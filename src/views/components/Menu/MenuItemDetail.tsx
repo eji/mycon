@@ -3,19 +3,24 @@ import {
   makeStyles,
   createStyles,
   Table,
-  TableHead,
   TableCell,
   TableRow,
   TableBody,
   Button,
   Box,
+  Typography,
+  Grid,
+  Theme,
 } from "@material-ui/core";
 
-const useStyle = makeStyles(() =>
+const useStyle = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: "flex",
       justifyContent: "center",
+    },
+    contentHeader: {
+      padding: theme.spacing(1),
     },
     closeButton: {
       position: "absolute",
@@ -56,24 +61,21 @@ const MenuItemDetail: React.FC<MenuItemDetailProps> = (
 
   return (
     <Box className={classes.root}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>材料</TableCell>
-            <TableCell align="right">分量</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.name}>
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.quantity}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <Grid container item xs={12} direction="column">
+        <Typography className={classes.contentHeader}>材料</Typography>
+        <Table>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow key={row.name}>
+                <TableCell component="th" scope="row">
+                  {row.name}
+                </TableCell>
+                <TableCell align="right">{row.quantity}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Grid>
       <Button
         onClick={handleClose}
         variant="contained"

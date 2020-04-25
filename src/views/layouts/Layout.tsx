@@ -2,12 +2,13 @@ import React, { ReactNode } from "react";
 import { AppBar, Toolbar, IconButton, Typography } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 
-interface LayoutProps {
+type LayoutProps = {
+  title: string;
   children: ReactNode;
-}
+};
 
 const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
-  const { children } = props;
+  const { title, children } = props;
   return (
     <>
       <AppBar position="static">
@@ -15,7 +16,7 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
           <IconButton edge="start" color="inherit" aria-label="menu">
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6">ダッシュボード</Typography>
+          <Typography variant="h6">{title}</Typography>
         </Toolbar>
       </AppBar>
       {children}

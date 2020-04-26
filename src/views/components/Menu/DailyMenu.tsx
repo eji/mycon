@@ -5,7 +5,10 @@ import MenuItemList from "./MenuItemList";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {},
+    root: {
+      height: "100%",
+      overflowY: "scroll",
+    },
     menuItemList: {},
     fab: {
       position: "fixed",

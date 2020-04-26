@@ -1,9 +1,26 @@
 import React, { ReactNode } from "react";
-import { Tabs, Tab, Box, useTheme } from "@material-ui/core";
+import {
+  Tabs,
+  Tab,
+  Box,
+  useTheme,
+  makeStyles,
+  Theme,
+  createStyles,
+} from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import SwipeableViews from "react-swipeable-views";
 import Layout from "../layouts/Layout";
 import DailyMenu from "../components/Menu/DailyMenu";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {},
+    tabContent: {
+      height: "100%",
+    },
+  })
+);
 
 type TabPanelProps = {
   index: number;
@@ -12,6 +29,7 @@ type TabPanelProps = {
 };
 
 const TabPanel: React.FC<TabPanelProps> = (props: TabPanelProps) => {
+  const classes = useStyles();
   const { index, selectedIndex, children } = props;
   return (
     <Box
@@ -19,18 +37,12 @@ const TabPanel: React.FC<TabPanelProps> = (props: TabPanelProps) => {
       hidden={index !== selectedIndex}
       id={`menu-tabpanel-${index}`}
       aria-labelledby={`menu-tab-${index}`}
+      className={classes.tabContent}
     >
       {children}
     </Box>
   );
 };
-
-// function a11yProps(index: any) {
-//   return {
-//     id: `simple-tab-${index}`,
-//     "aria-controls": `simple-tabpanel-${index}`,
-//   };
-// }
 
 type DailyMenuScreenProps = {};
 
@@ -38,6 +50,7 @@ const DailyMenuScreen: React.FC<DailyMenuScreenProps> = () => {
   const history = useHistory();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
+  const classes = useStyles();
 
   const handleChange = (
     event: React.ChangeEvent<{}>,
@@ -66,6 +79,7 @@ const DailyMenuScreen: React.FC<DailyMenuScreenProps> = () => {
         axis={theme.direction === "rtl" ? "x-reverse" : "x"}
         index={value}
         onChangeIndex={handleChangeIndex}
+        enableMouseEvents
       >
         <TabPanel selectedIndex={value} index={0}>
           <DailyMenu />

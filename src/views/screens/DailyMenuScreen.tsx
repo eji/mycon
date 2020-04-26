@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
-import { Tabs, Tab, Box } from "@material-ui/core";
+import { Tabs, Tab, Box, useTheme } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
+import SwipeableViews from "react-swipeable-views";
 import Layout from "../layouts/Layout";
 import DailyMenu from "../components/Menu/DailyMenu";
 
@@ -35,6 +36,7 @@ type DailyMenuScreenProps = {};
 
 const DailyMenuScreen: React.FC<DailyMenuScreenProps> = () => {
   const history = useHistory();
+  const theme = useTheme();
   const [value, setValue] = React.useState(0);
 
   const handleChange = (
@@ -42,6 +44,10 @@ const DailyMenuScreen: React.FC<DailyMenuScreenProps> = () => {
     newValue: number
   ): void => {
     setValue(newValue);
+  };
+
+  const handleChangeIndex = (index: number): void => {
+    setValue(index);
   };
 
   const handleBack = (): void => history.goBack();
@@ -56,12 +62,18 @@ const DailyMenuScreen: React.FC<DailyMenuScreenProps> = () => {
         <Tab label="献立" id="menu-tab-0" aria-controls="menu-tabpanel-0" />
         <Tab label="栄養素" id="menu-tab-1" aria-controls="menu-tabpanel-1" />
       </Tabs>
-      <TabPanel selectedIndex={value} index={0}>
-        <DailyMenu />
-      </TabPanel>
-      <TabPanel selectedIndex={value} index={1}>
-        <DailyMenu />
-      </TabPanel>
+      <SwipeableViews
+        axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+        index={value}
+        onChangeIndex={handleChangeIndex}
+      >
+        <TabPanel selectedIndex={value} index={0}>
+          <DailyMenu />
+        </TabPanel>
+        <TabPanel selectedIndex={value} index={1}>
+          <DailyMenu />
+        </TabPanel>
+      </SwipeableViews>
     </Layout>
   );
 };

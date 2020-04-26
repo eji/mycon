@@ -1,3 +1,2 @@
-export const menuScreenPath = "/menu";
-
 export const scheduleScreenPath = "/";
+export const dailyMenuScreenPath = "/menus/id";

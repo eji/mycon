@@ -15,7 +15,7 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import EventIcon from "@material-ui/icons/Event";
 import MenuBookIcon from "@material-ui/icons/MenuBook";
 import { useHistory } from "react-router-dom";
-import { scheduleScreenPath, menuScreenPath } from "../../routePaths";
+import { scheduleScreenPath } from "../../routePaths";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -57,7 +57,7 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
   };
 
   const handleClickMenu = (): void => {
-    history.replace(menuScreenPath);
+    // history.replace(menuScreenPath);
   };
 
   return (

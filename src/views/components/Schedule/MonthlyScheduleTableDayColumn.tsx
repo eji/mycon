@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 import DoneIcon from "@material-ui/icons/Done";
 import { useHistory } from "react-router-dom";
-import { menuScreenPath } from "../../../routePaths";
+import { dailyMenuScreenPath } from "../../../routePaths";
 
 const useStyle = makeStyles(() =>
   createStyles({
@@ -53,7 +53,7 @@ const MonthlyScheduleTableDayColumn: React.FC<MonthlyScheduleTableDayColumnProps
   }
 
   const handleClieck = (): void => {
-    history.push(menuScreenPath);
+    history.push(dailyMenuScreenPath);
   };
 
   return (

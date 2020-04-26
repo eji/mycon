@@ -1,18 +1,18 @@
 import React from "react";
 import "./App.css";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import MenuScreen from "./views/screens/MenuScreen";
+import { scheduleScreenPath, dailyMenuScreenPath } from "./routePaths";
 import ScheduleScreen from "./views/screens/ScheduleScreen";
-import { menuScreenPath, scheduleScreenPath } from "./routePaths";
+import DailyMenuScreen from "./views/screens/DailyMenuScreen";
 
 const App: React.FC = () => (
   <BrowserRouter>
     <Switch>
-      <Route exact path={menuScreenPath}>
-        <MenuScreen />
-      </Route>
       <Route exact path={scheduleScreenPath}>
         <ScheduleScreen />
+      </Route>
+      <Route exact path={dailyMenuScreenPath}>
+        <DailyMenuScreen />
       </Route>
     </Switch>
   </BrowserRouter>

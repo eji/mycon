@@ -55,9 +55,6 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
     <Box className={classes.root}>
       <AppBar position="static" className={classes.appBar}>
         <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton>
           <Typography variant="h6">{title}</Typography>
         </Toolbar>
       </AppBar>

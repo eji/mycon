@@ -1,5 +1,11 @@
 import React from "react";
-import { createStyles, makeStyles, Box, Grid } from "@material-ui/core";
+import {
+  createStyles,
+  makeStyles,
+  Box,
+  Grid,
+  ButtonBase,
+} from "@material-ui/core";
 import DoneIcon from "@material-ui/icons/Done";
 import { useHistory } from "react-router-dom";
 import { menuScreenPath } from "../../../routePaths";
@@ -9,13 +15,16 @@ const useStyle = makeStyles(() =>
     root: {
       padding: 0,
       height: 90,
+      width: "100%",
     },
     day: {
       textAlign: "center",
-      width: 20,
+      width: "100%",
+      fontSize: 18,
     },
     statusDone: {
       color: "#00CC00",
+      width: "100%",
     },
   })
 );
@@ -48,7 +57,7 @@ const MonthlyScheduleTableDayColumn: React.FC<MonthlyScheduleTableDayColumnProps
   };
 
   return (
-    <Box className={classes.root} onClick={handleClieck}>
+    <ButtonBase className={classes.root} onClick={handleClieck}>
       <Grid
         container
         item
@@ -61,7 +70,7 @@ const MonthlyScheduleTableDayColumn: React.FC<MonthlyScheduleTableDayColumnProps
           <DoneIcon />
         </Box>
       </Grid>
-    </Box>
+    </ButtonBase>
   );
 };
 

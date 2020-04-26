@@ -8,14 +8,23 @@ import {
   TableCell,
   TableHead,
   TableBody,
+  Grid,
+  IconButton,
 } from "@material-ui/core";
 import * as R from "remeda";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import splitAllWhen from "../../../utils/splitAllWhen";
 import MonthlyScheduleTableDayColumn from "./MonthlyScheduleTableDayColumn";
 
 const useStyles = makeStyles(() =>
   createStyles({
     root: {},
+    controlBar: {
+      height: 70,
+      textAlign: "center",
+      backgroundColor: "#ddd",
+    },
     weekdays: {
       width: "100vw",
       backgroundColor: "#ddd",
@@ -60,6 +69,27 @@ const MonthlyScheduleTable: React.FC<MonthlyScheduleTableProps> = () => {
 
   return (
     <Box className={classes.root}>
+      <Grid
+        container
+        xs={12}
+        justify="center"
+        alignItems="center"
+        className={classes.controlBar}
+      >
+        <Grid item xs={2}>
+          <IconButton>
+            <ArrowBackIosIcon />
+          </IconButton>
+        </Grid>
+        <Grid item xs>
+          2020年4月
+        </Grid>
+        <Grid item xs={2}>
+          <IconButton>
+            <ArrowForwardIosIcon />
+          </IconButton>
+        </Grid>
+      </Grid>
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>

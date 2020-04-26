@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import * as R from "remeda";
 import splitAllWhen from "../../../utils/splitAllWhen";
+import MonthlyScheduleTableDayColumn from "./MonthlyScheduleTableDayColumn";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,28 +41,6 @@ const dayOfTheWeekTable = new Map([
   [5, "金"],
   [6, "土"],
 ]);
-
-type WeekTableRowProps = {
-  dayInfoList: {
-    date: Date;
-    dayOfTheWeek: string;
-  }[];
-  dayOfTheWeek: string;
-};
-const WeekTableRow: React.FC<WeekTableRowProps> = (
-  props: WeekTableRowProps
-) => {
-  const { dayInfoList, dayOfTheWeek } = props;
-
-  const dayInfo = dayInfoList.find(
-    (info) => info.dayOfTheWeek === dayOfTheWeek
-  );
-  if (dayInfo == null) {
-    return <></>;
-  }
-
-  return <div>{dayInfo.date.getDate()}</div>;
-};
 
 type MonthlyScheduleTableProps = {};
 
@@ -94,8 +73,8 @@ const MonthlyScheduleTable: React.FC<MonthlyScheduleTableProps> = () => {
           {rows.map((days) => (
             <TableRow>
               {dayOfTheWeeks.map((dayOfTheWeek) => (
-                <TableCell component="th" scope="row">
-                  <WeekTableRow
+                <TableCell component="th" scope="row" padding="none">
+                  <MonthlyScheduleTableDayColumn
                     dayOfTheWeek={dayOfTheWeek}
                     dayInfoList={days}
                   />

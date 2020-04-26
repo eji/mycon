@@ -12,6 +12,8 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 import EventIcon from "@material-ui/icons/Event";
 import MenuBookIcon from "@material-ui/icons/MenuBook";
+import { useHistory } from "react-router-dom";
+import { scheduleScreenPath, menuScreenPath } from "../../routePaths";
 
 const useStyles = makeStyles({
   root: {
@@ -39,7 +41,16 @@ type LayoutProps = {
 
 const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
   const { title, children } = props;
+  const history = useHistory();
   const classes = useStyles();
+
+  const handleClickSchedule = (): void => {
+    history.replace(scheduleScreenPath);
+  };
+  const handleClickMenu = (): void => {
+    history.replace(menuScreenPath);
+  };
+
   return (
     <Box className={classes.root}>
       <AppBar position="static" className={classes.appBar}>
@@ -59,8 +70,16 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
         showLabels
         className={classes.bottomNavi}
       >
-        <BottomNavigationAction label="スケジュール" icon={<EventIcon />} />
-        <BottomNavigationAction label="メニュー" icon={<MenuBookIcon />} />
+        <BottomNavigationAction
+          label="スケジュール"
+          icon={<EventIcon />}
+          onClick={handleClickSchedule}
+        />
+        <BottomNavigationAction
+          label="メニュー"
+          icon={<MenuBookIcon />}
+          onClick={handleClickMenu}
+        />
       </BottomNavigation>
     </Box>
   );

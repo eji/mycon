@@ -17,9 +17,6 @@ const MenuItemList: React.FC<MenuItemListProps> = () => {
         <Grid item xs={6}>
           <MenuItem />
         </Grid>
-        <Grid item xs={6}>
-          <MenuItem />
-        </Grid>
       </Grid>
     </>
   );

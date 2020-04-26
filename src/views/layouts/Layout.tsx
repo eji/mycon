@@ -8,45 +8,54 @@ import {
   BottomNavigationAction,
   makeStyles,
   Box,
+  createStyles,
+  Theme,
 } from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import EventIcon from "@material-ui/icons/Event";
 import MenuBookIcon from "@material-ui/icons/MenuBook";
 import { useHistory } from "react-router-dom";
 import { scheduleScreenPath, menuScreenPath } from "../../routePaths";
 
-const useStyles = makeStyles({
-  root: {
-    display: "flex",
-    flexDirection: "column",
-    height: "100vh",
-  },
-  appBar: {
-    flex: "none",
-  },
-  contentArea: {
-    flex: "auto",
-    overflowY: "scroll",
-  },
-  bottomNavi: {
-    flex: "none",
-    width: "100vw",
-  },
-});
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      display: "flex",
+      flexDirection: "column",
+      height: "100vh",
+    },
+    backButton: {
+      marginRight: theme.spacing(2),
+    },
+    appBar: {
+      flex: "none",
+    },
+    contentArea: {
+      flex: "auto",
+      overflowY: "scroll",
+    },
+    bottomNavi: {
+      flex: "none",
+      width: "100vw",
+    },
+  })
+);
 
 type LayoutProps = {
   title: string;
+  handleBack?: () => void;
   children: ReactNode;
 };
 
 const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
-  const { title, children } = props;
+  const { title, handleBack, children } = props;
   const history = useHistory();
   const classes = useStyles();
 
   const handleClickSchedule = (): void => {
     history.replace(scheduleScreenPath);
   };
+
   const handleClickMenu = (): void => {
     history.replace(menuScreenPath);
   };
@@ -55,11 +64,22 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
     <Box className={classes.root}>
       <AppBar position="static" className={classes.appBar}>
         <Toolbar>
+          {handleBack && (
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="back"
+              className={classes.backButton}
+              onClick={handleBack}
+            >
+              <ArrowBackIcon />
+            </IconButton>
+          )}
           <Typography variant="h6">{title}</Typography>
         </Toolbar>
       </AppBar>
       <Box className={classes.contentArea}>{children}</Box>
-      <BottomNavigation
+      {/* <BottomNavigation
         // value={value}
         // onChange={(event, newValue) => {
         //   setValue(newValue);
@@ -77,7 +97,7 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
           icon={<MenuBookIcon />}
           onClick={handleClickMenu}
         />
-      </BottomNavigation>
+      </BottomNavigation> */}
     </Box>
   );
 };

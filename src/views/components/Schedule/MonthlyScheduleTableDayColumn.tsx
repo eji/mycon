@@ -1,7 +1,10 @@
 import React from "react";
-import { createStyles, makeStyles, Theme, Box, Grid } from "@material-ui/core";
+import { createStyles, makeStyles, Box, Grid } from "@material-ui/core";
+import DoneIcon from "@material-ui/icons/Done";
+import { useHistory } from "react-router-dom";
+import { menuScreenPath } from "../../../routePaths";
 
-const useStyle = makeStyles((theme: Theme) =>
+const useStyle = makeStyles(() =>
   createStyles({
     root: {
       padding: 0,
@@ -11,14 +14,8 @@ const useStyle = makeStyles((theme: Theme) =>
       textAlign: "center",
       width: 20,
     },
-    statusList: {
-      listStyleType: "none",
-      width: "100%",
-      padding: 0,
-    },
-    statusListItem: {
-      color: "white",
-      backgroundColor: "#3399FF",
+    statusDone: {
+      color: "#00CC00",
     },
   })
 );
@@ -34,31 +31,37 @@ type MonthlyScheduleTableDayColumnProps = {
 const MonthlyScheduleTableDayColumn: React.FC<MonthlyScheduleTableDayColumnProps> = (
   props: MonthlyScheduleTableDayColumnProps
 ) => {
+  const history = useHistory();
   const classes = useStyle();
   const { dayInfoList, dayOfTheWeek } = props;
 
   const dayInfo = dayInfoList.find(
     (info) => info.dayOfTheWeek === dayOfTheWeek
   );
+
   if (dayInfo == null) {
     return <></>;
   }
 
+  const handleClieck = (): void => {
+    history.push(menuScreenPath);
+  };
+
   return (
-    <Grid
-      container
-      item
-      direction="column"
-      justify="flex-start"
-      alignItems="flex-start"
-      className={classes.root}
-    >
-      <Box className={classes.day}>{dayInfo.date.getDate()}</Box>
-      <ul className={classes.statusList}>
-        <li className={classes.statusListItem}>食べた</li>
-        <li className={classes.statusListItem}>登録済み</li>
-      </ul>
-    </Grid>
+    <Box className={classes.root} onClick={handleClieck}>
+      <Grid
+        container
+        item
+        direction="column"
+        justify="flex-start"
+        alignItems="flex-start"
+      >
+        <Box className={classes.day}>{dayInfo.date.getDate()}</Box>
+        <Box className={classes.statusDone}>
+          <DoneIcon />
+        </Box>
+      </Grid>
+    </Box>
   );
 };
 

@@ -1,7 +1,6 @@
 import React from "react";
 import {
   makeStyles,
-  Theme,
   createStyles,
   Box,
   Table,
@@ -14,7 +13,7 @@ import * as R from "remeda";
 import splitAllWhen from "../../../utils/splitAllWhen";
 import MonthlyScheduleTableDayColumn from "./MonthlyScheduleTableDayColumn";
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     root: {},
     weekdays: {

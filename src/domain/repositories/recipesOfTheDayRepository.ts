@@ -5,5 +5,7 @@ import RecipesOfTheDay from "../models/recipesOfTheDay";
 
 export default interface RecipesOfTheDayRepository {
   findByDate(date: Date): TaskEither<QueryError, RecipesOfTheDay>;
-  save(recipesOfTheDay: RecipesOfTheDay): TaskEither<CommandError, void>;
+  saveValue(
+    recipesOfTheDay: RecipesOfTheDay
+  ): TaskEither<CommandError, boolean>;
 }

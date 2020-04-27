@@ -46,7 +46,7 @@ export default class SaveRecipesOfTheDayUseCase {
     }
 
     // 次に一日の献立を保存
-    const saveResult = await this.recipesOfTheDayRepository.save(
+    const saveResult = await this.recipesOfTheDayRepository.saveValue(
       recipesOfTheDay
     )();
     if (isLeft(saveResult)) {

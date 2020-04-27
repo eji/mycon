@@ -20,6 +20,11 @@ interface RecipeProps {
    * 材料一覧
    */
   ingredients: RecipeIngredient[];
+
+  /**
+   * 作り方のテキスト
+   */
+  textForcookingDirections: string[];
 }
 
 /**
@@ -34,6 +39,7 @@ class RecipeClass
     id: genId(),
     name: "",
     ingredients: [],
+    textForcookingDirections: [],
   })
   implements Recipe {}
 

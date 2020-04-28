@@ -16,6 +16,10 @@ import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import MonthlyScheduleTableDayColumn from "./MonthlyScheduleTableDayColumn";
 import { appStateContext } from "../AppStateProvider";
 import { dayOfTheWeekValues } from "../../../domain/models/calender/dayOfTheWeek";
+import {
+  selectPrevMonth,
+  selectNextMonth,
+} from "../../state/appState/calendar";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -42,8 +46,16 @@ type MonthlyScheduleTableProps = {};
 
 const MonthlyScheduleTable: React.FC<MonthlyScheduleTableProps> = () => {
   const classes = useStyles();
-  const { appState } = useContext(appStateContext);
+  const { appState, dispatch } = useContext(appStateContext);
   const { calendar } = appState;
+
+  const goToPrevMonth = async (): Promise<void> => {
+    await selectPrevMonth(dispatch);
+  };
+
+  const goToNextMonth = async (): Promise<void> => {
+    await selectNextMonth(dispatch);
+  };
 
   return (
     <Box className={classes.root}>
@@ -55,7 +67,7 @@ const MonthlyScheduleTable: React.FC<MonthlyScheduleTableProps> = () => {
         className={classes.controlBar}
       >
         <Grid item xs={2}>
-          <IconButton>
+          <IconButton onClick={goToPrevMonth}>
             <ArrowBackIosIcon />
           </IconButton>
         </Grid>
@@ -63,7 +75,7 @@ const MonthlyScheduleTable: React.FC<MonthlyScheduleTableProps> = () => {
           {`${calendar.year}年${calendar.currentMonth}月`}
         </Grid>
         <Grid item xs={2}>
-          <IconButton>
+          <IconButton onClick={goToNextMonth}>
             <ArrowForwardIosIcon />
           </IconButton>
         </Grid>

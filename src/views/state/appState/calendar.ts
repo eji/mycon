@@ -59,10 +59,12 @@ export const selectPrevMonth = async (
   dispatch: React.Dispatch<CalendarAction>
 ): Promise<void> => {
   dispatch({ type: selectMonth, direction: "prev" });
+  return Promise.resolve();
 };
 
 export const selectNextMonth = async (
   dispatch: React.Dispatch<CalendarAction>
 ): Promise<void> => {
   dispatch({ type: selectMonth, direction: "next" });
+  return Promise.resolve();
 };

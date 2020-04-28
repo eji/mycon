@@ -1,4 +1,5 @@
 import { Record } from "immutable";
+import { Eq } from "fp-ts/es6/Eq";
 import ID, { genId } from "./id";
 import RecipeIngredient from "./recipeIngredient";
 import Optional from "../../types/optional";
@@ -30,8 +31,9 @@ interface RecipeProps {
 /**
  * 料理
  */
-export default interface Recipe extends Readonly<RecipeProps> {
+export default interface Recipe extends Readonly<RecipeProps>, Eq<Recipe> {
   set<K extends keyof RecipeProps>(key: K, value: RecipeProps[K]): this;
+  equals(other: Recipe): boolean;
 }
 
 class RecipeClass

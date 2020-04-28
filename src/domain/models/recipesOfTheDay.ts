@@ -77,33 +77,36 @@ class RecipesOfTheDayClass
   })
   implements RecipesOfTheDay {
   addRecipeToBreakfast(recipe: Recipe): this {
-    // FIXME
-    return this;
+    return this.set("breakfastRecipes", [...this.breakfastRecipes, recipe]);
   }
 
   addRecipeToLunch(recipe: Recipe): this {
-    // FIXME
-    return this;
+    return this.set("lunchRecipes", [...this.lunchRecipes, recipe]);
   }
 
   addRecipeToDinner(recipe: Recipe): this {
-    // FIXME
-    return this;
+    return this.set("dinnerRecipes", [...this.dinnerRecipes, recipe]);
   }
 
   removeRecipeFromBreakfast(recipe: Recipe): this {
-    // FIXME
-    return this;
+    return this.set(
+      "breakfastRecipes",
+      this.breakfastRecipes.filter((r) => !r.equals(recipe))
+    );
   }
 
   removeRecipeFromLunch(recipe: Recipe): this {
-    // FIXME
-    return this;
+    return this.set(
+      "lunchRecipes",
+      this.lunchRecipes.filter((r) => !r.equals(recipe))
+    );
   }
 
   removeRecipeFromDinner(recipe: Recipe): this {
-    // FIXME
-    return this;
+    return this.set(
+      "dinnerRecipes",
+      this.dinnerRecipes.filter((r) => !r.equals(recipe))
+    );
   }
 
   allRecipes(): Recipe[] {

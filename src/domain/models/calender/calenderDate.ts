@@ -1,6 +1,5 @@
 import { Eq } from "fp-ts/lib/Eq";
 import { Record } from "immutable";
-import { Show } from "fp-ts/lib/Show";
 import { DayOfTheWeek, getDayOfTheWeek } from "./dayOfTheWeek";
 
 /**

@@ -4,18 +4,21 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { scheduleScreenPath, dailyMenuScreenPath } from "./routePaths";
 import ScheduleScreen from "./views/screens/ScheduleScreen";
 import DailyMenuScreen from "./views/screens/DailyMenuScreen";
+import AppStateProvider from "./views/components/AppStateProvider";
 
 const App: React.FC = () => (
-  <BrowserRouter>
-    <Switch>
-      <Route exact path={scheduleScreenPath}>
-        <ScheduleScreen />
-      </Route>
-      <Route exact path={dailyMenuScreenPath}>
-        <DailyMenuScreen />
-      </Route>
-    </Switch>
-  </BrowserRouter>
+  <AppStateProvider>
+    <BrowserRouter>
+      <Switch>
+        <Route exact path={scheduleScreenPath}>
+          <ScheduleScreen />
+        </Route>
+        <Route exact path={dailyMenuScreenPath}>
+          <DailyMenuScreen />
+        </Route>
+      </Switch>
+    </BrowserRouter>
+  </AppStateProvider>
 );
 
 export default App;

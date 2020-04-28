@@ -9,6 +9,8 @@ import {
 import DoneIcon from "@material-ui/icons/Done";
 import { useHistory } from "react-router-dom";
 import { dailyMenuScreenPath } from "../../../routePaths";
+import { Week } from "../../../domain/models/calender/week";
+import { DayOfTheWeek } from "../../../domain/models/calender/dayOfTheWeek";
 
 const useStyle = makeStyles(() =>
   createStyles({
@@ -30,11 +32,8 @@ const useStyle = makeStyles(() =>
 );
 
 type MonthlyScheduleTableDayColumnProps = {
-  dayInfoList: {
-    date: Date;
-    dayOfTheWeek: string;
-  }[];
-  dayOfTheWeek: string;
+  week: Week;
+  dayOfTheWeek: DayOfTheWeek;
 };
 
 const MonthlyScheduleTableDayColumn: React.FC<MonthlyScheduleTableDayColumnProps> = (
@@ -42,13 +41,11 @@ const MonthlyScheduleTableDayColumn: React.FC<MonthlyScheduleTableDayColumnProps
 ) => {
   const history = useHistory();
   const classes = useStyle();
-  const { dayInfoList, dayOfTheWeek } = props;
+  const { week, dayOfTheWeek } = props;
 
-  const dayInfo = dayInfoList.find(
-    (info) => info.dayOfTheWeek === dayOfTheWeek
-  );
+  const targetDate = week.find((date) => date.dayOfTheWeek === dayOfTheWeek);
 
-  if (dayInfo == null) {
+  if (targetDate == null) {
     return <></>;
   }
 
@@ -65,7 +62,7 @@ const MonthlyScheduleTableDayColumn: React.FC<MonthlyScheduleTableDayColumnProps
         justify="flex-start"
         alignItems="flex-start"
       >
-        <Box className={classes.day}>{dayInfo.date.getDate()}</Box>
+        <Box className={classes.day}>{targetDate.day}</Box>
         <Box className={classes.statusDone}>
           <DoneIcon />
         </Box>

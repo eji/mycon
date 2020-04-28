@@ -1,4 +1,4 @@
-import { Option, none, some } from "fp-ts/es6/Option";
+import { Option, none, some } from "fp-ts/lib/Option";
 
 export default class InMemoryStore<K, V> {
   readonly table: Map<K, V>;

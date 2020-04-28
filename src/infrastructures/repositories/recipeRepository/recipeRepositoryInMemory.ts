@@ -1,4 +1,4 @@
-import { TaskEither, fromOption, right } from "fp-ts/es6/TaskEither";
+import { TaskEither, fromOption, right } from "fp-ts/lib/TaskEither";
 import RecipeRepository from "../../../domain/repositories/recipeRepository";
 import QueryError from "../../../errors/repositoryErrors/queryError";
 import Recipe, { RecipeID } from "../../../domain/models/recipe";

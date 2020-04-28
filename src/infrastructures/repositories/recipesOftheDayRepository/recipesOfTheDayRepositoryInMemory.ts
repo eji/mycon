@@ -1,4 +1,4 @@
-import { TaskEither, fromOption, right } from "fp-ts/es6/TaskEither";
+import { TaskEither, fromOption, right } from "fp-ts/lib/TaskEither";
 import QueryError from "../../../errors/repositoryErrors/queryError";
 import CommandError from "../../../errors/repositoryErrors/commandError";
 import InMemoryStore from "../../../drivers/InMemoryStore";

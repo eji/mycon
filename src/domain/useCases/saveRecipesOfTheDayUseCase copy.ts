@@ -1,4 +1,4 @@
-import { isLeft } from "fp-ts/es6/Either";
+import { isLeft } from "fp-ts/lib/Either";
 import RepositoryError from "../../errors/repositoryError";
 import RecipesOfTheDay from "../models/recipesOfTheDay";
 import RecipesOfTheDayRepository from "../repositories/recipesOfTheDayRepository";

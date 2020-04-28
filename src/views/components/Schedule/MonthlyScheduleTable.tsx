@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   makeStyles,
   createStyles,
@@ -11,11 +11,11 @@ import {
   Grid,
   IconButton,
 } from "@material-ui/core";
-import * as R from "remeda";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
-import splitAllWhen from "../../../utils/splitAllWhen";
 import MonthlyScheduleTableDayColumn from "./MonthlyScheduleTableDayColumn";
+import { appStateContext } from "../AppStateProvider";
+import { dayOfTheWeekValues } from "../../../domain/models/calender/dayOfTheWeek";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -38,34 +38,12 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const dayOfTheWeeks = ["月", "火", "水", "木", "金", "土", "日"];
-
-const dayOfTheWeekTable = new Map([
-  [0, "日"],
-  [1, "月"],
-  [2, "火"],
-  [3, "水"],
-  [4, "木"],
-  [5, "金"],
-  [6, "土"],
-]);
-
 type MonthlyScheduleTableProps = {};
 
 const MonthlyScheduleTable: React.FC<MonthlyScheduleTableProps> = () => {
   const classes = useStyles();
-
-  const rows = splitAllWhen(
-    R.range(1, 31).map((index) => {
-      const date = new Date(`2020-04-${index}`);
-      const dayOfTheWeek = dayOfTheWeekTable.get(date.getDay()) || "日";
-      return {
-        date,
-        dayOfTheWeek,
-      };
-    }),
-    (item) => item.dayOfTheWeek === "月"
-  );
+  const { appState } = useContext(appStateContext);
+  const { calendar } = appState;
 
   return (
     <Box className={classes.root}>
@@ -82,7 +60,7 @@ const MonthlyScheduleTable: React.FC<MonthlyScheduleTableProps> = () => {
           </IconButton>
         </Grid>
         <Grid item xs>
-          2020年4月
+          {`${calendar.year}年${calendar.currentMonth}月`}
         </Grid>
         <Grid item xs={2}>
           <IconButton>
@@ -93,19 +71,19 @@ const MonthlyScheduleTable: React.FC<MonthlyScheduleTableProps> = () => {
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
-            {dayOfTheWeeks.map((dayOfTheWeek) => (
+            {dayOfTheWeekValues.map((dayOfTheWeek) => (
               <TableCell>{dayOfTheWeek}</TableCell>
             ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((days) => (
+          {calendar.weeks().map((week) => (
             <TableRow>
-              {dayOfTheWeeks.map((dayOfTheWeek) => (
+              {dayOfTheWeekValues.map((dayOfTheWeek) => (
                 <TableCell component="th" scope="row" padding="none">
                   <MonthlyScheduleTableDayColumn
                     dayOfTheWeek={dayOfTheWeek}
-                    dayInfoList={days}
+                    week={week}
                   />
                 </TableCell>
               ))}

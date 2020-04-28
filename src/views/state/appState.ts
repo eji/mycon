@@ -1,23 +1,23 @@
-import RecipesOfTheDay from "../../domain/models/recipesOfTheDay";
-import Recipe from "../../domain/models/recipe";
+import { Reducer } from "react";
+import Calendar, { makeCalendar } from "../../domain/models/calendar";
+import {
+  CalendarAction,
+  isCalendarAction,
+  calendarReducer,
+} from "./appState/calendar";
 
 export type AppState = {
   /**
-   * 一日の献立一覧
+   * カレンダー
    */
-  recpiesOfTheDays: RecipesOfTheDay[];
-
-  /**
-   * 一日の献立
-   */
-  recipesOfTheDay?: RecipesOfTheDay;
+  calendar: Calendar;
 };
 
 /* action messages */
 
 /* actions */
 
-export type AppStateAction = DomainAction;
+export type AppStateAction = CalendarAction;
 
 /* action handlers */
 
@@ -27,8 +27,8 @@ export const appStateReducer: Reducer<AppState, AppStateAction> = (
   state,
   action
 ) => {
-  if (isDomainAction(action)) {
-    return { ...state, domain: domainReducer(state.domain, action) };
+  if (isCalendarAction(action)) {
+    return { ...state, calendar: calendarReducer(state.calendar, action) };
   }
   return state;
 };
@@ -36,5 +36,5 @@ export const appStateReducer: Reducer<AppState, AppStateAction> = (
 /* initial state */
 
 export const initAppState: AppState = {
-  domain: initAppData,
+  calendar: makeCalendar(),
 };

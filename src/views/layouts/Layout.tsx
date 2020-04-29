@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useContext } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -17,6 +17,8 @@ import EventIcon from '@material-ui/icons/Event';
 import { useHistory } from 'react-router-dom';
 import AppleIcon from '@material-ui/icons/Apple';
 import { scheduleScreenPath, recipesScreenPath } from '../../routePaths';
+import { appStateContext } from '../components/AppStateProvider';
+import { selectBottomNavi } from '../state/appState';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -52,7 +54,8 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
   const { title, handleBack, children } = props;
   const history = useHistory();
   const classes = useStyles();
-  const [naviIndex, setNaviIndex] = useState(0);
+  const { appState, dispatch } = useContext(appStateContext);
+  const { bottomNaviIndex } = appState;
 
   const handleClickSchedule = (): void => {
     history.replace(scheduleScreenPath);
@@ -86,9 +89,9 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
       </AppBar>
       <Box className={classes.contentArea}>{children}</Box>
       <BottomNavigation
-        value={naviIndex}
-        onChange={(event, newValue) => {
-          setNaviIndex(newValue);
+        value={bottomNaviIndex}
+        onChange={async (event, newValue): Promise<void> => {
+          await selectBottomNavi(dispatch, newValue);
         }}
         showLabels
         className={classes.bottomNavi}

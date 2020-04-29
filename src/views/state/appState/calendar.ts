@@ -1,12 +1,12 @@
-import { Reducer } from "react";
-import { Action } from "../../../types/action";
-import { ActionHandler } from "../../../types/actionHandler";
-import Calendar from "../../../domain/models/calendar";
-import createActionDistinguishFunction from "../../../utils/createActionDistinguishFunction";
+import { Reducer } from 'react';
+import { Action } from '../../../types/action';
+import { ActionHandler } from '../../../types/actionHandler';
+import Calendar from '../../../domain/models/calendar';
+import createActionDistinguishFunction from '../../../utils/createActionDistinguishFunction';
 
 /** action messages */
 
-const selectMonth = "selectMonth";
+const selectMonth = 'selectMonth';
 
 const calendarMessages = [selectMonth];
 
@@ -14,7 +14,7 @@ const calendarMessages = [selectMonth];
 
 type SelectMonthAction = Action<
   typeof selectMonth,
-  { direction: "prev" | "next" }
+  { direction: 'prev' | 'next' }
 >;
 
 export type CalendarAction = SelectMonthAction;
@@ -30,9 +30,9 @@ const selectMonthHandler: ActionHandler<Calendar, SelectMonthAction> = (
   { direction }
 ) => {
   switch (direction) {
-    case "prev":
+    case 'prev':
       return calendar.prevMonth();
-    case "next":
+    case 'next':
       return calendar.nextMonth();
     default:
       return calendar;
@@ -58,13 +58,13 @@ export const calendarReducer: Reducer<Calendar, CalendarAction> = (
 export const selectPrevMonth = async (
   dispatch: React.Dispatch<CalendarAction>
 ): Promise<void> => {
-  dispatch({ type: selectMonth, direction: "prev" });
+  dispatch({ type: selectMonth, direction: 'prev' });
   return Promise.resolve();
 };
 
 export const selectNextMonth = async (
   dispatch: React.Dispatch<CalendarAction>
 ): Promise<void> => {
-  dispatch({ type: selectMonth, direction: "next" });
+  dispatch({ type: selectMonth, direction: 'next' });
   return Promise.resolve();
 };

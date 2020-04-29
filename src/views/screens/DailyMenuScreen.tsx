@@ -5,7 +5,6 @@ import {
   Box,
   useTheme,
   makeStyles,
-  Theme,
   createStyles,
 } from "@material-ui/core";
 import { useHistory, useParams } from "react-router-dom";
@@ -15,10 +14,9 @@ import DailyMenu from "../components/DailyMenu/DailyMenu";
 import { appStateContext } from "../components/AppStateProvider";
 import { scheduleScreenPath } from "../../routePaths";
 import { calendarDateFromDailyMenuID } from "../../domain/models/dailyMenu";
-import CalendarDate from "../../domain/models/calender/calenderDate";
 import NoDailyMenu from "../components/DailyMenu/NoDailyMenu";
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     root: {},
     tabContent: {
@@ -57,7 +55,7 @@ const DailyMenuScreen: React.FC<DailyMenuScreenProps> = () => {
   const history = useHistory();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
-  const classes = useStyles();
+  // const classes = useStyles();
 
   if (id == null) {
     history.replace(scheduleScreenPath);

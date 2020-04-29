@@ -4,18 +4,12 @@ import {
   Toolbar,
   IconButton,
   Typography,
-  BottomNavigation,
-  BottomNavigationAction,
   makeStyles,
   Box,
   createStyles,
   Theme,
 } from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import EventIcon from "@material-ui/icons/Event";
-import MenuBookIcon from "@material-ui/icons/MenuBook";
-import { useHistory } from "react-router-dom";
-import { scheduleScreenPath } from "../../routePaths";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -49,16 +43,16 @@ type LayoutProps = {
 
 const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
   const { title, handleBack, children } = props;
-  const history = useHistory();
+  // const history = useHistory();
   const classes = useStyles();
 
-  const handleClickSchedule = (): void => {
-    history.replace(scheduleScreenPath);
-  };
+  // const handleClickSchedule = (): void => {
+  //   history.replace(scheduleScreenPath);
+  // };
 
-  const handleClickMenu = (): void => {
-    // history.replace(menuScreenPath);
-  };
+  // const handleClickMenu = (): void => {
+  //   // history.replace(menuScreenPath);
+  // };
 
   return (
     <Box className={classes.root}>

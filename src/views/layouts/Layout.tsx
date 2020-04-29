@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -8,29 +8,36 @@ import {
   Box,
   createStyles,
   Theme,
-} from "@material-ui/core";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+  BottomNavigation,
+  BottomNavigationAction,
+} from '@material-ui/core';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import RestaurantIcon from '@material-ui/icons/Restaurant';
+import EventIcon from '@material-ui/icons/Event';
+import { useHistory } from 'react-router-dom';
+import AppleIcon from '@material-ui/icons/Apple';
+import { scheduleScreenPath, recipesScreenPath } from '../../routePaths';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      display: "flex",
-      flexDirection: "column",
-      height: "100vh",
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100vh',
     },
     backButton: {
       marginRight: theme.spacing(2),
     },
     appBar: {
-      flex: "none",
+      flex: 'none',
     },
     contentArea: {
-      flex: "auto",
-      overflowY: "scroll",
+      flex: 'auto',
+      overflowY: 'scroll',
     },
     bottomNavi: {
-      flex: "none",
-      width: "100vw",
+      flex: 'none',
+      width: '100vw',
     },
   })
 );
@@ -43,16 +50,21 @@ type LayoutProps = {
 
 const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
   const { title, handleBack, children } = props;
-  // const history = useHistory();
+  const history = useHistory();
   const classes = useStyles();
+  const [naviIndex, setNaviIndex] = useState(0);
 
-  // const handleClickSchedule = (): void => {
-  //   history.replace(scheduleScreenPath);
-  // };
+  const handleClickSchedule = (): void => {
+    history.replace(scheduleScreenPath);
+  };
 
-  // const handleClickMenu = (): void => {
-  //   // history.replace(menuScreenPath);
-  // };
+  const handleClickMenu = (): void => {
+    // history.replace(menuScreenPath);
+  };
+
+  const handleClickRecipes = (): void => {
+    history.replace(recipesScreenPath);
+  };
 
   return (
     <Box className={classes.root}>
@@ -73,11 +85,11 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
         </Toolbar>
       </AppBar>
       <Box className={classes.contentArea}>{children}</Box>
-      {/* <BottomNavigation
-        // value={value}
-        // onChange={(event, newValue) => {
-        //   setValue(newValue);
-        // }}
+      <BottomNavigation
+        value={naviIndex}
+        onChange={(event, newValue) => {
+          setNaviIndex(newValue);
+        }}
         showLabels
         className={classes.bottomNavi}
       >
@@ -87,11 +99,16 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
           onClick={handleClickSchedule}
         />
         <BottomNavigationAction
-          label="メニュー"
-          icon={<MenuBookIcon />}
+          label="レシピ"
+          icon={<RestaurantIcon />}
+          onClick={handleClickRecipes}
+        />
+        <BottomNavigationAction
+          label="食材"
+          icon={<AppleIcon />}
           onClick={handleClickMenu}
         />
-      </BottomNavigation> */}
+      </BottomNavigation>
     </Box>
   );
 };

@@ -1,9 +1,11 @@
-import CalendarDate from "./domain/models/calender/calenderDate";
-import { dailyMenuIDFromCalendarDate } from "./domain/models/dailyMenu";
+import CalendarDate from './domain/models/calender/calenderDate';
+import { dailyMenuIDFromCalendarDate } from './domain/models/dailyMenu';
 
-export const scheduleScreenPath = "/";
-export const dailyMenuScreenPath = "/daily-menus/:id";
-export const editDailyMenuScreenPath = "/daily-menus/:id/edit";
+export const scheduleScreenPath = '/';
+export const dailyMenuScreenPath = '/daily-menus/:id';
+export const editDailyMenuScreenPath = '/daily-menus/:id/edit';
+export const recipesScreenPath = '/recipes';
+export const addRecipesScreenPath = '/recipes/add';
 
 export const makeDailyMenuScreenPath = (props: {
   calendarDate: CalendarDate;

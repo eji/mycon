@@ -1,7 +1,7 @@
-import { Record } from "immutable";
-import ID, { genId } from "./id";
-import Quantity from "./quantity";
-import Foodstuff from "./foodstuff";
+import { Record } from 'immutable';
+import ID, { genId } from './id';
+import Quantity from './quantity';
+import Foodstuff from './foodstuff';
 
 /**
  * 材料ID

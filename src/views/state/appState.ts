@@ -1,13 +1,17 @@
-import { Reducer } from "react";
-import Calendar, { makeCalendar } from "../../domain/models/calendar";
+import { Reducer } from 'react';
+import Calendar, { makeCalendar } from '../../domain/models/calendar';
 import {
   CalendarAction,
   isCalendarAction,
   calendarReducer,
-} from "./appState/calendar";
-import DailyMenu from "../../domain/models/dailyMenu";
+} from './appState/calendar';
+import DailyMenu from '../../domain/models/dailyMenu';
+import Recipe from '../../domain/models/recipe';
+import Foodstuff from '../../domain/models/foodstuff';
 
 export type AppState = {
+  /* ドメインモデル */
+
   /**
    * カレンダー
    */
@@ -17,6 +21,16 @@ export type AppState = {
    * 全ての献立
    */
   allDailyMenus: { [key: string]: DailyMenu };
+
+  /**
+   * 全てのレシピ
+   */
+  allRecipes: { [key: string]: Recipe };
+
+  /**
+   * 全ての食材
+   */
+  allFoodstuffs: { [key: string]: Foodstuff };
 };
 
 /* action messages */
@@ -44,4 +58,6 @@ export const appStateReducer: Reducer<AppState, AppStateAction> = (
 export const initAppState: AppState = {
   calendar: makeCalendar(),
   allDailyMenus: {},
+  allRecipes: {},
+  allFoodstuffs: {},
 };

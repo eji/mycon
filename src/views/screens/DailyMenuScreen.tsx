@@ -15,6 +15,8 @@ import DailyMenu from "../components/DailyMenu/DailyMenu";
 import { appStateContext } from "../components/AppStateProvider";
 import { scheduleScreenPath } from "../../routePaths";
 import { calendarDateFromDailyMenuID } from "../../domain/models/dailyMenu";
+import CalendarDate from "../../domain/models/calender/calenderDate";
+import NoDailyMenu from "../components/DailyMenu/NoDailyMenu";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -70,7 +72,7 @@ const DailyMenuScreen: React.FC<DailyMenuScreenProps> = () => {
 
   const title = `${calendarDate.year}年${calendarDate.month}月${calendarDate.day}日(${calendarDate.dayOfTheWeek})`;
 
-  // const dailyMenu = appState.allDailyMenus[id];
+  const dailyMenu = appState.allDailyMenus[id];
 
   const handleChange = (
     event: React.ChangeEvent<{}>,
@@ -84,6 +86,14 @@ const DailyMenuScreen: React.FC<DailyMenuScreenProps> = () => {
   };
 
   const handleBack = (): void => history.goBack();
+
+  if (dailyMenu == null) {
+    return (
+      <Layout title={title} handleBack={handleBack}>
+        <NoDailyMenu calendarDate={calendarDate} />
+      </Layout>
+    );
+  }
 
   return (
     <Layout title={title} handleBack={handleBack}>

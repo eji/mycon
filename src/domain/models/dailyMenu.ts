@@ -1,7 +1,7 @@
 import { Record } from "immutable";
 import Recipe from "./recipe";
 
-interface RecipesOfTheDayProps {
+interface DailyMenuProps {
   /**
    * 対象の日
    */
@@ -24,13 +24,10 @@ interface RecipesOfTheDayProps {
 }
 
 /**
- * 一日のレシピ一覧
+ * 一日のメニュー
  */
-export default interface RecipesOfTheDay extends RecipesOfTheDayProps {
-  set<K extends keyof RecipesOfTheDayProps>(
-    key: K,
-    value: RecipesOfTheDayProps[K]
-  ): this;
+export default interface DailyMenu extends DailyMenuProps {
+  set<K extends keyof DailyMenuProps>(key: K, value: DailyMenuProps[K]): this;
 
   /**
    * 朝食にレシピを追加する
@@ -68,14 +65,14 @@ export default interface RecipesOfTheDay extends RecipesOfTheDayProps {
   allRecipes(): Recipe[];
 }
 
-class RecipesOfTheDayClass
-  extends Record<Readonly<RecipesOfTheDayProps>>({
+class DailyMenuClass
+  extends Record<Readonly<DailyMenuProps>>({
     date: new Date(),
     breakfastRecipes: [],
     lunchRecipes: [],
     dinnerRecipes: [],
   })
-  implements RecipesOfTheDay {
+  implements DailyMenu {
   addRecipeToBreakfast(recipe: Recipe): this {
     return this.set("breakfastRecipes", [...this.breakfastRecipes, recipe]);
   }
@@ -118,6 +115,5 @@ class RecipesOfTheDayClass
   }
 }
 
-export const makeRecipesOfTheDay = (
-  props: RecipesOfTheDayProps
-): RecipesOfTheDay => new RecipesOfTheDayClass(props);
+export const makeDailyMenu = (props: DailyMenuProps): DailyMenu =>
+  new DailyMenuClass(props);

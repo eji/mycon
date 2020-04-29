@@ -26,11 +26,18 @@ class CalendarDateClass
     day: new Date().getDate(),
   })
   implements CalendarDate {
-  static create(props: CalendarDateProps): CalendarDate {
+  static create(props?: CalendarDateProps): CalendarDate {
+    const today = new Date();
+    const initProps = props || {
+      year: today.getFullYear(),
+      month: today.getMonth() + 1,
+      day: today.getDate(),
+    };
+
     const date = new Date(
-      props.year,
-      props.month - 1,
-      props.day,
+      initProps.year,
+      initProps.month - 1,
+      initProps.day,
       timezoneOffset,
       0,
       0
@@ -72,5 +79,5 @@ class CalendarDateClass
   }
 }
 
-export const makeDate = (props: CalendarDateProps): CalendarDate =>
+export const makeDate = (props?: CalendarDateProps): CalendarDate =>
   CalendarDateClass.create(props);

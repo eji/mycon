@@ -1,11 +1,12 @@
 import { Record } from "immutable";
 import Recipe from "./recipe";
+import CalendarDate, { makeDate } from "./calender/calenderDate";
 
 interface DailyMenuProps {
   /**
    * 対象の日
    */
-  date: Date;
+  calendarDate: CalendarDate;
 
   /**
    * 朝食のレシピ一覧
@@ -67,7 +68,7 @@ export default interface DailyMenu extends DailyMenuProps {
 
 class DailyMenuClass
   extends Record<Readonly<DailyMenuProps>>({
-    date: new Date(),
+    calendarDate: makeDate(),
     breakfastRecipes: [],
     lunchRecipes: [],
     dinnerRecipes: [],

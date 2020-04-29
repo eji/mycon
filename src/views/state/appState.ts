@@ -5,12 +5,18 @@ import {
   isCalendarAction,
   calendarReducer,
 } from "./appState/calendar";
+import DailyMenu from "../../domain/models/dailyMenu";
 
 export type AppState = {
   /**
    * カレンダー
    */
   calendar: Calendar;
+
+  /**
+   * 選択中の一日のメニュー
+   */
+  selectedDailyMenu?: DailyMenu;
 };
 
 /* action messages */

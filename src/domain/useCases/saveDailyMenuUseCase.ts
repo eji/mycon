@@ -52,7 +52,9 @@ export default class SaveDailyMenuUseCase {
       return;
     }
 
-    const result = await this.dailyMenuRepository.findByDate(dailyMenu.date)();
+    const result = await this.dailyMenuRepository.findByCalendarDate(
+      dailyMenu.calendarDate
+    )();
     if (isLeft(result)) {
       outputPort.failed(result.left);
       return;

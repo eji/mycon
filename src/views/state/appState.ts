@@ -6,7 +6,6 @@ import {
   calendarReducer,
 } from "./appState/calendar";
 import DailyMenu from "../../domain/models/dailyMenu";
-import CalendarDate from "../../domain/models/calender/calenderDate";
 
 export type AppState = {
   /**
@@ -15,11 +14,9 @@ export type AppState = {
   calendar: Calendar;
 
   /**
-   * 選択中の一日のメニュー
+   * 全ての献立
    */
-  selectedDailyMenu?: DailyMenu;
-
-  allDailyMenus: { [key: CalendarDate]: DailyMenu };
+  allDailyMenus: { [key: string]: DailyMenu };
 };
 
 /* action messages */
@@ -46,4 +43,5 @@ export const appStateReducer: Reducer<AppState, AppStateAction> = (
 
 export const initAppState: AppState = {
   calendar: makeCalendar(),
+  allDailyMenus: {},
 };

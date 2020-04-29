@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useContext } from "react";
 import {
   Tabs,
   Tab,
@@ -8,10 +8,13 @@ import {
   Theme,
   createStyles,
 } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import SwipeableViews from "react-swipeable-views";
 import Layout from "../layouts/Layout";
-import DailyMenu from "../components/Menu/DailyMenu";
+import DailyMenu from "../components/DailyMenu/DailyMenu";
+import { appStateContext } from "../components/AppStateProvider";
+import { scheduleScreenPath } from "../../routePaths";
+import { calendarDateFromDailyMenuID } from "../../domain/models/dailyMenu";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -47,10 +50,30 @@ const TabPanel: React.FC<TabPanelProps> = (props: TabPanelProps) => {
 type DailyMenuScreenProps = {};
 
 const DailyMenuScreen: React.FC<DailyMenuScreenProps> = () => {
+  const { id } = useParams();
+  const { appState } = useContext(appStateContext);
   const history = useHistory();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
   const classes = useStyles();
+
+  if (id == null) {
+    console.log("nullllllllllllll");
+    history.replace(scheduleScreenPath);
+    return <></>;
+  }
+
+  const calendarDate = calendarDateFromDailyMenuID(id);
+  if (calendarDate == null) {
+    console.log("cal: nullllllllllllll");
+    console.log(id);
+    history.replace(scheduleScreenPath);
+    return <></>;
+  }
+
+  const title = `${calendarDate.year}年${calendarDate.month}月${calendarDate.day}日(${calendarDate.dayOfTheWeek})`;
+
+  // const dailyMenu = appState.allDailyMenus[id];
 
   const handleChange = (
     event: React.ChangeEvent<{}>,
@@ -66,7 +89,7 @@ const DailyMenuScreen: React.FC<DailyMenuScreenProps> = () => {
   const handleBack = (): void => history.goBack();
 
   return (
-    <Layout title="2020年4月30日(水)" handleBack={handleBack}>
+    <Layout title={title} handleBack={handleBack}>
       <Tabs
         value={value}
         onChange={handleChange}

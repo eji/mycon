@@ -2,10 +2,27 @@ import { Record } from "immutable";
 import Recipe from "./recipe";
 import CalendarDate, { makeDate } from "./calender/calenderDate";
 
-type DailyMenuID = string;
+export type DailyMenuID = string;
 
-const idFromCalendarDate = (calendarDate: CalendarDate): DailyMenuID =>
+const dailyMenuIDRegexp = /^(\d{4})-(\d{1,2})-(\d{1,2})$/;
+
+export const dailyMenuIDFromCalendarDate = (
+  calendarDate: CalendarDate
+): DailyMenuID =>
   `${calendarDate.year}-${calendarDate.month}-${calendarDate.day}`;
+
+export const calendarDateFromDailyMenuID = (
+  dailyMenuID: DailyMenuID
+): CalendarDate | null => {
+  const match = dailyMenuID.match(dailyMenuIDRegexp);
+  if (match == null) {
+    return null;
+  }
+  const year = Number.parseInt(match[1], 10);
+  const month = Number.parseInt(match[2], 10);
+  const day = Number.parseInt(match[3], 10);
+  return makeDate({ year, month, day });
+};
 
 interface DailyMenuProps {
   id: DailyMenuID;
@@ -83,7 +100,7 @@ class DailyMenuClass
   })
   implements DailyMenu {
   static create(props: Omit<DailyMenuProps, "id">): DailyMenu {
-    const id = idFromCalendarDate(props.calendarDate);
+    const id = dailyMenuIDFromCalendarDate(props.calendarDate);
     return new DailyMenuClass({ ...props, id });
   }
 

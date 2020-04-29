@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 import DoneIcon from "@material-ui/icons/Done";
 import { useHistory } from "react-router-dom";
-import { dailyMenuScreenPath } from "../../../routePaths";
+import { makeDailyMenuScreenPath } from "../../../routePaths";
 import { Week } from "../../../domain/models/calender/week";
 import { DayOfTheWeek } from "../../../domain/models/calender/dayOfTheWeek";
 
@@ -50,7 +50,7 @@ const MonthlyScheduleTableDayColumn: React.FC<MonthlyScheduleTableDayColumnProps
   }
 
   const handleClieck = (): void => {
-    history.push(dailyMenuScreenPath);
+    history.push(makeDailyMenuScreenPath({ calendarDate: targetDate }));
   };
 
   return (

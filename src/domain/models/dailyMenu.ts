@@ -2,7 +2,14 @@ import { Record } from "immutable";
 import Recipe from "./recipe";
 import CalendarDate, { makeDate } from "./calender/calenderDate";
 
+type DailyMenuID = string;
+
+const idFromCalendarDate = (calendarDate: CalendarDate): DailyMenuID =>
+  `${calendarDate.year}-${calendarDate.month}-${calendarDate.day}`;
+
 interface DailyMenuProps {
+  id: DailyMenuID;
+
   /**
    * 対象の日
    */
@@ -68,12 +75,23 @@ export default interface DailyMenu extends DailyMenuProps {
 
 class DailyMenuClass
   extends Record<Readonly<DailyMenuProps>>({
+    id: "",
     calendarDate: makeDate(),
     breakfastRecipes: [],
     lunchRecipes: [],
     dinnerRecipes: [],
   })
   implements DailyMenu {
+  static create(props: Omit<DailyMenuProps, "id">): DailyMenu {
+    const id = idFromCalendarDate(props.calendarDate);
+    return new DailyMenuClass({ ...props, id });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private constructor(...args: any[]) {
+    super(...args);
+  }
+
   addRecipeToBreakfast(recipe: Recipe): this {
     return this.set("breakfastRecipes", [...this.breakfastRecipes, recipe]);
   }
@@ -116,5 +134,5 @@ class DailyMenuClass
   }
 }
 
-export const makeDailyMenu = (props: DailyMenuProps): DailyMenu =>
-  new DailyMenuClass(props);
+export const makeDailyMenu = (props: Omit<DailyMenuProps, "id">): DailyMenu =>
+  DailyMenuClass.create(props);

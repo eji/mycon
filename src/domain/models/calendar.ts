@@ -57,12 +57,6 @@ class CalendarClass
         month: nextMonth,
         day: 0,
       });
-      console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-      console.log([
-        lastDayOfMonth.year,
-        lastDayOfMonth.month,
-        lastDayOfMonth.day,
-      ]);
       this.daysCache = R.times(lastDayOfMonth.day, (index) =>
         makeDate({ year: this.year, month: this.currentMonth, day: index + 1 })
       );

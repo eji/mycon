@@ -5,26 +5,26 @@ import QueryError from '../../../errors/repositoryErrors/queryError';
 import CommandError from '../../../errors/repositoryErrors/commandError';
 import InMemoryStore from '../../../drivers/InMemoryStore';
 import FoodstuffRepository from '../../../domain/repositories/foodstuffRepository';
-import Foodstuff from '../../../domain/models/foodstuff';
+import { Foodstuff, FoodstuffID } from '../../../domain/models/foodstuff';
 
 export default class FoodstuffRepositoryInMemory
   implements FoodstuffRepository {
-  readonly store: InMemoryStore<Foodstuff, Foodstuff>;
+  readonly store: InMemoryStore<FoodstuffID, Foodstuff>;
 
-  constructor(store?: InMemoryStore<Foodstuff, Foodstuff>) {
-    this.store = store || new InMemoryStore<Foodstuff, Foodstuff>();
+  constructor(store?: InMemoryStore<FoodstuffID, Foodstuff>) {
+    this.store = store || new InMemoryStore<FoodstuffID, Foodstuff>();
   }
 
-  all(): TaskEither<QueryError, string[]> {
+  all(): TaskEither<QueryError, Foodstuff[]> {
     return right(this.store.values());
   }
 
-  saveValue(foodstuff: string): Task<Option<CommandError>> {
+  saveValue(foodstuff: Foodstuff): Task<Option<CommandError>> {
     return this.saveValues([foodstuff]);
   }
 
-  saveValues(foodstuffs: string[]): Task<Option<CommandError>> {
-    foodstuffs.forEach((foodstuff) => this.store.set(foodstuff, foodstuff));
+  saveValues(foodstuffs: Foodstuff[]): Task<Option<CommandError>> {
+    foodstuffs.forEach((foodstuff) => this.store.set(foodstuff.id, foodstuff));
     return of(none);
   }
 }

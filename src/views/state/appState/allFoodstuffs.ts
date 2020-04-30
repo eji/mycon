@@ -6,9 +6,10 @@ import { Action } from '../../../types/action';
 import { ActionHandler } from '../../../types/actionHandler';
 import createActionDistinguishFunction from '../../../utils/createActionDistinguishFunction';
 import { AddFoodstuffForm } from '../../forms/addFoodstuffFormSchema';
-import Foodstuff from '../../../domain/models/foodstuff';
+import { Foodstuff, makeFoodstuff } from '../../../domain/models/foodstuff';
 import AddFoodstuffUseCase from '../../../domain/useCases/addFoodstuffUseCase';
 import RepositoryError from '../../../errors/repositoryError';
+import Nutrient from '../../../domain/models/nutrient';
 
 export type AllFoodStuffs = { [key: string]: Foodstuff };
 
@@ -37,7 +38,7 @@ const addFoodstuffHandler: ActionHandler<AllFoodStuffs, AddFoodstuffAction> = (
   allFoodstuffs,
   { newFoodstuff }
 ) => {
-  return { ...allFoodstuffs, [newFoodstuff]: newFoodstuff };
+  return { ...allFoodstuffs, [newFoodstuff.id]: newFoodstuff };
 };
 
 /* reducer */
@@ -56,25 +57,19 @@ export const allFoodstuffsReducer: Reducer<
 
 /* action creator */
 
-// export const addFoodstuff2 = async (
-//   dispatch: React.Dispatch<AppStateAction>,
-//   form: AddFoodstuffForm
-// ): Promise<Option<RepositoryError>> => {
-//   const result = await container
-//     .resolve(AddFoodstuffUseCase)
-//     .execute({ foodstuff: form.name });
-//   if (isRight(result)) {
-//     dispatch({ type: addFoodstuffMsg, newFoodstuff: result.right });
-//   }
-//   return getLeft(result);
-// };
-
 export const addFoodstuff = (
   form: AddFoodstuffForm
 ): TaskEither<RepositoryError, AddFoodstuffAction> => {
   const useCase = container.resolve(AddFoodstuffUseCase);
+  const foodstuff = makeFoodstuff({
+    name: form.name,
+    nutrients: form.nutrients as Nutrient[],
+  });
   return pipe(
-    useCase.execute({ foodstuff: form.name }),
-    map(() => ({ type: addFoodstuffMsg, newFoodstuff: form.name }))
+    useCase.execute({ foodstuff }),
+    map((persistedFoodstuff: Foodstuff) => ({
+      type: addFoodstuffMsg,
+      newFoodstuff: persistedFoodstuff,
+    }))
   );
 };

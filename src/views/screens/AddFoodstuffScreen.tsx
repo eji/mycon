@@ -53,6 +53,7 @@ const AddFoodstuffScreen: React.FC<AddFoodstuffScreenProps> = () => {
 
   const initValues: AddFoodstuffForm = {
     name: '',
+    nutrients: [],
   };
 
   const handleBack = (): void => {

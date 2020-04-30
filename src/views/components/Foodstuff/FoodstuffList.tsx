@@ -1,6 +1,6 @@
 import React from 'react';
 import { List, ListItem, ListItemText } from '@material-ui/core';
-import Foodstuff from '../../../domain/models/foodstuff';
+import { Foodstuff } from '../../../domain/models/foodstuff';
 
 type FoodstuffListProps = {
   foodstuffs: Foodstuff[];
@@ -14,7 +14,7 @@ const FoodstuffList: React.FC<FoodstuffListProps> = (
     <List>
       {foodstuffs.map((foodstuff) => (
         <ListItem>
-          <ListItemText primary={foodstuff} />
+          <ListItemText primary={foodstuff.name} />
         </ListItem>
       ))}
     </List>

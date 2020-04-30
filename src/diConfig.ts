@@ -7,7 +7,7 @@ import {
 import FoodstuffRepositoryInMemory from './infrastructures/repositories/foodstuffRepository/foodstuffRepositoryInMemory';
 import AddFoodstuffUseCase from './domain/useCases/addFoodstuffUseCase';
 
-export const initDI = (): void => {
+const diConfig = (): void => {
   container.register<FoodstuffRepository>(foodstuffRepository, {
     useToken: inMemoryFoodstuffRepository,
   });
@@ -32,4 +32,4 @@ export const initDI = (): void => {
   });
 };
 
-export default initDI;
+export default diConfig;

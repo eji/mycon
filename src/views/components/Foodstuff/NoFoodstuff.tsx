@@ -14,8 +14,8 @@ const NoRecipe: React.FC<NoRecipeProps> = () => {
 
   return (
     <NoItemView
-      message="レシピがありません"
-      buttonText="レシピを追加する"
+      message="食材がありません"
+      buttonText="食材を追加する"
       handleClick={handleClick}
     />
   );

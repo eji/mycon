@@ -16,7 +16,11 @@ import RestaurantIcon from '@material-ui/icons/Restaurant';
 import EventIcon from '@material-ui/icons/Event';
 import { useHistory } from 'react-router-dom';
 import AppleIcon from '@material-ui/icons/Apple';
-import { scheduleScreenPath, recipesScreenPath } from '../../routePaths';
+import {
+  scheduleScreenPath,
+  recipesScreenPath,
+  foodstuffsScreenPath,
+} from '../../routePaths';
 import { appStateContext } from '../components/AppStateProvider';
 import { selectBottomNavi } from '../state/appState';
 
@@ -61,12 +65,12 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
     history.replace(scheduleScreenPath);
   };
 
-  const handleClickMenu = (): void => {
-    // history.replace(menuScreenPath);
-  };
-
   const handleClickRecipes = (): void => {
     history.replace(recipesScreenPath);
+  };
+
+  const handleClickFoodstuffs = (): void => {
+    history.replace(foodstuffsScreenPath);
   };
 
   return (
@@ -109,7 +113,7 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
         <BottomNavigationAction
           label="食材"
           icon={<AppleIcon />}
-          onClick={handleClickMenu}
+          onClick={handleClickFoodstuffs}
         />
       </BottomNavigation>
     </Box>

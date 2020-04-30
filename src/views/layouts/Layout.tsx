@@ -52,10 +52,11 @@ type LayoutProps = {
   title: string;
   handleBack?: () => void;
   children: ReactNode;
+  hideBottomNavi?: boolean;
 };
 
 const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
-  const { title, handleBack, children } = props;
+  const { title, handleBack, hideBottomNavi, children } = props;
   const history = useHistory();
   const classes = useStyles();
   const { appState, dispatch } = useContext(appStateContext);
@@ -92,30 +93,32 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
         </Toolbar>
       </AppBar>
       <Box className={classes.contentArea}>{children}</Box>
-      <BottomNavigation
-        value={bottomNaviIndex}
-        onChange={async (event, newValue): Promise<void> => {
-          await selectBottomNavi(dispatch, newValue);
-        }}
-        showLabels
-        className={classes.bottomNavi}
-      >
-        <BottomNavigationAction
-          label="スケジュール"
-          icon={<EventIcon />}
-          onClick={handleClickSchedule}
-        />
-        <BottomNavigationAction
-          label="レシピ"
-          icon={<RestaurantIcon />}
-          onClick={handleClickRecipes}
-        />
-        <BottomNavigationAction
-          label="食材"
-          icon={<AppleIcon />}
-          onClick={handleClickFoodstuffs}
-        />
-      </BottomNavigation>
+      {hideBottomNavi || (
+        <BottomNavigation
+          value={bottomNaviIndex}
+          onChange={async (event, newValue): Promise<void> => {
+            await selectBottomNavi(dispatch, newValue);
+          }}
+          showLabels
+          className={classes.bottomNavi}
+        >
+          <BottomNavigationAction
+            label="スケジュール"
+            icon={<EventIcon />}
+            onClick={handleClickSchedule}
+          />
+          <BottomNavigationAction
+            label="レシピ"
+            icon={<RestaurantIcon />}
+            onClick={handleClickRecipes}
+          />
+          <BottomNavigationAction
+            label="食材"
+            icon={<AppleIcon />}
+            onClick={handleClickFoodstuffs}
+          />
+        </BottomNavigation>
+      )}
     </Box>
   );
 };

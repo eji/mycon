@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { CssBaseline } from '@material-ui/core';
 import {
   scheduleScreenPath,
   dailyMenuScreenPath,
@@ -19,33 +20,36 @@ import FoodstuffsScreen from './views/screens/FoodstuffsScreen';
 import AddFoodstuffScreen from './views/screens/AddFoodstuffScreen';
 
 const App: React.FC = () => (
-  <AppStateProvider>
-    <BrowserRouter>
-      <Switch>
-        <Route exact path={scheduleScreenPath}>
-          <ScheduleScreen />
-        </Route>
-        <Route exact path={dailyMenuScreenPath}>
-          <DailyMenuScreen />
-        </Route>
-        <Route exact path={editDailyMenuScreenPath}>
-          <DailyMenuScreen />
-        </Route>
-        <Route exact path={recipesScreenPath}>
-          <RecipesScreen />
-        </Route>
-        <Route exact path={addRecipeScreenPath}>
-          <AddRecipeScreen />
-        </Route>
-        <Route exact path={foodstuffsScreenPath}>
-          <FoodstuffsScreen />
-        </Route>
-        <Route exact path={addFoodstuffScreenPath}>
-          <AddFoodstuffScreen />
-        </Route>
-      </Switch>
-    </BrowserRouter>
-  </AppStateProvider>
+  <>
+    <CssBaseline />
+    <AppStateProvider>
+      <BrowserRouter>
+        <Switch>
+          <Route exact path={scheduleScreenPath}>
+            <ScheduleScreen />
+          </Route>
+          <Route exact path={dailyMenuScreenPath}>
+            <DailyMenuScreen />
+          </Route>
+          <Route exact path={editDailyMenuScreenPath}>
+            <DailyMenuScreen />
+          </Route>
+          <Route exact path={recipesScreenPath}>
+            <RecipesScreen />
+          </Route>
+          <Route exact path={addRecipeScreenPath}>
+            <AddRecipeScreen />
+          </Route>
+          <Route exact path={foodstuffsScreenPath}>
+            <FoodstuffsScreen />
+          </Route>
+          <Route exact path={addFoodstuffScreenPath}>
+            <AddFoodstuffScreen />
+          </Route>
+        </Switch>
+      </BrowserRouter>
+    </AppStateProvider>
+  </>
 );
 
 export default App;

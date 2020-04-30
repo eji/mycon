@@ -10,7 +10,7 @@ export const recipesScreenPath = '/recipes';
 export const addRecipeScreenPath = '/recipes/add';
 
 export const foodstuffsScreenPath = '/foodstuffs';
-export const addFoodstuffsScreenPath = '/foodstuffs/add';
+export const addFoodstuffScreenPath = '/foodstuffs/add';
 
 export const makeDailyMenuScreenPath = (props: {
   calendarDate: CalendarDate;

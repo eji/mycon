@@ -1,4 +1,4 @@
-import { Option, none, some } from "fp-ts/lib/Option";
+import { Option, none, some } from 'fp-ts/lib/Option';
 
 export default class InMemoryStore<K, V> {
   readonly table: Map<K, V>;
@@ -13,6 +13,10 @@ export default class InMemoryStore<K, V> {
 
   get(key: K): Option<V> {
     const value = this.table.get(key);
-    return typeof value === "undefined" ? none : some(value);
+    return typeof value === 'undefined' ? none : some(value);
+  }
+
+  values(): V[] {
+    return Array.from(this.table.values());
   }
 }

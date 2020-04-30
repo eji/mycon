@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   makeStyles,
   createStyles,
@@ -11,22 +11,22 @@ import {
   Typography,
   Grid,
   Theme,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
 const useStyle = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      display: "flex",
-      justifyContent: "center",
+      display: 'flex',
+      justifyContent: 'center',
     },
     contentHeader: {
       padding: theme.spacing(1),
     },
     closeButton: {
-      position: "absolute",
+      position: 'absolute',
       bottom: 0,
-      alignSelf: "flex-end",
-      width: "100%",
+      alignSelf: 'flex-end',
+      width: '100%',
     },
   })
 );
@@ -42,20 +42,20 @@ const MenuItemDetail: React.FC<MenuItemDetailProps> = (
   const classes = useStyle();
   const rows = [
     {
-      name: "お米",
-      quantity: "100g",
+      name: 'お米',
+      quantity: '100g',
     },
     {
-      name: "お米",
-      quantity: "100g",
+      name: 'お米',
+      quantity: '100g',
     },
     {
-      name: "お米",
-      quantity: "100g",
+      name: 'お米',
+      quantity: '100g',
     },
     {
-      name: "お米",
-      quantity: "100g",
+      name: 'お米',
+      quantity: '100g',
     },
   ];
 

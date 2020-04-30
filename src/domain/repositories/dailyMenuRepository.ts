@@ -1,8 +1,8 @@
-import { TaskEither } from "fp-ts/lib/TaskEither";
-import QueryError from "../../errors/repositoryErrors/queryError";
-import CommandError from "../../errors/repositoryErrors/commandError";
-import DailyMenu from "../models/dailyMenu";
-import CalendarDate from "../models/calender/calenderDate";
+import { TaskEither } from 'fp-ts/lib/TaskEither';
+import QueryError from '../../errors/repositoryErrors/queryError';
+import CommandError from '../../errors/repositoryErrors/commandError';
+import DailyMenu from '../models/dailyMenu';
+import CalendarDate from '../models/calender/calenderDate';
 
 export default interface DailyMenuRepository {
   findByCalendarDate(

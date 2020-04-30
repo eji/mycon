@@ -1,6 +1,6 @@
-import React from "react";
-import { Grid } from "@material-ui/core";
-import MenuItem from "./MenuItem";
+import React from 'react';
+import { Grid } from '@material-ui/core';
+import MenuItem from './MenuItem';
 
 type MenuItemListProps = {};
 

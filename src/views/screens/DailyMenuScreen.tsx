@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext } from "react";
+import React, { ReactNode, useContext } from 'react';
 import {
   Tabs,
   Tab,
@@ -6,21 +6,21 @@ import {
   useTheme,
   makeStyles,
   createStyles,
-} from "@material-ui/core";
-import { useHistory, useParams } from "react-router-dom";
-import SwipeableViews from "react-swipeable-views";
-import Layout from "../layouts/Layout";
-import DailyMenu from "../components/DailyMenu/DailyMenu";
-import { appStateContext } from "../components/AppStateProvider";
-import { scheduleScreenPath } from "../../routePaths";
-import { calendarDateFromDailyMenuID } from "../../domain/models/dailyMenu";
-import NoDailyMenu from "../components/DailyMenu/NoDailyMenu";
+} from '@material-ui/core';
+import { useHistory, useParams } from 'react-router-dom';
+import SwipeableViews from 'react-swipeable-views';
+import Layout from '../layouts/Layout';
+import DailyMenu from '../components/DailyMenu/DailyMenu';
+import { appStateContext } from '../components/AppStateProvider';
+import { scheduleScreenPath } from '../../routePaths';
+import { calendarDateFromDailyMenuID } from '../../domain/models/dailyMenu';
+import NoDailyMenu from '../components/DailyMenu/NoDailyMenu';
 
 const useStyles = makeStyles(() =>
   createStyles({
     root: {},
     tabContent: {
-      height: "100%",
+      height: '100%',
     },
   })
 );
@@ -104,7 +104,7 @@ const DailyMenuScreen: React.FC<DailyMenuScreenProps> = () => {
         <Tab label="栄養素" id="menu-tab-1" aria-controls="menu-tabpanel-1" />
       </Tabs>
       <SwipeableViews
-        axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
         index={value}
         onChangeIndex={handleChangeIndex}
         enableMouseEvents

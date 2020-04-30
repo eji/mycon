@@ -1,5 +1,5 @@
-import { createContext } from "react";
-import { AppState, AppStateAction, initAppState } from "./state/appState";
+import { createContext } from 'react';
+import { AppState, AppStateAction, initAppState } from './state/appState';
 
 export default interface AppStore {
   appState: AppState;

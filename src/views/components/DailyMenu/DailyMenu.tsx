@@ -1,17 +1,17 @@
-import React from "react";
-import { Fab, makeStyles, Theme, createStyles, Box } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import MenuItemList from "./MenuItemList";
+import React from 'react';
+import { Fab, makeStyles, Theme, createStyles, Box } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import MenuItemList from './MenuItemList';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      height: "100%",
-      overflowY: "scroll",
+      height: '100%',
+      overflowY: 'scroll',
     },
     menuItemList: {},
     fab: {
-      position: "fixed",
+      position: 'fixed',
       bottom: theme.spacing(8),
       right: theme.spacing(2),
     },

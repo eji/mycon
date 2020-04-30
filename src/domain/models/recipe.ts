@@ -1,8 +1,8 @@
-import { Record } from "immutable";
-import { Eq } from "fp-ts/lib/Eq";
-import ID, { genId } from "./id";
-import RecipeIngredient from "./recipeIngredient";
-import Optional from "../../types/optional";
+import { Record } from 'immutable';
+import { Eq } from 'fp-ts/lib/Eq';
+import ID, { genId } from './id';
+import RecipeIngredient from './recipeIngredient';
+import Optional from '../../types/optional';
 
 /**
  * レシピID
@@ -39,7 +39,7 @@ export default interface Recipe extends Readonly<RecipeProps>, Eq<Recipe> {
 class RecipeClass
   extends Record<RecipeProps>({
     id: genId(),
-    name: "",
+    name: '',
     ingredients: [],
     textForcookingDirections: [],
   })

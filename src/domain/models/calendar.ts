@@ -1,8 +1,8 @@
-import { Record } from "immutable";
-import * as R from "remeda";
-import { Week } from "./calender/week";
-import splitAllWhen from "../../utils/splitAllWhen";
-import CalendarDate, { makeDate } from "./calender/calenderDate";
+import { Record } from 'immutable';
+import * as R from 'remeda';
+import { Week } from './calender/week';
+import splitAllWhen from '../../utils/splitAllWhen';
+import CalendarDate, { makeDate } from './calender/calenderDate';
 
 interface CalendarProps {
   year: number;
@@ -65,7 +65,7 @@ class CalendarClass
   }
 
   weeks(): Week[] {
-    return splitAllWhen(this.days(), (day) => day.dayOfTheWeek === "月");
+    return splitAllWhen(this.days(), (day) => day.dayOfTheWeek === '月');
   }
 }
 

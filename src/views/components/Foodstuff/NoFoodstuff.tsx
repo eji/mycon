@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { addRecipeScreenPath } from '../../../routePaths';
 import NoItemView from '../NoItemView';
+import { addFoodstuffScreenPath } from '../../../routePaths';
 
 type NoRecipeProps = {};
 
@@ -9,7 +9,7 @@ const NoRecipe: React.FC<NoRecipeProps> = () => {
   const history = useHistory();
 
   const handleClick = (): void => {
-    history.push(addRecipeScreenPath);
+    history.push(addFoodstuffScreenPath);
   };
 
   return (

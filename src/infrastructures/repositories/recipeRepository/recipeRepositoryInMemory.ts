@@ -1,10 +1,10 @@
-import { TaskEither, fromOption, right } from "fp-ts/lib/TaskEither";
-import RecipeRepository from "../../../domain/repositories/recipeRepository";
-import QueryError from "../../../errors/repositoryErrors/queryError";
-import Recipe, { RecipeID } from "../../../domain/models/recipe";
-import CommandError from "../../../errors/repositoryErrors/commandError";
-import InMemoryStore from "../../../drivers/InMemoryStore";
-import NotFoundError from "../../../errors/repositoryErrors/queryErrors/notFoundError";
+import { TaskEither, fromOption, right } from 'fp-ts/lib/TaskEither';
+import RecipeRepository from '../../../domain/repositories/recipeRepository';
+import QueryError from '../../../errors/repositoryErrors/queryError';
+import Recipe, { RecipeID } from '../../../domain/models/recipe';
+import CommandError from '../../../errors/repositoryErrors/commandError';
+import InMemoryStore from '../../../drivers/InMemoryStore';
+import NotFoundError from '../../../errors/repositoryErrors/queryErrors/notFoundError';
 
 export default class RecipeRepositoryInMemory implements RecipeRepository {
   readonly store: InMemoryStore<RecipeID, Recipe>;

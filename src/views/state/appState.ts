@@ -7,9 +7,14 @@ import {
 } from './appState/calendar';
 import DailyMenu from '../../domain/models/dailyMenu';
 import Recipe from '../../domain/models/recipe';
-import Foodstuff from '../../domain/models/foodstuff';
 import { Action } from '../../types/action';
 import { ActionHandler } from '../../types/actionHandler';
+import {
+  AllFoodStuffs,
+  isAllFoodstuffsAction,
+  allFoodstuffsReducer,
+  AllFoodstuffsAction,
+} from './appState/allFoodstuffs';
 
 export type AppState = {
   /* ドメインモデル */
@@ -32,7 +37,7 @@ export type AppState = {
   /**
    * 全ての食材
    */
-  allFoodstuffs: { [key: string]: Foodstuff };
+  allFoodstuffs: AllFoodStuffs;
 
   /* UIのステート */
   bottomNaviIndex: number;
@@ -48,7 +53,10 @@ type SelectBottomNaviAction = Action<
   { index: number }
 >;
 
-export type AppStateAction = CalendarAction | SelectBottomNaviAction;
+export type AppStateAction =
+  | CalendarAction
+  | SelectBottomNaviAction
+  | AllFoodstuffsAction;
 
 /* action handlers */
 
@@ -67,6 +75,12 @@ export const appStateReducer: Reducer<AppState, AppStateAction> = (
 ) => {
   if (isCalendarAction(action)) {
     return { ...state, calendar: calendarReducer(state.calendar, action) };
+  }
+  if (isAllFoodstuffsAction(action)) {
+    return {
+      ...state,
+      allFoodstuffs: allFoodstuffsReducer(state.allFoodstuffs, action),
+    };
   }
   switch (action.type) {
     case selectBottomNaviMsg:

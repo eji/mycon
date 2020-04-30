@@ -1,6 +1,6 @@
-import { Eq } from "fp-ts/lib/Eq";
-import { Record } from "immutable";
-import { DayOfTheWeek, getDayOfTheWeek } from "./dayOfTheWeek";
+import { Eq } from 'fp-ts/lib/Eq';
+import { Record } from 'immutable';
+import { DayOfTheWeek, getDayOfTheWeek } from './dayOfTheWeek';
 
 /**
  * 面倒くさいから日本のタイムゾーンに固定

@@ -1,6 +1,6 @@
-import { Record } from "immutable";
-import Recipe from "./recipe";
-import CalendarDate, { makeDate } from "./calender/calenderDate";
+import { Record } from 'immutable';
+import Recipe from './recipe';
+import CalendarDate, { makeDate } from './calender/calenderDate';
 
 export type DailyMenuID = string;
 
@@ -92,14 +92,14 @@ export default interface DailyMenu extends DailyMenuProps {
 
 class DailyMenuClass
   extends Record<Readonly<DailyMenuProps>>({
-    id: "",
+    id: '',
     calendarDate: makeDate(),
     breakfastRecipes: [],
     lunchRecipes: [],
     dinnerRecipes: [],
   })
   implements DailyMenu {
-  static create(props: Omit<DailyMenuProps, "id">): DailyMenu {
+  static create(props: Omit<DailyMenuProps, 'id'>): DailyMenu {
     const id = dailyMenuIDFromCalendarDate(props.calendarDate);
     return new DailyMenuClass({ ...props, id });
   }
@@ -110,34 +110,34 @@ class DailyMenuClass
   }
 
   addRecipeToBreakfast(recipe: Recipe): this {
-    return this.set("breakfastRecipes", [...this.breakfastRecipes, recipe]);
+    return this.set('breakfastRecipes', [...this.breakfastRecipes, recipe]);
   }
 
   addRecipeToLunch(recipe: Recipe): this {
-    return this.set("lunchRecipes", [...this.lunchRecipes, recipe]);
+    return this.set('lunchRecipes', [...this.lunchRecipes, recipe]);
   }
 
   addRecipeToDinner(recipe: Recipe): this {
-    return this.set("dinnerRecipes", [...this.dinnerRecipes, recipe]);
+    return this.set('dinnerRecipes', [...this.dinnerRecipes, recipe]);
   }
 
   removeRecipeFromBreakfast(recipe: Recipe): this {
     return this.set(
-      "breakfastRecipes",
+      'breakfastRecipes',
       this.breakfastRecipes.filter((r) => !r.equals(recipe))
     );
   }
 
   removeRecipeFromLunch(recipe: Recipe): this {
     return this.set(
-      "lunchRecipes",
+      'lunchRecipes',
       this.lunchRecipes.filter((r) => !r.equals(recipe))
     );
   }
 
   removeRecipeFromDinner(recipe: Recipe): this {
     return this.set(
-      "dinnerRecipes",
+      'dinnerRecipes',
       this.dinnerRecipes.filter((r) => !r.equals(recipe))
     );
   }
@@ -151,5 +151,5 @@ class DailyMenuClass
   }
 }
 
-export const makeDailyMenu = (props: Omit<DailyMenuProps, "id">): DailyMenu =>
+export const makeDailyMenu = (props: Omit<DailyMenuProps, 'id'>): DailyMenu =>
   DailyMenuClass.create(props);

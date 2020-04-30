@@ -8,6 +8,7 @@ import {
   recipesScreenPath,
   addRecipeScreenPath,
   foodstuffsScreenPath,
+  addFoodstuffScreenPath,
 } from './routePaths';
 import ScheduleScreen from './views/screens/ScheduleScreen';
 import DailyMenuScreen from './views/screens/DailyMenuScreen';
@@ -15,6 +16,7 @@ import AppStateProvider from './views/components/AppStateProvider';
 import RecipesScreen from './views/screens/RecipesScreen';
 import AddRecipeScreen from './views/screens/AddRecipeScreen';
 import FoodstuffsScreen from './views/screens/FoodstuffsScreen';
+import AddFoodstuffScreen from './views/screens/AddFoodstuffScreen';
 
 const App: React.FC = () => (
   <AppStateProvider>
@@ -37,6 +39,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path={foodstuffsScreenPath}>
           <FoodstuffsScreen />
+        </Route>
+        <Route exact path={addFoodstuffScreenPath}>
+          <AddFoodstuffScreen />
         </Route>
       </Switch>
     </BrowserRouter>

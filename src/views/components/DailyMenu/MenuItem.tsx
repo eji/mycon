@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Card,
   CardHeader,
@@ -8,9 +8,9 @@ import {
   CardActionArea,
   Dialog,
   Slide,
-} from "@material-ui/core";
-import { TransitionProps } from "@material-ui/core/transitions/transition";
-import MenuItemDetail from "./MenuItemDetail";
+} from '@material-ui/core';
+import { TransitionProps } from '@material-ui/core/transitions/transition';
+import MenuItemDetail from './MenuItemDetail';
 
 const useStyle = makeStyles(() =>
   createStyles({
@@ -19,8 +19,8 @@ const useStyle = makeStyles(() =>
     },
     media: {
       //   height: 0,
-      width: "100%",
-      paddingTop: "56.25%", // 16:9
+      width: '100%',
+      paddingTop: '56.25%', // 16:9
     },
   })
 );

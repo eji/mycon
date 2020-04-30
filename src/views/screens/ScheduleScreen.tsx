@@ -1,6 +1,6 @@
-import React from "react";
-import Layout from "../layouts/Layout";
-import MonthlyScheduleTable from "../components/Schedule/MonthlyScheduleTable";
+import React from 'react';
+import Layout from '../layouts/Layout';
+import MonthlyScheduleTable from '../components/Schedule/MonthlyScheduleTable';
 
 type ScheduleScreenProps = {};
 

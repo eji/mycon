@@ -1,11 +1,11 @@
-import { TaskEither, fromOption, right } from "fp-ts/lib/TaskEither";
-import QueryError from "../../../errors/repositoryErrors/queryError";
-import CommandError from "../../../errors/repositoryErrors/commandError";
-import InMemoryStore from "../../../drivers/InMemoryStore";
-import NotFoundError from "../../../errors/repositoryErrors/queryErrors/notFoundError";
-import DailyMenuRepository from "../../../domain/repositories/dailyMenuRepository";
-import DailyMenu from "../../../domain/models/dailyMenu";
-import CalendarDate from "../../../domain/models/calender/calenderDate";
+import { TaskEither, fromOption, right } from 'fp-ts/lib/TaskEither';
+import QueryError from '../../../errors/repositoryErrors/queryError';
+import CommandError from '../../../errors/repositoryErrors/commandError';
+import InMemoryStore from '../../../drivers/InMemoryStore';
+import NotFoundError from '../../../errors/repositoryErrors/queryErrors/notFoundError';
+import DailyMenuRepository from '../../../domain/repositories/dailyMenuRepository';
+import DailyMenu from '../../../domain/models/dailyMenu';
+import CalendarDate from '../../../domain/models/calender/calenderDate';
 
 export default class DailyMenuRepositoryInMemory
   implements DailyMenuRepository {

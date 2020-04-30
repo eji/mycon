@@ -1,8 +1,8 @@
-import { isLeft } from "fp-ts/lib/Either";
-import RepositoryError from "../../errors/repositoryError";
-import DailyMenu from "../models/dailyMenu";
-import DailyMenuRepository from "../repositories/dailyMenuRepository";
-import RecipeRepository from "../repositories/recipeRepository";
+import { isLeft } from 'fp-ts/lib/Either';
+import RepositoryError from '../../errors/repositoryError';
+import DailyMenu from '../models/dailyMenu';
+import DailyMenuRepository from '../repositories/dailyMenuRepository';
+import RecipeRepository from '../repositories/recipeRepository';
 
 type InputPort = {
   dailyMenu: DailyMenu;

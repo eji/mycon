@@ -1,6 +1,6 @@
-import React, { ReactNode, useReducer } from "react";
-import { createAppStateContext } from "../appStore";
-import { appStateReducer, initAppState } from "../state/appState";
+import React, { ReactNode, useReducer } from 'react';
+import { createAppStateContext } from '../appStore';
+import { appStateReducer, initAppState } from '../state/appState';
 
 export const appStateContext = createAppStateContext();
 

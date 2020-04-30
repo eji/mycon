@@ -1,8 +1,12 @@
+import 'reflect-metadata';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import initDI from './diConfig';
+
+initDI();
 
 ReactDOM.render(
   <React.StrictMode>

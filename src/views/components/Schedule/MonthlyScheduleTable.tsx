@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext } from 'react';
 import {
   makeStyles,
   createStyles,
@@ -10,34 +10,34 @@ import {
   TableBody,
   Grid,
   IconButton,
-} from "@material-ui/core";
-import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
-import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
-import MonthlyScheduleTableDayColumn from "./MonthlyScheduleTableDayColumn";
-import { appStateContext } from "../AppStateProvider";
-import { dayOfTheWeekValues } from "../../../domain/models/calender/dayOfTheWeek";
+} from '@material-ui/core';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import MonthlyScheduleTableDayColumn from './MonthlyScheduleTableDayColumn';
+import { appStateContext } from '../AppStateProvider';
+import { dayOfTheWeekValues } from '../../../domain/models/calender/dayOfTheWeek';
 import {
   selectPrevMonth,
   selectNextMonth,
-} from "../../state/appState/calendar";
+} from '../../state/appState/calendar';
 
 const useStyles = makeStyles(() =>
   createStyles({
     root: {},
     controlBar: {
       height: 70,
-      textAlign: "center",
-      backgroundColor: "#ddd",
+      textAlign: 'center',
+      backgroundColor: '#ddd',
     },
     weekdays: {
-      width: "100vw",
-      backgroundColor: "#ddd",
+      width: '100vw',
+      backgroundColor: '#ddd',
     },
     weekdaysSaturday: {
-      color: "blue",
+      color: 'blue',
     },
     weekdaysSunday: {
-      color: "red",
+      color: 'red',
     },
   })
 );

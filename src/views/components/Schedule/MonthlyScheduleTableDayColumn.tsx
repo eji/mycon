@@ -1,32 +1,32 @@
-import React from "react";
+import React from 'react';
 import {
   createStyles,
   makeStyles,
   Box,
   Grid,
   ButtonBase,
-} from "@material-ui/core";
-import DoneIcon from "@material-ui/icons/Done";
-import { useHistory } from "react-router-dom";
-import { makeDailyMenuScreenPath } from "../../../routePaths";
-import { Week } from "../../../domain/models/calender/week";
-import { DayOfTheWeek } from "../../../domain/models/calender/dayOfTheWeek";
+} from '@material-ui/core';
+import DoneIcon from '@material-ui/icons/Done';
+import { useHistory } from 'react-router-dom';
+import { makeDailyMenuScreenPath } from '../../../routePaths';
+import { Week } from '../../../domain/models/calender/week';
+import { DayOfTheWeek } from '../../../domain/models/calender/dayOfTheWeek';
 
 const useStyle = makeStyles(() =>
   createStyles({
     root: {
       padding: 0,
       height: 90,
-      width: "100%",
+      width: '100%',
     },
     day: {
-      textAlign: "center",
-      width: "100%",
+      textAlign: 'center',
+      width: '100%',
       fontSize: 18,
     },
     statusDone: {
-      color: "#00CC00",
-      width: "100%",
+      color: '#00CC00',
+      width: '100%',
     },
   })
 );

@@ -1,3 +1,3 @@
-import QueryError from "../queryError";
+import QueryError from '../queryError';
 
 export default class NotFoundError extends QueryError {}

@@ -4,9 +4,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import initDI from './diConfig';
+import diConfig from './diConfig';
 
-initDI();
+diConfig();
 
 ReactDOM.render(
   <React.StrictMode>

@@ -19,6 +19,7 @@ import {
 } from '../forms/addFoodstuffFormSchema';
 import { addFoodstuff } from '../state/appState/allFoodstuffs';
 import CommandError from '../../errors/repositoryErrors/commandError';
+import CheckboxButton from '../components/common/CheckboxButton';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -96,6 +97,8 @@ const AddFoodstuffScreen: React.FC<AddFoodstuffScreenProps> = () => {
                 fullWidth
               />
             </div>
+            <CheckboxButton text="カルシウム" checked />
+            <CheckboxButton text="unko" />
             <ButtonBase
               type="button"
               disabled={isSubmitting}

@@ -1,4 +1,4 @@
-import { TaskEither, fromOption, right } from 'fp-ts/lib/TaskEither';
+import * as TE from 'fp-ts/lib/TaskEither';
 import RecipeRepository from '../../../domain/repositories/recipeRepository';
 import QueryError from '../../../errors/repositoryErrors/queryError';
 import Recipe, { RecipeID } from '../../../domain/models/recipe';
@@ -13,18 +13,18 @@ export default class RecipeRepositoryInMemory implements RecipeRepository {
     this.store = store || new InMemoryStore<RecipeID, Recipe>();
   }
 
-  findById(id: RecipeID): TaskEither<QueryError, Recipe> {
+  findById(id: RecipeID): TE.TaskEither<QueryError, Recipe> {
     const recipe = this.store.get(id);
-    return fromOption(() => new NotFoundError())(recipe);
+    return TE.fromOption(() => new NotFoundError())(recipe);
   }
 
-  saveValue(recipe: Recipe): TaskEither<CommandError, boolean> {
-    this.store.set(recipe.id, recipe);
-    return right(true);
+  saveValue(recipe: Recipe): TE.TaskEither<CommandError, unknown> {
+    return TE.right(this.store.set(recipe.id, recipe));
   }
 
-  saveValues(recipes: Recipe[]): TaskEither<CommandError, boolean> {
-    recipes.forEach((recipe) => this.store.set(recipe.id, recipe));
-    return right(true);
+  saveValues(recipes: Recipe[]): TE.TaskEither<CommandError, unknown> {
+    return TE.right(
+      recipes.forEach((recipe) => this.store.set(recipe.id, recipe))
+    );
   }
 }

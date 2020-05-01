@@ -34,16 +34,16 @@ const App: React.FC = () => (
           <Route exact path={editDailyMenuScreenPath}>
             <DailyMenuScreen />
           </Route>
-          <Route exact path={recipesScreenPath}>
+          <Route exact path={recipesScreenPath()}>
             <RecipesScreen />
           </Route>
-          <Route exact path={addRecipeScreenPath}>
+          <Route exact path={addRecipeScreenPath()}>
             <AddRecipeScreen />
           </Route>
-          <Route exact path={foodstuffsScreenPath}>
+          <Route exact path={foodstuffsScreenPath()}>
             <FoodstuffsScreen />
           </Route>
-          <Route exact path={addFoodstuffScreenPath}>
+          <Route exact path={addFoodstuffScreenPath()}>
             <AddFoodstuffScreen />
           </Route>
         </Switch>

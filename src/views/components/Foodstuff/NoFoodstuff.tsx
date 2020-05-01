@@ -8,8 +8,9 @@ type NoRecipeProps = {};
 const NoRecipe: React.FC<NoRecipeProps> = () => {
   const history = useHistory();
 
+  const path = addFoodstuffScreenPath();
   const handleClick = (): void => {
-    history.push(addFoodstuffScreenPath);
+    history.push(path);
   };
 
   return (

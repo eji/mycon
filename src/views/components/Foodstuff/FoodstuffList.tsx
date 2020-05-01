@@ -49,7 +49,7 @@ const FoodstuffList: React.FC<FoodstuffListProps> = (
       </List>
       <Link
         to={{
-          pathname: addFoodstuffScreenPath,
+          pathname: addFoodstuffScreenPath(),
         }}
       >
         <Fab

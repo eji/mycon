@@ -67,11 +67,11 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
   };
 
   const handleClickRecipes = (): void => {
-    history.replace(recipesScreenPath);
+    history.replace(recipesScreenPath());
   };
 
   const handleClickFoodstuffs = (): void => {
-    history.replace(foodstuffsScreenPath);
+    history.replace(foodstuffsScreenPath());
   };
 
   return (

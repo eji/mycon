@@ -9,7 +9,7 @@ const NoRecipe: React.FC<NoRecipeProps> = () => {
   const history = useHistory();
 
   const handleClick = (): void => {
-    history.push(addRecipeScreenPath);
+    history.push(addRecipeScreenPath());
   };
 
   return (

@@ -8,5 +8,5 @@ export default interface DailyMenuRepository {
   findByCalendarDate(
     calendarDate: CalendarDate
   ): TaskEither<QueryError, DailyMenu>;
-  saveValue(dailyMenu: DailyMenu): TaskEither<CommandError, boolean>;
+  saveValue(dailyMenu: DailyMenu): TaskEither<CommandError, unknown>;
 }

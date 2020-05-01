@@ -63,6 +63,7 @@ export const makeFoodstuff = (props: {
   name: string;
   nutrients: Nutrient[];
 }): Foodstuff => {
+  const id = props.id || genId();
   const nutrientSet = Set(props.nutrients);
-  return new FoodstuffClass({ ...props, nutrients: nutrientSet });
+  return new FoodstuffClass({ ...props, id, nutrients: nutrientSet });
 };

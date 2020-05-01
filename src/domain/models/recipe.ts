@@ -45,5 +45,9 @@ class RecipeClass
   })
   implements Recipe {}
 
-export const makeRecipe = (props: Optional<RecipeProps>): Recipe =>
-  new RecipeClass(props);
+export const makeRecipe = (
+  props: Omit<RecipeProps, 'id'> & { id?: RecipeID }
+): Recipe => {
+  const id = props.id || genId();
+  return new RecipeClass({ ...props, id });
+};

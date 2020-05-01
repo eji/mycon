@@ -2,7 +2,6 @@ import { Record } from 'immutable';
 import { Eq } from 'fp-ts/lib/Eq';
 import ID, { genId } from './id';
 import RecipeIngredient from './recipeIngredient';
-import Optional from '../../types/optional';
 
 /**
  * レシピID

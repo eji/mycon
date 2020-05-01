@@ -15,6 +15,11 @@ import {
   allFoodstuffsReducer,
   AllFoodstuffsAction,
 } from './appState/allFoodstuffs';
+import {
+  AllRecipesAction,
+  isAllRecipesAction,
+  allRecipesReducer,
+} from './appState/allRecipes';
 
 export type AppState = {
   /* ドメインモデル */
@@ -56,6 +61,7 @@ type SelectBottomNaviAction = Action<
 export type AppStateAction =
   | CalendarAction
   | SelectBottomNaviAction
+  | AllRecipesAction
   | AllFoodstuffsAction;
 
 /* action handlers */
@@ -73,20 +79,23 @@ export const appStateReducer: Reducer<AppState, AppStateAction> = (
   state,
   action
 ) => {
-  if (isCalendarAction(action)) {
-    return { ...state, calendar: calendarReducer(state.calendar, action) };
-  }
-  if (isAllFoodstuffsAction(action)) {
-    return {
-      ...state,
-      allFoodstuffs: allFoodstuffsReducer(state.allFoodstuffs, action),
-    };
-  }
+  const newState = {
+    ...state,
+    calendar: isCalendarAction(action)
+      ? calendarReducer(state.calendar, action)
+      : state.calendar,
+    allFoodstuffs: isAllFoodstuffsAction(action)
+      ? allFoodstuffsReducer(state.allFoodstuffs, action)
+      : state.allFoodstuffs,
+    allRecipes: isAllRecipesAction(action)
+      ? allRecipesReducer(state.allRecipes, action)
+      : state.allRecipes,
+  };
   switch (action.type) {
     case selectBottomNaviMsg:
-      return selectBottomNaviHandler(state, action);
+      return selectBottomNaviHandler(newState, action);
     default:
-      return state;
+      return newState;
   }
 };
 

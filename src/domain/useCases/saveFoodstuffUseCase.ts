@@ -8,17 +8,19 @@ type Params = {
   foodstuff: Foodstuff;
 };
 
+type ReturnValue = TE.TaskEither<RepositoryError, Foodstuff>;
+
 /**
- * 食材を追加するためのユースケース
+ * 食材を保存するためのユースケース
  */
-export default class AddFoodstuffUseCase {
+export default class SaveFoodstuffUseCase {
   readonly foodstuffRepository: FoodstuffRepository;
 
   constructor(foodstuffRepository: FoodstuffRepository) {
     this.foodstuffRepository = foodstuffRepository;
   }
 
-  execute(params: Params): TE.TaskEither<RepositoryError, Foodstuff> {
+  execute(params: Params): ReturnValue {
     const { foodstuff } = params;
     return pipe(
       this.foodstuffRepository.saveValue(foodstuff),

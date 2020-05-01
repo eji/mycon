@@ -9,7 +9,7 @@ import { Foodstuff } from '../../../domain/models/foodstuff';
 import RepositoryError from '../../../errors/repositoryError';
 import Recipe, { makeRecipe } from '../../../domain/models/recipe';
 import { AddRecipeForm } from '../../forms/addRecipeFormSchema';
-import AddRecipeUseCase from '../../../domain/useCases/addRecipeUseCase';
+import SaveRecipeUseCase from '../../../domain/useCases/saveRecipeUseCase';
 import { makeRecipeIngredient } from '../../../domain/models/recipeIngredient';
 
 export type AllRecipes = { [key: string]: Recipe };
@@ -63,7 +63,7 @@ export const addRecipe = (params: {
   allFoodstuffs: { [key: string]: Foodstuff };
 }): TE.TaskEither<RepositoryError, AddRecipeAction> => {
   const { form, allFoodstuffs } = params;
-  const useCase = container.resolve(AddRecipeUseCase);
+  const useCase = container.resolve(SaveRecipeUseCase);
   const ingredients = form.ingredients.map((ingredient) =>
     makeRecipeIngredient({
       ...ingredient,

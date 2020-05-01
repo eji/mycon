@@ -7,7 +7,7 @@ import { ActionHandler } from '../../../types/actionHandler';
 import createActionDistinguishFunction from '../../../utils/createActionDistinguishFunction';
 import { AddFoodstuffForm } from '../../forms/addFoodstuffFormSchema';
 import { Foodstuff, makeFoodstuff } from '../../../domain/models/foodstuff';
-import AddFoodstuffUseCase from '../../../domain/useCases/addFoodstuffUseCase';
+import SaveFoodstuffUseCase from '../../../domain/useCases/saveFoodstuffUseCase';
 import RepositoryError from '../../../errors/repositoryError';
 import Nutrient from '../../../domain/models/nutrient';
 
@@ -60,7 +60,7 @@ export const allFoodstuffsReducer: Reducer<
 export const addFoodstuff = (
   form: AddFoodstuffForm
 ): TaskEither<RepositoryError, AddFoodstuffAction> => {
-  const useCase = container.resolve(AddFoodstuffUseCase);
+  const useCase = container.resolve(SaveFoodstuffUseCase);
   const foodstuff = makeFoodstuff({
     name: form.name,
     nutrients: form.nutrients as Nutrient[],

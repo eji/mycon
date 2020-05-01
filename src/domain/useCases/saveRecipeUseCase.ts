@@ -1,16 +1,14 @@
-import { isLeft } from 'fp-ts/lib/Either';
-import RecipeRepository from '../repositories/recipeRepository';
-import Recipe from '../models/recipe';
+import * as TE from 'fp-ts/lib/TaskEither';
+import { pipe } from 'fp-ts/lib/pipeable';
 import RepositoryError from '../../errors/repositoryError';
+import Recipe from '../models/recipe';
+import RecipeRepository from '../repositories/recipeRepository';
 
-type InputPort = {
+type Params = {
   recipe: Recipe;
 };
 
-type OutputPort = {
-  succeeded: (recipe: Recipe) => void;
-  failed: (error: RepositoryError) => void;
-};
+type ReturnValue = TE.TaskEither<RepositoryError, Recipe>;
 
 /**
  * レシピを保存するためのユースケース
@@ -22,25 +20,11 @@ export default class SaveRecipeUseCase {
     this.recipeRepository = recipeRepository;
   }
 
-  async execute(params: {
-    inputPort: InputPort;
-    outputPort: OutputPort;
-  }): Promise<void> {
-    const { inputPort, outputPort } = params;
-    const { recipe } = inputPort;
-    const recipeId = recipe.id;
-    const saveResult = await this.recipeRepository.saveValue(recipe)();
-    if (isLeft(saveResult)) {
-      outputPort.failed(saveResult.left);
-      return;
-    }
-
-    const result = await this.recipeRepository.findById(recipeId)();
-    if (isLeft(result)) {
-      outputPort.failed(result.left);
-      return;
-    }
-
-    outputPort.succeeded(result.right);
+  execute(params: Params): ReturnValue {
+    const { recipe } = params;
+    return pipe(
+      this.recipeRepository.saveValue(recipe),
+      TE.map(() => recipe)
+    );
   }
 }

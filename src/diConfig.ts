@@ -7,10 +7,10 @@ import {
   recipeRepository,
 } from './types/diTypes';
 import FoodstuffRepositoryInMemory from './infrastructures/repositories/foodstuffRepository/foodstuffRepositoryInMemory';
-import AddFoodstuffUseCase from './domain/useCases/addFoodstuffUseCase';
+import SaveFoodstuffUseCase from './domain/useCases/saveFoodstuffUseCase';
 import RecipeRepositoryInMemory from './infrastructures/repositories/recipeRepository/recipeRepositoryInMemory';
 import RecipeRepository from './domain/repositories/recipeRepository';
-import AddRecipeUseCase from './domain/useCases/addRecipeUseCase';
+import SaveRecipeUseCase from './domain/useCases/saveRecipeUseCase';
 
 const diConfig = (): void => {
   container.register<FoodstuffRepository>(foodstuffRepository, {
@@ -34,25 +34,25 @@ const diConfig = (): void => {
   );
 
   /* use cases */
-  container.register<AddFoodstuffUseCase>(AddFoodstuffUseCase, {
+  container.register<SaveFoodstuffUseCase>(SaveFoodstuffUseCase, {
     useFactory: (
       dependencyContainer: DependencyContainer
-    ): AddFoodstuffUseCase => {
+    ): SaveFoodstuffUseCase => {
       const repos = dependencyContainer.resolve<FoodstuffRepository>(
         foodstuffRepository
       );
-      return new AddFoodstuffUseCase(repos);
+      return new SaveFoodstuffUseCase(repos);
     },
   });
 
-  container.register<AddRecipeUseCase>(AddRecipeUseCase, {
+  container.register<SaveRecipeUseCase>(SaveRecipeUseCase, {
     useFactory: (
       dependencyContainer: DependencyContainer
-    ): AddRecipeUseCase => {
+    ): SaveRecipeUseCase => {
       const repos = dependencyContainer.resolve<RecipeRepository>(
         recipeRepository
       );
-      return new AddRecipeUseCase(repos);
+      return new SaveRecipeUseCase(repos);
     },
   });
 };

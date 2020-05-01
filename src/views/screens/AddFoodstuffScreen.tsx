@@ -18,7 +18,7 @@ import Layout from '../layouts/Layout';
 import { appStateContext } from '../components/AppStateProvider';
 import {
   AddFoodstuffForm,
-  AddFoodstuffFormSchema,
+  addFoodstuffFormSchema,
 } from '../forms/addFoodstuffFormSchema';
 import { addFoodstuff } from '../state/appState/allFoodstuffs';
 import CommandError from '../../errors/repositoryErrors/commandError';
@@ -99,30 +99,80 @@ const AddFoodstuffScreen: React.FC<AddFoodstuffScreenProps> = () => {
       mapLeft((error: CommandError) => console.log(error))
     )();
   };
+
+  const NutrientItem = (props: {
+    nutrient: Nutrient;
+    values: Nutrient[];
+    setFieldValue: (
+      field: string,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      value: any,
+      shouldValidate?: boolean | undefined
+    ) => void;
+  }): JSX.Element => {
+    const { nutrient, values, setFieldValue } = props;
+    const checked = values.includes(nutrient);
+    const handleChecked = (): void => {
+      setFieldValue(
+        'nutrients',
+        checked ? values.filter((v) => v !== nutrient) : [...values, nutrient]
+      );
+    };
+    return (
+      <Box className={classes.nutrientItem}>
+        <CheckboxButton
+          text={nutrient}
+          checked={checked}
+          handleChecked={handleChecked}
+        />
+      </Box>
+    );
+  };
+
   const nutrientList = (params: {
     section: string;
     nutrients: Nutrient[];
-  }): JSX.Element => (
-    <>
-      <Divider variant="fullWidth" />
-      <Typography className={classes.nutrientCategorySection}>
-        {params.section}
-      </Typography>
-      <Grid item className={classes.nutrientCategory}>
-        {params.nutrients.map((nutrient) => (
-          <Box className={classes.nutrientItem}>
-            <CheckboxButton text={nutrient} checked />
-          </Box>
-        ))}
-      </Grid>
-    </>
-  );
+    values: Nutrient[];
+    setFieldValue: (
+      field: string,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      value: any,
+      shouldValidate?: boolean | undefined
+    ) => void;
+  }): JSX.Element => {
+    const { section, nutrients, values, setFieldValue } = params;
+
+    return (
+      <>
+        <Divider variant="fullWidth" />
+        <Typography className={classes.nutrientCategorySection}>
+          {section}
+        </Typography>
+        <Grid item className={classes.nutrientCategory}>
+          {nutrients.map((nutrient) => (
+            <NutrientItem
+              nutrient={nutrient}
+              values={values}
+              setFieldValue={setFieldValue}
+            />
+            // <Box className={classes.nutrientItem}>
+            //   <CheckboxButton
+            //     text={nutrient}
+            //     checked={values.includes(nutrient)}
+            //     handleChecked={(): void => {}}
+            //   />
+            // </Box>
+          ))}
+        </Grid>
+      </>
+    );
+  };
 
   return (
     <Layout title="食材の追加" handleBack={handleBack} hideBottomNavi>
       <Formik
         initialValues={initValues}
-        validationSchema={AddFoodstuffFormSchema}
+        validationSchema={addFoodstuffFormSchema}
         validateOnChange={false}
         onSubmit={handleSubmit}
       >
@@ -132,6 +182,7 @@ const AddFoodstuffScreen: React.FC<AddFoodstuffScreenProps> = () => {
           handleBlur,
           submitForm,
           isSubmitting,
+          setFieldValue,
         }): ReactElement => (
           <Form className={classes.root}>
             <div className={classes.inputArea}>
@@ -158,17 +209,38 @@ const AddFoodstuffScreen: React.FC<AddFoodstuffScreenProps> = () => {
                 {nutrientList({
                   section: '炭水化物',
                   nutrients: CARBOHYDRATES,
+                  setFieldValue,
+                  values: values.nutrients as Nutrient[],
                 })}
-                {nutrientList({ section: 'タンパク質', nutrients: PROTEINS })}
-                {nutrientList({ section: '脂質', nutrients: FATS })}
-                {nutrientList({ section: 'ミネラル', nutrients: MINERALS })}
+                {nutrientList({
+                  section: 'タンパク質',
+                  nutrients: PROTEINS,
+                  setFieldValue,
+                  values: values.nutrients as Nutrient[],
+                })}
+                {nutrientList({
+                  section: '脂質',
+                  nutrients: FATS,
+                  setFieldValue,
+                  values: values.nutrients as Nutrient[],
+                })}
+                {nutrientList({
+                  section: 'ミネラル',
+                  nutrients: MINERALS,
+                  setFieldValue,
+                  values: values.nutrients as Nutrient[],
+                })}
                 {nutrientList({
                   section: '脂溶性ビタミン',
                   nutrients: FAT_SOLUBLE_VITAMINS,
+                  setFieldValue,
+                  values: values.nutrients as Nutrient[],
                 })}
                 {nutrientList({
                   section: '水溶性ビタミン',
                   nutrients: WATER_SOLUBLE_VITAMINS,
+                  setFieldValue,
+                  values: values.nutrients as Nutrient[],
                 })}
               </Grid>
             </div>

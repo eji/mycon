@@ -5,6 +5,6 @@ import CommandError from '../../errors/repositoryErrors/commandError';
 
 export default interface RecipeRepository {
   findById(id: RecipeID): TaskEither<QueryError, Recipe>;
-  saveValue(recipe: Recipe): TaskEither<CommandError, boolean>;
-  saveValues(recipes: Recipe[]): TaskEither<CommandError, boolean>;
+  saveValue(recipe: Recipe): TaskEither<CommandError, unknown>;
+  saveValues(recipes: Recipe[]): TaskEither<CommandError, unknown>;
 }

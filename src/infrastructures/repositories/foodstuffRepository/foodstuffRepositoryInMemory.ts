@@ -1,6 +1,4 @@
-import { TaskEither, right } from 'fp-ts/lib/TaskEither';
-import { Task, of } from 'fp-ts/lib/Task';
-import { Option, none } from 'fp-ts/lib/Option';
+import * as TE from 'fp-ts/lib/TaskEither';
 import QueryError from '../../../errors/repositoryErrors/queryError';
 import CommandError from '../../../errors/repositoryErrors/commandError';
 import InMemoryStore from '../../../drivers/InMemoryStore';
@@ -15,16 +13,17 @@ export default class FoodstuffRepositoryInMemory
     this.store = store || new InMemoryStore<FoodstuffID, Foodstuff>();
   }
 
-  all(): TaskEither<QueryError, Foodstuff[]> {
-    return right(this.store.values());
+  all(): TE.TaskEither<QueryError, Foodstuff[]> {
+    return TE.right(this.store.values());
   }
 
-  saveValue(foodstuff: Foodstuff): Task<Option<CommandError>> {
+  saveValue(foodstuff: Foodstuff): TE.TaskEither<CommandError, unknown> {
     return this.saveValues([foodstuff]);
   }
 
-  saveValues(foodstuffs: Foodstuff[]): Task<Option<CommandError>> {
-    foodstuffs.forEach((foodstuff) => this.store.set(foodstuff.id, foodstuff));
-    return of(none);
+  saveValues(foodstuffs: Foodstuff[]): TE.TaskEither<CommandError, unknown> {
+    return TE.right(
+      foodstuffs.forEach((foodstuff) => this.store.set(foodstuff.id, foodstuff))
+    );
   }
 }

@@ -5,7 +5,6 @@ import {
   createStyles,
   Typography,
   ButtonBase,
-  Container,
 } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) => {

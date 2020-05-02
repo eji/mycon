@@ -20,6 +20,17 @@ import {
   isAllRecipesAction,
   allRecipesReducer,
 } from './appState/allRecipes';
+import FoodAllergyHistory from '../../domain/models/foodAllergyHistory';
+import FamilyMember from '../../domain/models/familyMember';
+import {
+  AllFamilyMembersAction,
+  isAllFamilyMembersAction,
+  allFamilyMembersReducer,
+} from './appState/allFamilyMembers';
+import {
+  isAllFoodAllergyHistoriesAction,
+  allFoodAllergyHistoriesReducer,
+} from './appState/allFoodAllergyHistories';
 
 export type AppState = {
   /* ドメインモデル */
@@ -44,6 +55,19 @@ export type AppState = {
    */
   allFoodstuffs: AllFoodStuffs;
 
+  /**
+   * 全ての家族メンバー
+   */
+  allFamilyMembers: { [key: string]: FamilyMember };
+
+  /**
+   * 全ての食品アレルギー履歴
+   */
+  allFoodAllergyHistories: {
+    byFamilyMember: { [key: string]: FoodAllergyHistory };
+    byFoodstuff: { [key: string]: FoodAllergyHistory };
+  };
+
   /* UIのステート */
   bottomNaviIndex: number;
 };
@@ -62,6 +86,8 @@ export type AppStateAction =
   | CalendarAction
   | SelectBottomNaviAction
   | AllRecipesAction
+  | AllFoodstuffsAction
+  | AllFamilyMembersAction
   | AllFoodstuffsAction;
 
 /* action handlers */
@@ -90,6 +116,12 @@ export const appStateReducer: Reducer<AppState, AppStateAction> = (
     allRecipes: isAllRecipesAction(action)
       ? allRecipesReducer(state.allRecipes, action)
       : state.allRecipes,
+    allFamilyMembers: isAllFamilyMembersAction(action)
+      ? allFamilyMembersReducer(state.allFamilyMembers, action)
+      : state.allFamilyMembers,
+    allFoodAllergyHistories: isAllFoodAllergyHistoriesAction(action)
+      ? allFoodAllergyHistoriesReducer(state.allFoodAllergyHistories, action)
+      : state.allFoodAllergyHistories,
   };
   switch (action.type) {
     case selectBottomNaviMsg:
@@ -106,6 +138,11 @@ export const initAppState: AppState = {
   allDailyMenus: {},
   allRecipes: {},
   allFoodstuffs: {},
+  allFamilyMembers: {},
+  allFoodAllergyHistories: {
+    byFamilyMember: {},
+    byFoodstuff: {},
+  },
   bottomNaviIndex: 0,
 };
 

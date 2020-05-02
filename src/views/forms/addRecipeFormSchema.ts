@@ -11,7 +11,6 @@ export const addRecipeFormSchema = yup.object().shape({
       quantity: yup.string(),
     })
   ),
-  textForCookingDirections: yup.array().of(yup.string()),
 });
 
 export type AddRecipeForm = yup.InferType<typeof addRecipeFormSchema>;

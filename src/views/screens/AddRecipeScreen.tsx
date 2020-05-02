@@ -15,18 +15,11 @@ import {
   TableBody,
   ButtonBase,
   Typography,
-  List,
-  ListItem,
-  ListItemAvatar,
-  Avatar,
-  ListItemText,
   Box,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import Layout from '../layouts/Layout';
 import { appStateContext } from '../components/AppStateProvider';
-import RecipesList from '../components/Recipe/RecipesList';
-import NoRecipe from '../components/Recipe/NoRecipe';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -97,28 +90,6 @@ const AddRecipeScreen: React.FC<AddRecipeScreenProps> = () => {
           </TableContainer>
           <Container>
             <Button startIcon={<AddIcon />}>材料を追加</Button>
-          </Container>
-          <Typography>作り方</Typography>
-          <List>
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar>
-                  <Typography>1</Typography>
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary="Single-line item" />
-            </ListItem>
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar>
-                  <Typography>2</Typography>
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary="hogeeeeeeeeeeeeddddddddddddddddddddddddddddddddddddddd" />
-            </ListItem>
-          </List>
-          <Container>
-            <Button startIcon={<AddIcon />}>手順を追加</Button>
           </Container>
         </Box>
         <ButtonBase

@@ -8,8 +8,6 @@ type Params = {
   recipe: Recipe;
 };
 
-type ReturnValue = TE.TaskEither<RepositoryError, Recipe>;
-
 /**
  * レシピを保存するためのユースケース
  */
@@ -20,7 +18,7 @@ export default class SaveRecipeUseCase {
     this.recipeRepository = recipeRepository;
   }
 
-  execute(params: Params): ReturnValue {
+  execute(params: Params): TE.TaskEither<RepositoryError, Recipe> {
     const { recipe } = params;
     return pipe(
       this.recipeRepository.saveValue(recipe),

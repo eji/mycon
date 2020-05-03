@@ -5,22 +5,20 @@ import FamilyMember from '../models/familyMember';
 import FamilyMemberRepository from '../repositories/familyMemberRepository';
 
 type Params = {
-  familyMembers: FamilyMember[];
+  familyMember: FamilyMember;
 };
 
-type ReturnValue = TE.TaskEither<RepositoryError, FamilyMember[]>;
-
 /**
- * 家族メンバー一覧を保存するためのユースケース
+ * 家族メンバーを保存するためのユースケース
  */
-export default class SaveRecipeUseCase {
+export default class SaveFamilyMemberUseCase {
   constructor(readonly familyMemberRepository: FamilyMemberRepository) {}
 
-  execute(params: Params): ReturnValue {
-    const { familyMembers } = params;
+  execute(params: Params): TE.TaskEither<RepositoryError, FamilyMember> {
+    const { familyMember } = params;
     return pipe(
-      this.familyMemberRepository.saveValues(familyMembers),
-      TE.map(() => familyMembers)
+      this.familyMemberRepository.saveValue(familyMember),
+      TE.map(() => familyMember)
     );
   }
 }

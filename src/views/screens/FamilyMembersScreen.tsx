@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import Layout from '../layouts/Layout';
 import { appStateContext } from '../components/AppStateProvider';
 import NoFamilyMember from '../components/FamilyMember/NoFamilyMember';
+import FamilyMemberList from '../components/FamilyMember/FamilyMemberList';
 
 type FamilyMembersScreenProps = {};
 
@@ -15,8 +16,7 @@ const FamilyMembersScreen: React.FC<FamilyMembersScreenProps> = () => {
       {familyMembers.length === 0 ? (
         <NoFamilyMember />
       ) : (
-        <NoFamilyMember />
-        // <FoodstuffList foodstuffs={foodstuffs} />
+        <FamilyMemberList familyMembers={familyMembers} />
       )}
     </Layout>
   );

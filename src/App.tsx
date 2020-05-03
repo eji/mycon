@@ -10,6 +10,8 @@ import {
   addRecipeScreenPath,
   foodstuffsScreenPath,
   addFoodstuffScreenPath,
+  familyMembersScreenPath,
+  addFamilyMemberScreenPath,
 } from './routePaths';
 import ScheduleScreen from './views/screens/ScheduleScreen';
 import DailyMenuScreen from './views/screens/DailyMenuScreen';
@@ -18,6 +20,8 @@ import RecipesScreen from './views/screens/RecipesScreen';
 import AddRecipeScreen from './views/screens/AddRecipeScreen';
 import FoodstuffsScreen from './views/screens/FoodstuffsScreen';
 import AddFoodstuffScreen from './views/screens/AddFoodstuffScreen';
+import FamilyMembersScreen from './views/screens/FamilyMembersScreen';
+import EditFamilyMemberScreen from './views/screens/EditFamilyMemberScreen';
 
 const App: React.FC = () => (
   <>
@@ -45,6 +49,12 @@ const App: React.FC = () => (
           </Route>
           <Route exact path={addFoodstuffScreenPath()}>
             <AddFoodstuffScreen />
+          </Route>
+          <Route exact path={familyMembersScreenPath()}>
+            <FamilyMembersScreen />
+          </Route>
+          <Route path={addFamilyMemberScreenPath()}>
+            <EditFamilyMemberScreen />
           </Route>
         </Switch>
       </BrowserRouter>

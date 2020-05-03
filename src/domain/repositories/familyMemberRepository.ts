@@ -7,5 +7,4 @@ export default interface FamilyMemberRepository {
   findById(id: FamilyMemberID): TaskEither<QueryError, FamilyMember>;
   all(): TaskEither<QueryError, FamilyMember[]>;
   saveValue(familyMember: FamilyMember): TaskEither<CommandError, unknown>;
-  saveValues(familyMembers: FamilyMember[]): TaskEither<CommandError, unknown>;
 }

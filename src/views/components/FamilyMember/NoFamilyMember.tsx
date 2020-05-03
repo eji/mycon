@@ -8,9 +8,8 @@ type NoFamilyMemberProps = {};
 const NoFamilyMember: React.FC<NoFamilyMemberProps> = () => {
   const history = useHistory();
 
-  const path = addFamilyMemberScreenPath();
   const handleClick = (): void => {
-    history.push(path);
+    history.push(addFamilyMemberScreenPath());
   };
 
   return (

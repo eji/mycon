@@ -1,25 +1,34 @@
 import { Reducer } from 'react';
+import { container } from 'tsyringe';
+import { pipe } from 'fp-ts/lib/pipeable';
+import * as TE from 'fp-ts/lib/TaskEither';
 import { Action } from '../../../types/action';
 import { ActionHandler } from '../../../types/actionHandler';
 import createActionDistinguishFunction from '../../../utils/createActionDistinguishFunction';
-import FamilyMember from '../../../domain/models/familyMember';
+import FamilyMember, {
+  makeFamilyMember,
+  FamilyMemberID,
+} from '../../../domain/models/familyMember';
+import { SaveFamilyMemberForm } from '../../forms/saveFamilyMemberFormSchema';
+import SaveFamilyMemberUseCase from '../../../domain/useCases/saveFamilyMemberUseCase';
+import RepositoryError from '../../../errors/repositoryError';
 
 export type AllFamilyMembers = { [key: string]: FamilyMember };
 
 /** action messages */
 
-const addFamilyMembersMsg = 'addFamilyMembers';
+const saveFamilyMemberMsg = 'saveFamilyMember';
 
-const allFamilyMembersMsgs = [addFamilyMembersMsg];
+const allFamilyMembersMsgs = [saveFamilyMemberMsg];
 
 /* actions */
 
-export type AddFamilyMembersAction = Action<
-  typeof addFamilyMembersMsg,
-  { familyMembers: FamilyMember[] }
+export type SaveFamilyMemberAction = Action<
+  typeof saveFamilyMemberMsg,
+  { familyMember: FamilyMember }
 >;
 
-export type AllFamilyMembersAction = AddFamilyMembersAction;
+export type AllFamilyMembersAction = SaveFamilyMemberAction;
 
 export const isAllFamilyMembersAction = createActionDistinguishFunction<
   AllFamilyMembersAction
@@ -27,18 +36,13 @@ export const isAllFamilyMembersAction = createActionDistinguishFunction<
 
 /* action handler */
 
-const addFamiyMembersHandler: ActionHandler<
+const saveFamiyMemberHandler: ActionHandler<
   AllFamilyMembers,
-  AddFamilyMembersAction
-> = (allFamilyMembers, { familyMembers }) => {
-  return familyMembers.reduce(
-    (allMembers, familyMember) => ({
-      ...allMembers,
-      [familyMember.id]: familyMember,
-    }),
-    allFamilyMembers
-  );
-};
+  SaveFamilyMemberAction
+> = (allFamilyMembers, { familyMember }) => ({
+  ...allFamilyMembers,
+  [familyMember.id]: familyMember,
+});
 
 /* reducer */
 
@@ -47,8 +51,8 @@ export const allFamilyMembersReducer: Reducer<
   AllFamilyMembersAction
 > = (allFamilyMembers, action) => {
   switch (action.type) {
-    case addFamilyMembersMsg:
-      return addFamiyMembersHandler(allFamilyMembers, action);
+    case saveFamilyMemberMsg:
+      return saveFamiyMemberHandler(allFamilyMembers, action);
     default:
       return allFamilyMembers;
   }
@@ -56,21 +60,16 @@ export const allFamilyMembersReducer: Reducer<
 
 /* action creator */
 
-// export const addRecipe = (params: {
-//   form: AddRecipeForm;
-//   allFoodstuffs: { [key: string]: Foodstuff };
-// }): TE.TaskEither<RepositoryError, AddFamilyMembersAction> => {
-//   const { form, allFoodstuffs } = params;
-//   const useCase = container.resolve(SaveRecipeUseCase);
-//   const ingredients = form.ingredients.map((ingredient) =>
-//     makeRecipeIngredient({
-//       ...ingredient,
-//       foodstuff: allFoodstuffs[ingredient.foodstuffID],
-//     })
-//   );
-//   const recipe = makeRecipe({ ...form, ingredients });
-//   return pipe(
-//     useCase.execute({ recipe }),
-//     TE.map(() => ({ type: addFamilyMembersMsg, newRecipe: recipe }))
-//   );
-// };
+export const saveFamilyMember = (
+  form: SaveFamilyMemberForm & { id?: FamilyMemberID }
+): TE.TaskEither<RepositoryError, SaveFamilyMemberAction> => {
+  const useCase = container.resolve(SaveFamilyMemberUseCase);
+  const familyMember = makeFamilyMember(form);
+  return pipe(
+    useCase.execute({ familyMember }),
+    TE.map(() => ({
+      type: saveFamilyMemberMsg,
+      familyMember,
+    }))
+  );
+};

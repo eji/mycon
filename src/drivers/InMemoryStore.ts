@@ -1,4 +1,5 @@
-import { Option, none, some } from 'fp-ts/lib/Option';
+import * as O from 'fp-ts/lib/Option';
+import { pipe } from 'fp-ts/lib/pipeable';
 
 export default class InMemoryStore<K, V> {
   readonly table: Map<K, V>;
@@ -7,16 +8,9 @@ export default class InMemoryStore<K, V> {
     this.table = table || new Map<K, V>();
   }
 
-  set(key: K, value: V): void {
-    this.table.set(key, value);
-  }
+  set = (key: K, value: V): unknown => this.table.set(key, value);
 
-  get(key: K): Option<V> {
-    const value = this.table.get(key);
-    return typeof value === 'undefined' ? none : some(value);
-  }
+  get = (key: K): O.Option<V> => pipe(this.table.get(key), O.fromNullable);
 
-  values(): V[] {
-    return Array.from(this.table.values());
-  }
+  values = (): V[] => Array.from(this.table.values());
 }

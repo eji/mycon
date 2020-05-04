@@ -4,6 +4,7 @@ import CommandError from '../../../errors/repositoryErrors/commandError';
 import InMemoryStore from '../../../drivers/InMemoryStore';
 import FoodstuffRepository from '../../../domain/repositories/foodstuffRepository';
 import { Foodstuff, FoodstuffID } from '../../../domain/models/foodstuff';
+import foodstuffSeeds from '../../../data/seeds/foodstuffs';
 
 export default class FoodstuffRepositoryInMemory
   implements FoodstuffRepository {
@@ -11,6 +12,8 @@ export default class FoodstuffRepositoryInMemory
 
   constructor(store?: InMemoryStore<FoodstuffID, Foodstuff>) {
     this.store = store || new InMemoryStore<FoodstuffID, Foodstuff>();
+    // TODO: 後でこれを消すこと
+    this.saveValues(foodstuffSeeds);
   }
 
   all(): TE.TaskEither<QueryError, Foodstuff[]> {

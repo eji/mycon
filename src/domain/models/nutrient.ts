@@ -125,7 +125,7 @@ export const WATER_SOLUBLE_VITAMINS: WaterSolubleVitamin[] = [
  * ビタミン
  */
 export type Vitamin = FatSolubleVitamin | WaterSolubleVitamin;
-export const VITAMINS = [...FAT_SOLUBLE_VITAMINS, WATER_SOLUBLE_VITAMINS];
+export const VITAMINS = [...FAT_SOLUBLE_VITAMINS, ...WATER_SOLUBLE_VITAMINS];
 
 /**
  * 栄養素

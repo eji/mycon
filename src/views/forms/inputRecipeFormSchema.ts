@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-export const addRecipeFormSchema = yup.object().shape({
+export const inputRecipeFormSchema = yup.object().shape({
   name: yup
     .string()
     .required('入力してください')
@@ -13,4 +13,4 @@ export const addRecipeFormSchema = yup.object().shape({
   ),
 });
 
-export type AddRecipeForm = yup.InferType<typeof addRecipeFormSchema>;
+export type InputRecipeForm = yup.InferType<typeof inputRecipeFormSchema>;

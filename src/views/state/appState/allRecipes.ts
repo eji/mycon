@@ -8,7 +8,7 @@ import createActionDistinguishFunction from '../../../utils/createActionDistingu
 import { Foodstuff } from '../../../domain/models/foodstuff';
 import RepositoryError from '../../../errors/repositoryError';
 import Recipe, { makeRecipe } from '../../../domain/models/recipe';
-import { AddRecipeForm } from '../../forms/addRecipeFormSchema';
+import { InputRecipeForm } from '../../forms/inputRecipeFormSchema';
 import SaveRecipeUseCase from '../../../domain/useCases/saveRecipeUseCase';
 import { makeRecipeIngredient } from '../../../domain/models/recipeIngredient';
 
@@ -59,7 +59,7 @@ export const allRecipesReducer: Reducer<AllRecipes, AllRecipesAction> = (
 /* action creator */
 
 export const addRecipe = (params: {
-  form: AddRecipeForm;
+  form: InputRecipeForm;
   allFoodstuffs: { [key: string]: Foodstuff };
 }): TE.TaskEither<RepositoryError, AddRecipeAction> => {
   const { form, allFoodstuffs } = params;

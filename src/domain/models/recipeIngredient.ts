@@ -1,16 +1,8 @@
 import { Record } from 'immutable';
-import ID, { genId } from './id';
 import Quantity from './quantity';
 import { Foodstuff } from './foodstuff';
 
-/**
- * 材料ID
- */
-export type RecipeIngredientID = ID;
-
 interface RecipeIngredientProps {
-  id: RecipeIngredientID;
-
   /**
    * 食材
    */
@@ -34,15 +26,9 @@ export default interface RecipeIngredient
 }
 
 export const makeRecipeIngredient = (props: {
-  id?: RecipeIngredientID;
   foodstuff: Foodstuff;
   quantity: Quantity;
 }): RecipeIngredient => {
-  const id = props.id || genId();
-  return new (class
-    extends Record<RecipeIngredientProps>({
-      ...props,
-      id,
-    })
+  return new (class extends Record<RecipeIngredientProps>(props)
     implements RecipeIngredient {})(props);
 };

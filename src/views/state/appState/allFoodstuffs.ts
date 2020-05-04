@@ -10,6 +10,7 @@ import { Foodstuff, makeFoodstuff } from '../../../domain/models/foodstuff';
 import SaveFoodstuffUseCase from '../../../domain/useCases/saveFoodstuffUseCase';
 import RepositoryError from '../../../errors/repositoryError';
 import Nutrient from '../../../domain/models/nutrient';
+import FoodstuffCategory from '../../../domain/models/foodstuffCategory';
 
 export type AllFoodStuffs = { [key: string]: Foodstuff };
 
@@ -64,6 +65,7 @@ export const addFoodstuff = (
   const foodstuff = makeFoodstuff({
     name: form.name,
     nutrients: form.nutrients as Nutrient[],
+    category: form.category as FoodstuffCategory,
   });
   return pipe(
     useCase.execute({ foodstuff }),

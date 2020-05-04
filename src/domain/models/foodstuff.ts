@@ -1,6 +1,7 @@
 import { Record, Set, merge } from 'immutable';
 import ID, { genId } from './id';
 import Nutrient from './nutrient';
+import FoodstuffCategory from './foodstuffCategory';
 
 /**
  * 食材ID
@@ -22,6 +23,11 @@ interface FoodstuffProps {
    * 含有栄養素一覧
    */
   nutrients: Set<Nutrient>;
+
+  /**
+   * 食材のカテゴリー
+   */
+  category: FoodstuffCategory;
 }
 
 /**
@@ -44,6 +50,7 @@ class FoodstuffClass
     id: genId(),
     name: '',
     nutrients: Set(),
+    category: 'その他',
   })
   implements Foodstuff {
   addNutrients(nutrients: Nutrient[]): this {
@@ -62,6 +69,7 @@ export const makeFoodstuff = (props: {
   id?: FoodstuffID;
   name: string;
   nutrients: Nutrient[];
+  category: FoodstuffCategory;
 }): Foodstuff => {
   const id = props.id || genId();
   const nutrientSet = Set(props.nutrients);

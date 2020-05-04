@@ -12,6 +12,10 @@ import {
   Divider,
   Grid,
   Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
 } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import Layout from '../layouts/Layout';
@@ -31,6 +35,7 @@ import Nutrient, {
   CARBOHYDRATES,
   PROTEINS,
 } from '../../domain/models/nutrient';
+import { foodstuffCategories } from '../../domain/models/foodstuffCategory';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -47,6 +52,10 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     textField: {
       width: '100%',
+    },
+    selectCategoryArea: {
+      marginTop: theme.spacing(2),
+      width: '70%',
     },
     nutrients: {
       marginTop: theme.spacing(2),
@@ -85,6 +94,7 @@ const AddFoodstuffScreen: React.FC<AddFoodstuffScreenProps> = () => {
   const initValues: AddFoodstuffForm = {
     name: '',
     nutrients: [],
+    category: '',
   };
 
   const handleBack = (): void => {
@@ -197,6 +207,27 @@ const AddFoodstuffScreen: React.FC<AddFoodstuffScreenProps> = () => {
                   fullWidth
                 />
               </div>
+              <FormControl className={classes.selectCategoryArea}>
+                <InputLabel id="foodstuff-category-select-label">
+                  カテゴリ
+                </InputLabel>
+                <Select
+                  labelId="foodstuff-category-select-label"
+                  id="foodstuff-category-select"
+                  value={values.category}
+                  onChange={(
+                    event: React.ChangeEvent<{ value: unknown }>
+                  ): void => {
+                    setFieldValue('category', event.target.value as string);
+                  }}
+                >
+                  {foodstuffCategories.map((foodstuffCategory) => (
+                    <MenuItem value={foodstuffCategory}>
+                      {foodstuffCategory}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
               <Grid
                 container
                 xs={12}

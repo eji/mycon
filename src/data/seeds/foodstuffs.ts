@@ -12,7 +12,7 @@ import {
 
 const foodstuffSeeds: Foodstuff[] = pipe(
   [
-    { name: 'ごはん', nutrients: ['糖質'] },
+    { name: 'ごはん', nutrients: ['糖質'], category: '穀類・いも類' },
     {
       name: 'たまご',
       nutrients: [
@@ -21,6 +21,7 @@ const foodstuffSeeds: Foodstuff[] = pipe(
         ...MINERALS,
         ...VITAMINS.filter((v) => v !== VITAMIN_C),
       ],
+      category: '卵・肉・魚介',
     },
     {
       name: '牛乳',
@@ -31,6 +32,7 @@ const foodstuffSeeds: Foodstuff[] = pipe(
         ...MINERALS,
         ...VITAMINS.filter((v) => v !== VITAMIN_C),
       ],
+      category: '乳製品',
     },
   ],
   A.map(makeFoodstuff)

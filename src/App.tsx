@@ -22,6 +22,7 @@ import FoodstuffsScreen from './views/screens/FoodstuffsScreen';
 import EditFoodstuffScreen from './views/screens/EditFoodstuffScreen';
 import FamilyMembersScreen from './views/screens/FamilyMembersScreen';
 import EditFamilyMemberScreen from './views/screens/EditFamilyMemberScreen';
+import RequireInitApp from './views/components/common/RequireInitApp';
 
 const App: React.FC = () => (
   <>
@@ -30,31 +31,49 @@ const App: React.FC = () => (
       <BrowserRouter>
         <Switch>
           <Route exact path={scheduleScreenPath}>
-            <ScheduleScreen />
+            <RequireInitApp>
+              <ScheduleScreen />
+            </RequireInitApp>
           </Route>
           <Route exact path={dailyMenuScreenPath}>
-            <DailyMenuScreen />
+            <RequireInitApp>
+              <DailyMenuScreen />
+            </RequireInitApp>
           </Route>
           <Route exact path={editDailyMenuScreenPath}>
-            <DailyMenuScreen />
+            <RequireInitApp>
+              <DailyMenuScreen />
+            </RequireInitApp>
           </Route>
           <Route exact path={recipesScreenPath()}>
-            <RecipesScreen />
+            <RequireInitApp>
+              <RecipesScreen />
+            </RequireInitApp>
           </Route>
           <Route exact path={addRecipeScreenPath()}>
-            <EditRecipeScreen />
+            <RequireInitApp>
+              <EditRecipeScreen />
+            </RequireInitApp>
           </Route>
           <Route exact path={foodstuffsScreenPath()}>
-            <FoodstuffsScreen />
+            <RequireInitApp>
+              <FoodstuffsScreen />
+            </RequireInitApp>
           </Route>
           <Route exact path={addFoodstuffScreenPath()}>
-            <EditFoodstuffScreen />
+            <RequireInitApp>
+              <EditFoodstuffScreen />
+            </RequireInitApp>
           </Route>
           <Route exact path={familyMembersScreenPath()}>
-            <FamilyMembersScreen />
+            <RequireInitApp>
+              <FamilyMembersScreen />
+            </RequireInitApp>
           </Route>
           <Route path={addFamilyMemberScreenPath()}>
-            <EditFamilyMemberScreen />
+            <RequireInitApp>
+              <EditFamilyMemberScreen />
+            </RequireInitApp>
           </Route>
         </Switch>
       </BrowserRouter>

@@ -1,4 +1,7 @@
 import { Reducer } from 'react';
+import * as TE from 'fp-ts/lib/TaskEither';
+import { pipe } from 'fp-ts/lib/pipeable';
+import { container } from 'tsyringe';
 import Calendar, { makeCalendar } from '../../domain/models/calendar';
 import {
   CalendarAction,
@@ -31,6 +34,16 @@ import {
   isAllFoodAllergyHistoriesAction,
   allFoodAllergyHistoriesReducer,
 } from './appState/allFoodAllergyHistories';
+import RepositoryError from '../../errors/repositoryError';
+import initSeeds from '../../data/initSeeds';
+import {
+  foodstuffRepository,
+  familyMemberRepository,
+} from '../../types/diTypes';
+import FoodstuffRepository from '../../domain/repositories/foodstuffRepository';
+import FamilyMemberRepository from '../../domain/repositories/familyMemberRepository';
+
+export type InitializedAppState = 'not yet' | 'initializing' | 'initialized';
 
 export type AppState = {
   /* ドメインモデル */
@@ -68,12 +81,18 @@ export type AppState = {
     byFoodstuff: { [key: string]: FoodAllergyHistory };
   };
 
+  /* アプリのステート */
+
+  initializeAppState: InitializedAppState;
+
   /* UIのステート */
+
   bottomNaviIndex: number;
 };
 
 /* action messages */
 const selectBottomNaviMsg = 'selectBottomNavi';
+const initializeAppStateMsg = 'initializeAppState';
 
 /* actions */
 
@@ -82,9 +101,15 @@ type SelectBottomNaviAction = Action<
   { index: number }
 >;
 
+type InitializeAppStateAction = Action<
+  typeof initializeAppStateMsg,
+  { status: InitializedAppState; newAppState?: AppState }
+>;
+
 export type AppStateAction =
-  | CalendarAction
   | SelectBottomNaviAction
+  | InitializeAppStateAction
+  | CalendarAction
   | AllRecipesAction
   | AllFoodstuffsAction
   | AllFamilyMembersAction
@@ -97,6 +122,16 @@ const selectBottomNaviHandler: ActionHandler<
   SelectBottomNaviAction
 > = (appState, { index }) => {
   return { ...appState, bottomNaviIndex: index };
+};
+
+const initializeAppStateHandler: ActionHandler<
+  AppState,
+  InitializeAppStateAction
+> = (appState, { status, newAppState }) => {
+  if (typeof newAppState === 'undefined') {
+    return appState;
+  }
+  return { ...appState, ...newAppState, initializeAppState: status };
 };
 
 /* reducer */
@@ -126,6 +161,8 @@ export const appStateReducer: Reducer<AppState, AppStateAction> = (
   switch (action.type) {
     case selectBottomNaviMsg:
       return selectBottomNaviHandler(newState, action);
+    case initializeAppStateMsg:
+      return initializeAppStateHandler(newState, action);
     default:
       return newState;
   }
@@ -143,6 +180,7 @@ export const initAppState: AppState = {
     byFamilyMember: {},
     byFoodstuff: {},
   },
+  initializeAppState: 'not yet',
   bottomNaviIndex: 0,
 };
 
@@ -154,4 +192,61 @@ export const selectBottomNavi = async (
 ): Promise<void> => {
   dispatch({ type: selectBottomNaviMsg, index });
   return Promise.resolve();
+};
+
+export const initializingAppState = (): TE.TaskEither<
+  RepositoryError,
+  InitializeAppStateAction
+> => {
+  // const recipeRepos = container.resolve<RecipeRepository>(recipeRepository);
+  const foodstuffRepos = container.resolve<FoodstuffRepository>(
+    foodstuffRepository
+  );
+  const familyMemberRepos = container.resolve<FamilyMemberRepository>(
+    familyMemberRepository
+  );
+  return pipe(
+    initSeeds(),
+    TE.chain(() =>
+      pipe(
+        familyMemberRepos.all(),
+        TE.chain((allFamilyMembers) =>
+          pipe(
+            foodstuffRepos.all(),
+            TE.map(
+              (allFoodstuffs): InitializeAppStateAction => {
+                const newAppState: AppState = {
+                  calendar: makeCalendar(),
+                  allDailyMenus: {},
+                  allRecipes: {},
+                  allFoodstuffs: allFoodstuffs.reduce(
+                    (acc, foodstuff) => ({ ...acc, [foodstuff.id]: foodstuff }),
+                    {} as AllFoodStuffs
+                  ),
+                  allFamilyMembers: allFamilyMembers.reduce(
+                    (acc, familyMember) => ({
+                      ...acc,
+                      [familyMember.id]: familyMember,
+                    }),
+                    {}
+                  ),
+                  allFoodAllergyHistories: {
+                    byFamilyMember: {},
+                    byFoodstuff: {},
+                  },
+                  initializeAppState: 'initialized',
+                  bottomNaviIndex: 0,
+                };
+                return {
+                  type: initializeAppStateMsg,
+                  newAppState,
+                  status: 'initialized',
+                };
+              }
+            )
+          )
+        )
+      )
+    )
+  );
 };

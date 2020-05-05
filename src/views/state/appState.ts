@@ -39,9 +39,11 @@ import initSeeds from '../../data/initSeeds';
 import {
   foodstuffRepository,
   familyMemberRepository,
+  recipeRepository,
 } from '../../types/diTypes';
 import FoodstuffRepository from '../../domain/repositories/foodstuffRepository';
 import FamilyMemberRepository from '../../domain/repositories/familyMemberRepository';
+import RecipeRepository from '../../domain/repositories/recipeRepository';
 
 export type InitializedAppState = 'not yet' | 'initializing' | 'initialized';
 
@@ -194,11 +196,12 @@ export const selectBottomNavi = async (
   return Promise.resolve();
 };
 
+// TODO: 直すこと
 export const initializingAppState = (): TE.TaskEither<
   RepositoryError,
   InitializeAppStateAction
 > => {
-  // const recipeRepos = container.resolve<RecipeRepository>(recipeRepository);
+  const recipeRepos = container.resolve<RecipeRepository>(recipeRepository);
   const foodstuffRepos = container.resolve<FoodstuffRepository>(
     foodstuffRepository
   );
@@ -209,40 +212,54 @@ export const initializingAppState = (): TE.TaskEither<
     initSeeds(),
     TE.chain(() =>
       pipe(
-        familyMemberRepos.all(),
-        TE.chain((allFamilyMembers) =>
+        recipeRepos.all(),
+        TE.chain((allRecipes) =>
           pipe(
-            foodstuffRepos.all(),
-            TE.map(
-              (allFoodstuffs): InitializeAppStateAction => {
-                const newAppState: AppState = {
-                  calendar: makeCalendar(),
-                  allDailyMenus: {},
-                  allRecipes: {},
-                  allFoodstuffs: allFoodstuffs.reduce(
-                    (acc, foodstuff) => ({ ...acc, [foodstuff.id]: foodstuff }),
-                    {} as AllFoodStuffs
-                  ),
-                  allFamilyMembers: allFamilyMembers.reduce(
-                    (acc, familyMember) => ({
-                      ...acc,
-                      [familyMember.id]: familyMember,
-                    }),
-                    {}
-                  ),
-                  allFoodAllergyHistories: {
-                    byFamilyMember: {},
-                    byFoodstuff: {},
-                  },
-                  initializeAppState: 'initialized',
-                  bottomNaviIndex: 0,
-                };
-                return {
-                  type: initializeAppStateMsg,
-                  newAppState,
-                  status: 'initialized',
-                };
-              }
+            familyMemberRepos.all(),
+            TE.chain((allFamilyMembers) =>
+              pipe(
+                foodstuffRepos.all(),
+                TE.map(
+                  (allFoodstuffs): InitializeAppStateAction => {
+                    const newAppState: AppState = {
+                      calendar: makeCalendar(),
+                      allDailyMenus: {},
+                      allRecipes: allRecipes.reduce(
+                        (acc, recipe) => ({
+                          ...acc,
+                          [recipe.id]: recipe,
+                        }),
+                        {}
+                      ),
+                      allFoodstuffs: allFoodstuffs.reduce(
+                        (acc, foodstuff) => ({
+                          ...acc,
+                          [foodstuff.id]: foodstuff,
+                        }),
+                        {} as AllFoodStuffs
+                      ),
+                      allFamilyMembers: allFamilyMembers.reduce(
+                        (acc, familyMember) => ({
+                          ...acc,
+                          [familyMember.id]: familyMember,
+                        }),
+                        {}
+                      ),
+                      allFoodAllergyHistories: {
+                        byFamilyMember: {},
+                        byFoodstuff: {},
+                      },
+                      initializeAppState: 'initialized',
+                      bottomNaviIndex: 0,
+                    };
+                    return {
+                      type: initializeAppStateMsg,
+                      newAppState,
+                      status: 'initialized',
+                    };
+                  }
+                )
+              )
             )
           )
         )

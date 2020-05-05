@@ -13,18 +13,22 @@ export default class RecipeRepositoryInMemory implements RecipeRepository {
     this.store = store || new InMemoryStore<RecipeID, Recipe>();
   }
 
-  findById(id: RecipeID): TE.TaskEither<QueryError, Recipe> {
+  all = (): TE.TaskEither<QueryError, Recipe[]> => {
+    return TE.right(this.store.values());
+  };
+
+  findById = (id: RecipeID): TE.TaskEither<QueryError, Recipe> => {
     const recipe = this.store.get(id);
     return TE.fromOption(() => new NotFoundError())(recipe);
-  }
+  };
 
-  saveValue(recipe: Recipe): TE.TaskEither<CommandError, unknown> {
+  saveValue = (recipe: Recipe): TE.TaskEither<CommandError, unknown> => {
     return TE.right(this.store.set(recipe.id, recipe));
-  }
+  };
 
-  saveValues(recipes: Recipe[]): TE.TaskEither<CommandError, unknown> {
+  saveValues = (recipes: Recipe[]): TE.TaskEither<CommandError, unknown> => {
     return TE.right(
       recipes.forEach((recipe) => this.store.set(recipe.id, recipe))
     );
-  }
+  };
 }

@@ -100,7 +100,7 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
           <BottomNavigationAction
             label="スケジュール"
             icon={<EventIcon />}
-            onClick={goTo(scheduleScreenPath)}
+            onClick={goTo(scheduleScreenPath())}
           />
           <BottomNavigationAction
             label="レシピ"

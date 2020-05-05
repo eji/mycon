@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import CalendarDate from '../../../domain/models/calender/calenderDate';
-import { makeEditDailyMenuScreenPath } from '../../../routePaths';
+import CalendarDate from '../../../domain/models/calender/calendarDate';
+import { editDailyMenuScreenPath } from '../../../routePaths';
 import NoItemView from '../NoItemView';
 
 type NoDailyMenuProps = {
@@ -13,7 +13,7 @@ const NoDailyMenu: React.FC<NoDailyMenuProps> = (props: NoDailyMenuProps) => {
   const { calendarDate } = props;
 
   const handleClick = (): void => {
-    history.push(makeEditDailyMenuScreenPath({ calendarDate }));
+    history.push(editDailyMenuScreenPath({ calendarDate }));
   };
 
   return (

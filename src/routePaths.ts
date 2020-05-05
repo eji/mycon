@@ -1,5 +1,5 @@
 import { flow } from 'fp-ts/lib/function';
-import CalendarDate from './domain/models/calender/calenderDate';
+import CalendarDate from './domain/models/calender/calendarDate';
 import { dailyMenuIDFromCalendarDate } from './domain/models/dailyMenu';
 
 type PathCreator<T = unknown> = (props?: T) => string;
@@ -21,10 +21,21 @@ const makeEditPathCreator = (
   return `${basePathCreator(props)}/edit`;
 };
 
-export const scheduleScreenPath = '/';
+export const scheduleScreenPath: PathCreator = () => '/';
 
-export const dailyMenuScreenPath = '/daily-menus/:id';
-export const editDailyMenuScreenPath = '/daily-menus/:id/edit';
+export const dailyMenusScreenPath: PathCreator = () => '/daily-menus';
+export const showDailyMenuScreenPath: PathCreator<{
+  calendarDate: CalendarDate;
+}> = (props?: { calendarDate: CalendarDate }) => {
+  const id =
+    props == null ? ':id' : dailyMenuIDFromCalendarDate(props.calendarDate);
+  return `${dailyMenusScreenPath()}/${id}`;
+};
+
+export const editDailyMenuScreenPath: PathCreator<{
+  calendarDate: CalendarDate;
+}> = (props?: { calendarDate: CalendarDate }) =>
+  `${showDailyMenuScreenPath(props)}/edit`;
 
 /* レシピ */
 
@@ -56,17 +67,3 @@ export const showFamilyMemberScreenPath = makeShowPathCreator(
 export const editFamilyMemberScreenPath = makeEditPathCreator(
   showFamilyMemberScreenPath
 );
-
-export const makeDailyMenuScreenPath = (props: {
-  calendarDate: CalendarDate;
-}): string => {
-  const dailyMenuID = dailyMenuIDFromCalendarDate(props.calendarDate);
-  return `/daily-menus/${dailyMenuID}`;
-};
-
-export const makeEditDailyMenuScreenPath = (props: {
-  calendarDate: CalendarDate;
-}): string => {
-  const dailyMenuID = dailyMenuIDFromCalendarDate(props.calendarDate);
-  return `/daily-menus/${dailyMenuID}/edit`;
-};

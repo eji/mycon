@@ -4,7 +4,6 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { CssBaseline } from '@material-ui/core';
 import {
   scheduleScreenPath,
-  dailyMenuScreenPath,
   editDailyMenuScreenPath,
   recipesScreenPath,
   addRecipeScreenPath,
@@ -12,6 +11,7 @@ import {
   addFoodstuffScreenPath,
   familyMembersScreenPath,
   addFamilyMemberScreenPath,
+  showDailyMenuScreenPath,
 } from './routePaths';
 import ScheduleScreen from './views/screens/ScheduleScreen';
 import DailyMenuScreen from './views/screens/DailyMenuScreen';
@@ -30,17 +30,17 @@ const App: React.FC = () => (
     <AppStateProvider>
       <BrowserRouter>
         <Switch>
-          <Route exact path={scheduleScreenPath}>
+          <Route exact path={scheduleScreenPath()}>
             <RequireInitApp>
               <ScheduleScreen />
             </RequireInitApp>
           </Route>
-          <Route exact path={dailyMenuScreenPath}>
+          <Route exact path={showDailyMenuScreenPath()}>
             <RequireInitApp>
               <DailyMenuScreen />
             </RequireInitApp>
           </Route>
-          <Route exact path={editDailyMenuScreenPath}>
+          <Route exact path={editDailyMenuScreenPath()}>
             <RequireInitApp>
               <DailyMenuScreen />
             </RequireInitApp>

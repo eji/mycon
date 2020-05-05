@@ -1,6 +1,6 @@
 import CalendarDate, {
   makeDate,
-} from '../../domain/models/calender/calenderDate';
+} from '../../domain/models/calender/calendarDate';
 
 const dateStrRegexp = /^(\d{4})-(\d{2})-(\d{2})$/;
 

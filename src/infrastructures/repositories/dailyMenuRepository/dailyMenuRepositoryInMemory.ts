@@ -5,7 +5,7 @@ import InMemoryStore from '../../../drivers/InMemoryStore';
 import NotFoundError from '../../../errors/repositoryErrors/queryErrors/notFoundError';
 import DailyMenuRepository from '../../../domain/repositories/dailyMenuRepository';
 import DailyMenu from '../../../domain/models/dailyMenu';
-import CalendarDate from '../../../domain/models/calender/calenderDate';
+import CalendarDate from '../../../domain/models/calender/calendarDate';
 
 export default class DailyMenuRepositoryInMemory
   implements DailyMenuRepository {

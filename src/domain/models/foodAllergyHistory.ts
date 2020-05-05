@@ -1,7 +1,7 @@
 import ID, { genId } from './id';
 import FamilyMember from './familyMember';
 import { Foodstuff } from './foodstuff';
-import CalendarDate from './calender/calenderDate';
+import CalendarDate from './calender/calendarDate';
 
 export type FoodAllergyHistoryID = ID;
 

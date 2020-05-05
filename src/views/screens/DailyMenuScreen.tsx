@@ -58,13 +58,13 @@ const DailyMenuScreen: React.FC<DailyMenuScreenProps> = () => {
   // const classes = useStyles();
 
   if (id == null) {
-    history.replace(scheduleScreenPath);
+    history.replace(scheduleScreenPath());
     return <></>;
   }
 
   const calendarDate = calendarDateFromDailyMenuID(id);
   if (calendarDate == null) {
-    history.replace(scheduleScreenPath);
+    history.replace(scheduleScreenPath());
     return <></>;
   }
 

@@ -1,6 +1,6 @@
 import { Record } from 'immutable';
 import Recipe from './recipe';
-import CalendarDate, { makeDate } from './calender/calenderDate';
+import CalendarDate, { makeDate } from './calender/calendarDate';
 
 export type DailyMenuID = string;
 

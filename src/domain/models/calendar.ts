@@ -2,7 +2,7 @@ import { Record } from 'immutable';
 import * as R from 'remeda';
 import { Week } from './calender/week';
 import splitAllWhen from '../../utils/splitAllWhen';
-import CalendarDate, { makeDate } from './calender/calenderDate';
+import CalendarDate, { makeDate } from './calender/calendarDate';
 
 interface CalendarProps {
   year: number;

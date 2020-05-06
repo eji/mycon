@@ -44,3 +44,7 @@ export const makeRecipe = (
   const id = props.id || genId();
   return new RecipeClass({ ...props, id });
 };
+
+export const eqRecipe: Eq<Recipe> = {
+  equals: (a: Recipe, b: Recipe) => a.id === b.id,
+};

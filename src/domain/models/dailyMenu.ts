@@ -1,6 +1,6 @@
 import { Record } from 'immutable';
-import Recipe from './recipe';
 import CalendarDate, { makeDate } from './calender/calendarDate';
+import Meal from './meal';
 
 export type DailyMenuID = string;
 
@@ -33,19 +33,9 @@ interface DailyMenuProps {
   calendarDate: CalendarDate;
 
   /**
-   * 朝食のレシピ一覧
+   * 食事一覧
    */
-  breakfastRecipes: Recipe[];
-
-  /**
-   * 昼食のレシピ一覧
-   */
-  lunchRecipes: Recipe[];
-
-  /**
-   * 夕食のレシピ一覧
-   */
-  dinnerRecipes: Recipe[];
+  meals: Meal[];
 }
 
 /**
@@ -55,48 +45,21 @@ export default interface DailyMenu extends DailyMenuProps {
   set<K extends keyof DailyMenuProps>(key: K, value: DailyMenuProps[K]): this;
 
   /**
-   * 朝食にレシピを追加する
+   * 食事を追加する
    */
-  addRecipeToBreakfast(recipe: Recipe): this;
+  addMeal(meal: Meal): this;
 
   /**
-   * 昼食にレシピを追加する
+   * 食事を削除する
    */
-  addRecipeToLunch(recipe: Recipe): this;
-
-  /**
-   * 夕食にレシピを追加する
-   */
-  addRecipeToDinner(recipe: Recipe): this;
-
-  /**
-   * 夕食からレシピを削除する
-   */
-  removeRecipeFromBreakfast(recipe: Recipe): this;
-
-  /**
-   * 夕食からレシピを削除する
-   */
-  removeRecipeFromLunch(recipe: Recipe): this;
-
-  /**
-   * 夕食からレシピを削除する
-   */
-  removeRecipeFromDinner(recipe: Recipe): this;
-
-  /**
-   * 全てのレシピを取得
-   */
-  allRecipes(): Recipe[];
+  removeMeal(meal: Meal): this;
 }
 
 class DailyMenuClass
   extends Record<Readonly<DailyMenuProps>>({
     id: '',
     calendarDate: makeDate(),
-    breakfastRecipes: [],
-    lunchRecipes: [],
-    dinnerRecipes: [],
+    meals: [],
   })
   implements DailyMenu {
   static create(props: Omit<DailyMenuProps, 'id'>): DailyMenu {
@@ -109,46 +72,10 @@ class DailyMenuClass
     super(...args);
   }
 
-  addRecipeToBreakfast(recipe: Recipe): this {
-    return this.set('breakfastRecipes', [...this.breakfastRecipes, recipe]);
-  }
+  addMeal = (meal: Meal): this => this.set('meals', [...this.meals, meal]);
 
-  addRecipeToLunch(recipe: Recipe): this {
-    return this.set('lunchRecipes', [...this.lunchRecipes, recipe]);
-  }
-
-  addRecipeToDinner(recipe: Recipe): this {
-    return this.set('dinnerRecipes', [...this.dinnerRecipes, recipe]);
-  }
-
-  removeRecipeFromBreakfast(recipe: Recipe): this {
-    return this.set(
-      'breakfastRecipes',
-      this.breakfastRecipes.filter((r) => !r.equals(recipe))
-    );
-  }
-
-  removeRecipeFromLunch(recipe: Recipe): this {
-    return this.set(
-      'lunchRecipes',
-      this.lunchRecipes.filter((r) => !r.equals(recipe))
-    );
-  }
-
-  removeRecipeFromDinner(recipe: Recipe): this {
-    return this.set(
-      'dinnerRecipes',
-      this.dinnerRecipes.filter((r) => !r.equals(recipe))
-    );
-  }
-
-  allRecipes(): Recipe[] {
-    return [
-      ...this.breakfastRecipes,
-      ...this.lunchRecipes,
-      ...this.dinnerRecipes,
-    ];
-  }
+  removeMeal = (meal: Meal): this =>
+    this.set('meals', this.meals.filter(meal.notEquals));
 }
 
 export const makeDailyMenu = (props: Omit<DailyMenuProps, 'id'>): DailyMenu =>

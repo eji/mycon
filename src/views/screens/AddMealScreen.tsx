@@ -18,7 +18,7 @@ import {
   Box,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as TE from 'fp-ts/lib/TaskEither';
 import { pipe } from 'fp-ts/lib/pipeable';
@@ -31,6 +31,15 @@ import {
 } from '../forms/inputRecipeFormSchema';
 import { addRecipe } from '../state/appState/allRecipes';
 import SelectRecipesDialog from '../components/Meal/SelectRecipesDialog';
+import {
+  InputMealForm,
+  inputMealFormSchema,
+} from '../forms/inputMealFormSchema';
+import Recipe from '../../domain/models/recipe';
+import RecipesList from '../components/Recipe/RecipesList';
+import { addMeal } from '../state/appState/allDailyMenus';
+import { calendarDateFromDailyMenuID } from '../../domain/models/dailyMenu';
+import { scheduleScreenPath } from '../../routePaths';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -67,35 +76,45 @@ type Props = {};
 
 const AddMealScreen: React.FC<Props> = () => {
   const { appState, dispatch } = useContext(appStateContext);
-  const { allRecipes } = appState;
+  const { allDailyMenus, allRecipes } = appState;
   const recipes = Object.values(allRecipes);
   const classes = useStyles();
   const history = useHistory();
   const [open, setOpen] = useState(false);
+  const { id } = useParams();
+  if (id == null) {
+    history.replace(scheduleScreenPath());
+    return <></>;
+  }
+  const calendarDate = calendarDateFromDailyMenuID(id);
+  if (calendarDate == null) {
+    history.replace(scheduleScreenPath());
+    return <></>;
+  }
 
-  const handleBack = useCallback((): void => history.goBack(), [history]);
+  const handleBack = (): void => history.goBack();
 
   const openInputRecipeIngredientDialog = (): unknown => setOpen(true);
   const closeInputRecipeIngredientDialog = (): unknown => setOpen(false);
 
-  const initValues: InputRecipeForm = {
+  const initValues: InputMealForm = {
     name: '',
-    ingredients: [],
+    recipeIDs: [],
   };
 
   return (
     <Layout title="食事の追加" hideBottomNavi handleBack={handleBack}>
       <Formik
         initialValues={initValues}
-        validationSchema={inputRecipeFormSchema}
+        validationSchema={inputMealFormSchema}
         validateOnChange={false}
         onSubmit={async (values): Promise<void> => {
-          // await pipe(
-          //   addRecipe({ form: values, allFoodstuffs }),
-          //   TE.map(dispatch),
-          //   TE.map(() => history.goBack()),
-          //   TE.mapLeft((error) => console.log(error))
-          // )();
+          await pipe(
+            addMeal({ form: values, allDailyMenus, allRecipes, calendarDate }),
+            TE.map(dispatch),
+            TE.map(() => history.goBack()),
+            TE.mapLeft((error) => console.log(error))
+          )();
         }}
       >
         {({
@@ -120,6 +139,9 @@ const AddMealScreen: React.FC<Props> = () => {
                 />
                 <Typography>レシピ一覧</Typography>
                 <Container>
+                  <RecipesList
+                    recipes={values.recipeIDs.map((id) => allRecipes[id])}
+                  />
                   <Button
                     startIcon={<AddIcon />}
                     onClick={openInputRecipeIngredientDialog}
@@ -140,17 +162,13 @@ const AddMealScreen: React.FC<Props> = () => {
             <SelectRecipesDialog
               open={open}
               handleClose={closeInputRecipeIngredientDialog}
-              handleSelected={(ingredient: {
-                foodstuffID: string;
-                quantity: string;
-              }): void => {
-                setFieldValue('ingredients', [
-                  ...values.ingredients,
-                  ingredient,
-                ]);
+              handleSelected={(selectedRecipes: Recipe[]): void => {
+                setFieldValue(
+                  'recipeIDs',
+                  selectedRecipes.map((r) => r.id)
+                );
                 closeInputRecipeIngredientDialog();
               }}
-              initValues={null}
             />
           </>
         )}

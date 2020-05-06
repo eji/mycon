@@ -44,6 +44,11 @@ import {
 import FoodstuffRepository from '../../domain/repositories/foodstuffRepository';
 import FamilyMemberRepository from '../../domain/repositories/familyMemberRepository';
 import RecipeRepository from '../../domain/repositories/recipeRepository';
+import {
+  AllDailyMenusAction,
+  isAllDailyMenusAction,
+  allDailyMenusReducer,
+} from './appState/allDailyMenus';
 
 export type InitializedAppState = 'not yet' | 'initializing' | 'initialized';
 
@@ -112,6 +117,7 @@ export type AppStateAction =
   | SelectBottomNaviAction
   | InitializeAppStateAction
   | CalendarAction
+  | AllDailyMenusAction
   | AllRecipesAction
   | AllFoodstuffsAction
   | AllFamilyMembersAction
@@ -147,6 +153,9 @@ export const appStateReducer: Reducer<AppState, AppStateAction> = (
     calendar: isCalendarAction(action)
       ? calendarReducer(state.calendar, action)
       : state.calendar,
+    allDailyMenus: isAllDailyMenusAction(action)
+      ? allDailyMenusReducer(state.allDailyMenus, action)
+      : state.allDailyMenus,
     allFoodstuffs: isAllFoodstuffsAction(action)
       ? allFoodstuffsReducer(state.allFoodstuffs, action)
       : state.allFoodstuffs,

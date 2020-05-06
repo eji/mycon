@@ -1,10 +1,9 @@
-import React, { useContext, ReactNode, ReactElement, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   DialogContentText,
-  TextField,
   DialogActions,
   Button,
   useTheme,
@@ -16,20 +15,16 @@ import {
   Typography,
   createStyles,
   makeStyles,
-  Theme,
   ButtonBase,
 } from '@material-ui/core';
-import { Autocomplete, RenderInputParams } from '@material-ui/lab';
-import { Formik } from 'formik';
 import AddIcon from '@material-ui/icons/Add';
 import { Link } from 'react-router-dom';
 import * as A from 'fp-ts/lib/Array';
 import { appStateContext } from '../AppStateProvider';
-import RecipeIngredient from '../../../domain/models/recipeIngredient';
 import { addRecipeScreenPath } from '../../../routePaths';
 import Recipe, { eqRecipe } from '../../../domain/models/recipe';
 
-const useStyles = makeStyles((theme: Theme) => {
+const useStyles = makeStyles(() => {
   return createStyles({
     root: {},
     addRecipeLink: {
@@ -85,19 +80,14 @@ const useStyles = makeStyles((theme: Theme) => {
 
 interface Props {
   open: boolean;
-  initValues: RecipeIngredient | null;
   handleClose: () => unknown;
-  handleSelected: (ingredient: {
-    foodstuffID: string;
-    quantity: string;
-  }) => void;
+  handleSelected: (recipes: Recipe[]) => void;
 }
 
 const SelectRecipesDialog: React.FC<Props> = (props: Props) => {
-  const { open, handleClose, handleSelected, initValues } = props;
+  const { open, handleClose, handleSelected } = props;
   const { appState } = useContext(appStateContext);
-  const { allFoodstuffs, allRecipes } = appState;
-  const foodstuffs = Object.values(allFoodstuffs);
+  const { allRecipes } = appState;
   const recipes = Object.values(allRecipes);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -163,7 +153,12 @@ const SelectRecipesDialog: React.FC<Props> = (props: Props) => {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button color="primary">選択</Button>
+          <Button
+            color="primary"
+            onClick={(): void => handleSelected(selectedRecipes)}
+          >
+            選択
+          </Button>
         </DialogActions>
       </>
     </Dialog>

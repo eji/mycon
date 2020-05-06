@@ -7,6 +7,8 @@ import {
   recipeRepository,
   familyMemberRepository,
   inMemoryFamilyMemberRepository,
+  dailyMenuRepository,
+  inMemoryDailyMenuRepository,
 } from './types/diTypes';
 import FoodstuffRepositoryInMemory from './infrastructures/repositories/foodstuffRepository/foodstuffRepositoryInMemory';
 import SaveFoodstuffUseCase from './domain/useCases/saveFoodstuffUseCase';
@@ -16,6 +18,9 @@ import SaveRecipeUseCase from './domain/useCases/saveRecipeUseCase';
 import FamilyMemberRepository from './domain/repositories/familyMemberRepository';
 import FamilyMemberRepositoryInMemory from './infrastructures/repositories/familyMemberRepository/familyMemberRepositoryInMemory';
 import SaveFamilyMemberUseCase from './domain/useCases/saveFamilyMemberUseCase';
+import SaveDailyMenuUseCase from './domain/useCases/saveDailyMenuUseCase';
+import DailyMenuRepository from './domain/repositories/dailyMenuRepository';
+import DailyMenuRepositoryInMemory from './infrastructures/repositories/dailyMenuRepository/dailyMenuRepositoryInMemory';
 
 const diConfig = (): void => {
   container.register<FoodstuffRepository>(foodstuffRepository, {
@@ -28,6 +33,10 @@ const diConfig = (): void => {
 
   container.register<FamilyMemberRepository>(familyMemberRepository, {
     useToken: inMemoryFamilyMemberRepository,
+  });
+
+  container.register<DailyMenuRepository>(dailyMenuRepository, {
+    useToken: inMemoryDailyMenuRepository,
   });
 
   /* in-memory repository */
@@ -45,6 +54,11 @@ const diConfig = (): void => {
   container.registerInstance(
     inMemoryFamilyMemberRepository,
     new FamilyMemberRepositoryInMemory()
+  );
+
+  container.registerInstance(
+    inMemoryDailyMenuRepository,
+    new DailyMenuRepositoryInMemory()
   );
 
   /* use cases */
@@ -78,6 +92,17 @@ const diConfig = (): void => {
         familyMemberRepository
       );
       return new SaveFamilyMemberUseCase(repos);
+    },
+  });
+
+  container.register<SaveDailyMenuUseCase>(SaveDailyMenuUseCase, {
+    useFactory: (
+      dependencyContainer: DependencyContainer
+    ): SaveDailyMenuUseCase => {
+      const repos = dependencyContainer.resolve<DailyMenuRepository>(
+        dailyMenuRepository
+      );
+      return new SaveDailyMenuUseCase(repos);
     },
   });
 };

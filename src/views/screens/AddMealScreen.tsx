@@ -1,18 +1,11 @@
-import React, { useContext, useCallback, useState, ReactElement } from 'react';
+import React, { useContext, useState, ReactElement } from 'react';
 import {
   TextField,
   Button,
   Container,
-  Table,
-  TableContainer,
   createStyles,
   makeStyles,
   Theme,
-  Paper,
-  TableRow,
-  TableCell,
-  TableHead,
-  TableBody,
   ButtonBase,
   Typography,
   Box,
@@ -23,13 +16,6 @@ import { Formik } from 'formik';
 import * as TE from 'fp-ts/lib/TaskEither';
 import { pipe } from 'fp-ts/lib/pipeable';
 import Layout from '../layouts/Layout';
-import { appStateContext } from '../components/AppStateProvider';
-import InputRecipeIngredientDialog from '../components/Recipe/InputRecipeIngredientDialog';
-import {
-  InputRecipeForm,
-  inputRecipeFormSchema,
-} from '../forms/inputRecipeFormSchema';
-import { addRecipe } from '../state/appState/allRecipes';
 import SelectRecipesDialog from '../components/Meal/SelectRecipesDialog';
 import {
   InputMealForm,
@@ -40,6 +26,7 @@ import RecipesList from '../components/Recipe/RecipesList';
 import { addMeal } from '../state/appState/allDailyMenus';
 import { calendarDateFromDailyMenuID } from '../../domain/models/dailyMenu';
 import { scheduleScreenPath } from '../../routePaths';
+import { appStateContext } from '../components/AppStateProvider';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -77,7 +64,6 @@ type Props = {};
 const AddMealScreen: React.FC<Props> = () => {
   const { appState, dispatch } = useContext(appStateContext);
   const { allDailyMenus, allRecipes } = appState;
-  const recipes = Object.values(allRecipes);
   const classes = useStyles();
   const history = useHistory();
   const [open, setOpen] = useState(false);
@@ -140,7 +126,7 @@ const AddMealScreen: React.FC<Props> = () => {
                 <Typography>レシピ一覧</Typography>
                 <Container>
                   <RecipesList
-                    recipes={values.recipeIDs.map((id) => allRecipes[id])}
+                    recipes={values.recipeIDs.map((rid) => allRecipes[rid])}
                   />
                   <Button
                     startIcon={<AddIcon />}

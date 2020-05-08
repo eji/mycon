@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useContext } from 'react';
 import {
   createStyles,
   makeStyles,
@@ -11,6 +11,8 @@ import { useHistory } from 'react-router-dom';
 import { showDailyMenuScreenPath } from '../../../routePaths';
 import { Week } from '../../../domain/models/calender/week';
 import { DayOfTheWeek } from '../../../domain/models/calender/dayOfTheWeek';
+import { appStateContext } from '../AppStateProvider';
+import { dailyMenuIDFromCalendarDate } from '../../../domain/models/dailyMenu';
 
 const useStyle = makeStyles(() =>
   createStyles({
@@ -39,15 +41,18 @@ type MonthlyScheduleTableDayColumnProps = {
 const MonthlyScheduleTableDayColumn: React.FC<MonthlyScheduleTableDayColumnProps> = (
   props: MonthlyScheduleTableDayColumnProps
 ) => {
+  const { appState } = useContext(appStateContext);
+  const { allDailyMenus } = appState;
   const history = useHistory();
   const classes = useStyle();
   const { week, dayOfTheWeek } = props;
 
   const targetDate = week.find((date) => date.dayOfTheWeek === dayOfTheWeek);
-
   if (targetDate == null) {
     return <></>;
   }
+
+  const dailyMenu = allDailyMenus[dailyMenuIDFromCalendarDate(targetDate)];
 
   const handleClieck = (): void => {
     history.push(showDailyMenuScreenPath({ calendarDate: targetDate }));
@@ -63,9 +68,11 @@ const MonthlyScheduleTableDayColumn: React.FC<MonthlyScheduleTableDayColumnProps
         alignItems="flex-start"
       >
         <Box className={classes.day}>{targetDate.day}</Box>
-        <Box className={classes.statusDone}>
-          <DoneIcon />
-        </Box>
+        {dailyMenu && (
+          <Box className={classes.statusDone}>
+            <DoneIcon />
+          </Box>
+        )}
       </Grid>
     </ButtonBase>
   );

@@ -7,11 +7,15 @@ import {
   makeStyles,
   Theme,
   createStyles,
+  ButtonBase,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import { Link } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { Foodstuff } from '../../../domain/models/foodstuff';
-import { addFoodstuffScreenPath } from '../../../routePaths';
+import {
+  addFoodstuffScreenPath,
+  showFoodstuffScreenPath,
+} from '../../../routePaths';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -19,6 +23,11 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'relative',
       height: '100%',
       overflowY: 'scroll',
+    },
+    foodstuffListItem: {},
+    foodstuffListItemButton: {
+      flexGrow: 1,
+      width: '100%',
     },
     fabButton: {
       position: 'absolute',
@@ -37,29 +46,32 @@ const FoodstuffList: React.FC<FoodstuffListProps> = (
 ) => {
   const { foodstuffs } = props;
   const classes = useStyles();
+  const history = useHistory();
+
+  const goTo = (path: string): (() => void) => (): void => history.push(path);
 
   return (
     <div className={classes.root}>
       <List>
         {foodstuffs.map((foodstuff) => (
-          <ListItem>
-            <ListItemText primary={foodstuff.name} />
-          </ListItem>
+          <ButtonBase
+            className={classes.foodstuffListItemButton}
+            onClick={goTo(showFoodstuffScreenPath({ id: foodstuff.id }))}
+          >
+            <ListItem className={classes.foodstuffListItem}>
+              <ListItemText primary={foodstuff.name} />
+            </ListItem>
+          </ButtonBase>
         ))}
       </List>
-      <Link
-        to={{
-          pathname: addFoodstuffScreenPath(),
-        }}
+      <Fab
+        color="primary"
+        aria-label="add foodstuff"
+        className={classes.fabButton}
+        onClick={goTo(addFoodstuffScreenPath())}
       >
-        <Fab
-          color="primary"
-          aria-label="add foodstuff"
-          className={classes.fabButton}
-        >
-          <AddIcon />
-        </Fab>
-      </Link>
+        <AddIcon />
+      </Fab>
     </div>
   );
 };

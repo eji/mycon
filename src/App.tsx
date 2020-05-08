@@ -13,6 +13,7 @@ import {
   addFamilyMemberScreenPath,
   showDailyMenuScreenPath,
   addMealScreenPath,
+  showFoodstuffScreenPath,
 } from './routePaths';
 import ScheduleScreen from './views/screens/ScheduleScreen';
 import DailyMenuScreen from './views/screens/DailyMenuScreen';
@@ -25,6 +26,7 @@ import FamilyMembersScreen from './views/screens/FamilyMembersScreen';
 import EditFamilyMemberScreen from './views/screens/EditFamilyMemberScreen';
 import RequireInitApp from './views/components/common/RequireInitApp';
 import AddMealScreen from './views/screens/AddMealScreen';
+import ShowFoodstuffScreen from './views/screens/ShowFoodstuffScreen';
 
 const App: React.FC = () => (
   <>
@@ -70,6 +72,11 @@ const App: React.FC = () => (
           <Route exact path={addFoodstuffScreenPath()}>
             <RequireInitApp>
               <EditFoodstuffScreen />
+            </RequireInitApp>
+          </Route>
+          <Route exact path={showFoodstuffScreenPath()}>
+            <RequireInitApp>
+              <ShowFoodstuffScreen />
             </RequireInitApp>
           </Route>
           <Route exact path={familyMembersScreenPath()}>

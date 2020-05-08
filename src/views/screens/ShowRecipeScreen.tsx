@@ -24,7 +24,7 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const ShowFoodstuffScreen: React.FC = () => {
+const ShowRecipeScreen: React.FC = () => {
   const history = useHistory();
   const classes = useStyles();
   const { appState } = useContext(appStateContext);
@@ -34,27 +34,18 @@ const ShowFoodstuffScreen: React.FC = () => {
     return null;
   }
 
-  const { allFoodstuffs } = appState;
-  const foodstuff = allFoodstuffs[id];
-  if (foodstuff == null) {
+  const { allRecipes } = appState;
+  const recipe = allRecipes[id];
+  if (recipe == null) {
     history.replace(foodstuffsScreenPath());
     return null;
   }
 
   return (
-    <Layout title={foodstuff.name} hideBottomNavi handleBack={history.goBack}>
-      <Container className={classes.root}>
-        <Paper>
-          <Typography variant="h6" component="h2" className={classes.section}>
-            含有栄養素
-          </Typography>
-        </Paper>
-        {foodstuff.nutrients.map((nutrient) => (
-          <Typography>{nutrient}</Typography>
-        ))}
-      </Container>
+    <Layout title={recipe.name} hideBottomNavi handleBack={history.goBack}>
+      <Container className={classes.root} />
     </Layout>
   );
 };
 
-export default ShowFoodstuffScreen;
+export default ShowRecipeScreen;

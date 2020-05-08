@@ -35,9 +35,9 @@ const Transition = React.forwardRef(
   }
 );
 
-type MenuItemProps = {};
+type Props = {};
 
-const MenuItem: React.FC<MenuItemProps> = () => {
+const MenuItem: React.FC<Props> = () => {
   const classes = useStyle();
   const [dialogOpen, setDialogOpen] = useState(false);
 

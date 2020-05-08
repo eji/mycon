@@ -71,6 +71,7 @@ export const addMeal = (params: {
 }): TE.TaskEither<RepositoryError, SaveDailyMenuAction> => {
   const { form, calendarDate, allDailyMenus, allRecipes } = params;
   const meal = makeMeal({
+    ...form,
     recipes: form.recipeIDs.map((rid) => allRecipes[rid]),
   });
   const id = dailyMenuIDFromCalendarDate(calendarDate);

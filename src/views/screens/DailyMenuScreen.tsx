@@ -10,7 +10,7 @@ import {
 import { useHistory, useParams } from 'react-router-dom';
 import SwipeableViews from 'react-swipeable-views';
 import Layout from '../layouts/Layout';
-import DailyMenu from '../components/DailyMenu/DailyMenu';
+import DailyMenuView from '../components/DailyMenu/DailyMenuView';
 import { appStateContext } from '../components/AppStateProvider';
 import { scheduleScreenPath } from '../../routePaths';
 import { calendarDateFromDailyMenuID } from '../../domain/models/dailyMenu';
@@ -95,27 +95,7 @@ const DailyMenuScreen: React.FC<DailyMenuScreenProps> = () => {
 
   return (
     <Layout title={title} handleBack={handleBack}>
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        aria-label="simple tabs example"
-      >
-        <Tab label="献立" id="menu-tab-0" aria-controls="menu-tabpanel-0" />
-        <Tab label="栄養素" id="menu-tab-1" aria-controls="menu-tabpanel-1" />
-      </Tabs>
-      <SwipeableViews
-        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-        index={value}
-        onChangeIndex={handleChangeIndex}
-        enableMouseEvents
-      >
-        <TabPanel selectedIndex={value} index={0}>
-          <DailyMenu />
-        </TabPanel>
-        <TabPanel selectedIndex={value} index={1}>
-          <DailyMenu />
-        </TabPanel>
-      </SwipeableViews>
+      <DailyMenuView dailyMenu={dailyMenu} />
     </Layout>
   );
 };

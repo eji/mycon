@@ -217,6 +217,7 @@ export const initializingAppState = (): TE.TaskEither<
   const familyMemberRepos = container.resolve<FamilyMemberRepository>(
     familyMemberRepository
   );
+
   return pipe(
     initSeeds(),
     TE.chain(() =>

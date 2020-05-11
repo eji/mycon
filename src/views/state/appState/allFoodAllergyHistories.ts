@@ -1,8 +1,18 @@
 import { Reducer } from 'react';
+import * as TE from 'fp-ts/lib/TaskEither';
+import { container } from 'tsyringe';
+import { pipe } from 'fp-ts/lib/pipeable';
 import { Action } from '../../../types/action';
 import { ActionHandler } from '../../../types/actionHandler';
 import createActionDistinguishFunction from '../../../utils/createActionDistinguishFunction';
-import FoodAllergyHistory from '../../../domain/models/foodAllergyHistory';
+import FoodAllergyHistory, {
+  makeFoodAllergyHistory,
+} from '../../../domain/models/foodAllergyHistory';
+import { AddFoodAllergyHistoryForm } from '../../forms/addFoodAllergyHistoryFormSchema';
+import { Foodstuff } from '../../../domain/models/foodstuff';
+import FamilyMember from '../../../domain/models/familyMember';
+import RepositoryError from '../../../errors/repositoryError';
+import SaveFoodAllergyHistoryUseCase from '../../../domain/useCases/saveFoodAllergyHistoryUseCase';
 
 export type AllFoodAllergyHistories = {
   byFamilyMember: { [key: string]: FoodAllergyHistory };
@@ -11,14 +21,14 @@ export type AllFoodAllergyHistories = {
 
 /** action messages */
 
-const addFoodAllergyHistory = 'addFoodAllergyHistory';
+const addFoodAllergyHistoryMsg = 'addFoodAllergyHistory';
 
-const allFoodAllergyHistoriesMsgs = [addFoodAllergyHistory];
+const allFoodAllergyHistoriesMsgs = [addFoodAllergyHistoryMsg];
 
 /* actions */
 
 export type AddFoodAllergyHistoryAction = Action<
-  typeof addFoodAllergyHistory,
+  typeof addFoodAllergyHistoryMsg,
   { foodAllergyHistory: FoodAllergyHistory }
 >;
 
@@ -55,7 +65,7 @@ export const allFoodAllergyHistoriesReducer: Reducer<
   AllFoodAllergyHistoriesAction
 > = (allFoodAllergyHistories, action) => {
   switch (action.type) {
-    case addFoodAllergyHistory:
+    case addFoodAllergyHistoryMsg:
       return addFoodAllergyHistoryHandler(allFoodAllergyHistories, action);
     default:
       return allFoodAllergyHistories;
@@ -64,21 +74,20 @@ export const allFoodAllergyHistoriesReducer: Reducer<
 
 /* action creator */
 
-// export const addRecipe = (params: {
-//   form: AddRecipeForm;
-//   allFoodstuffs: { [key: string]: Foodstuff };
-// }): TE.TaskEither<RepositoryError, AddFamilyMembersAction> => {
-//   const { form, allFoodstuffs } = params;
-//   const useCase = container.resolve(SaveRecipeUseCase);
-//   const ingredients = form.ingredients.map((ingredient) =>
-//     makeRecipeIngredient({
-//       ...ingredient,
-//       foodstuff: allFoodstuffs[ingredient.foodstuffID],
-//     })
-//   );
-//   const recipe = makeRecipe({ ...form, ingredients });
-//   return pipe(
-//     useCase.execute({ recipe }),
-//     TE.map(() => ({ type: addFamilyMembersMsg, newRecipe: recipe }))
-//   );
-// };
+export const addFoodAllergyHistory = (params: {
+  form: AddFoodAllergyHistoryForm;
+  foodstuff: Foodstuff;
+  allFamilyMembers: { [key: string]: FamilyMember };
+}): TE.TaskEither<RepositoryError, AddFoodAllergyHistoryAction> => {
+  const { form, foodstuff, allFamilyMembers } = params;
+  const familyMember = allFamilyMembers[form.familyMemberID];
+  const foodAllergyHistory = makeFoodAllergyHistory({
+    familyMember,
+    foodstuff,
+  });
+  const useCase = container.resolve(SaveFoodAllergyHistoryUseCase);
+  return pipe(
+    useCase.execute({ foodAllergyHistory }),
+    TE.map(() => ({ type: addFoodAllergyHistoryMsg, foodAllergyHistory }))
+  );
+};

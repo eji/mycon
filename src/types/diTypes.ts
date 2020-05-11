@@ -15,3 +15,8 @@ export const inMemoryFamilyMemberRepository = 'inMemoryFamilyMemberRepository';
 export const dailyMenuRepository = 'dailyMenuRepository';
 
 export const inMemoryDailyMenuRepository = 'inMemoryDailyMenuRepository';
+
+export const foodAllergyHistoryRepository = 'foodAllergyHistoryRepository';
+
+export const inMemoryFoodAllergyHistoryRepository =
+  'inMemoryFoodAllergyHistoryRepository';

@@ -6,16 +6,16 @@ import { Foodstuff } from '../models/foodstuff';
 import FamilyMember from '../models/familyMember';
 
 export default interface FoodAllergyHistoryRepository {
-  findAllByFoodstuff(
+  findAllByFoodstuff: (
     foodstuff: Foodstuff
-  ): TE.TaskEither<QueryError, FoodAllergyHistory[]>;
-  findAllByFamilyMember(
+  ) => TE.TaskEither<QueryError, FoodAllergyHistory[]>;
+  findAllByFamilyMember: (
     familyMember: FamilyMember
-  ): TE.TaskEither<QueryError, FoodAllergyHistory[]>;
-  saveValue(
+  ) => TE.TaskEither<QueryError, FoodAllergyHistory[]>;
+  saveValue: (
     foodAllergyHistory: FoodAllergyHistory
-  ): TE.TaskEither<CommandError, unknown>;
-  saveValues(
+  ) => TE.TaskEither<CommandError, unknown>;
+  saveValues: (
     foodAllergyHistories: FoodAllergyHistory[]
-  ): TE.TaskEither<CommandError, unknown>;
+  ) => TE.TaskEither<CommandError, unknown>;
 }

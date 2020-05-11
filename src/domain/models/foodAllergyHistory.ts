@@ -1,7 +1,7 @@
+import { Record } from 'immutable';
 import ID, { genId } from './id';
 import FamilyMember from './familyMember';
 import { Foodstuff } from './foodstuff';
-import CalendarDate from './calender/calendarDate';
 
 export type FoodAllergyHistoryID = ID;
 
@@ -17,11 +17,6 @@ interface FoodAllergyHistoryProps {
    * アレルギーが発生した食品
    */
   foodstuff: Foodstuff;
-
-  /**
-   * 発症日
-   */
-  dateOfOccurrence: CalendarDate;
 }
 
 /**
@@ -38,5 +33,11 @@ export const makeFoodAllergyHistory = (
   props: Omit<FoodAllergyHistoryProps, 'id'> & { id?: FoodAllergyHistoryID }
 ): FoodAllergyHistory => {
   const id = props?.id || genId();
-  return makeFoodAllergyHistory({ ...props, id });
+
+  return new (class
+    extends Record<FoodAllergyHistoryProps>({
+      ...props,
+      id,
+    })
+    implements FoodAllergyHistory {})(props);
 };

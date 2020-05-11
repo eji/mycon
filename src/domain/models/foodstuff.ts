@@ -43,6 +43,8 @@ export interface Foodstuff extends Readonly<FoodstuffProps> {
    * 栄養素を削除
    */
   removeNutrients(nutrients: Nutrient[]): this;
+
+  equals(other: Foodstuff): boolean;
 }
 
 class FoodstuffClass
@@ -53,16 +55,16 @@ class FoodstuffClass
     category: 'その他',
   })
   implements Foodstuff {
-  addNutrients(nutrients: Nutrient[]): this {
-    return this.set('nutrients', merge(this.nutrients, nutrients));
-  }
+  addNutrients = (nutrients: Nutrient[]): this =>
+    this.set('nutrients', merge(this.nutrients, nutrients));
 
-  removeNutrients(nutrients: Nutrient[]): this {
-    return this.set(
+  removeNutrients = (nutrients: Nutrient[]): this =>
+    this.set(
       'nutrients',
       this.nutrients.filterNot((item) => nutrients.includes(item))
     );
-  }
+
+  equals = (other: Foodstuff): boolean => this.id === other.id;
 }
 
 export const makeFoodstuff = (props: {

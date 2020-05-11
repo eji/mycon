@@ -9,6 +9,8 @@ import {
   inMemoryFamilyMemberRepository,
   dailyMenuRepository,
   inMemoryDailyMenuRepository,
+  inMemoryFoodAllergyHistoryRepository,
+  foodAllergyHistoryRepository,
 } from './types/diTypes';
 import FoodstuffRepositoryInMemory from './infrastructures/repositories/foodstuffRepository/foodstuffRepositoryInMemory';
 import SaveFoodstuffUseCase from './domain/useCases/saveFoodstuffUseCase';
@@ -21,6 +23,9 @@ import SaveFamilyMemberUseCase from './domain/useCases/saveFamilyMemberUseCase';
 import SaveDailyMenuUseCase from './domain/useCases/saveDailyMenuUseCase';
 import DailyMenuRepository from './domain/repositories/dailyMenuRepository';
 import DailyMenuRepositoryInMemory from './infrastructures/repositories/dailyMenuRepository/dailyMenuRepositoryInMemory';
+import FoodAllergyHistoryRepositoryInMemory from './infrastructures/repositories/foodAllergyHistoryRepository/foodAllergyHistoryRepositoryInMemory';
+import FoodAllergyHistoryRepository from './domain/repositories/foodAllergyHistoryRepository';
+import SaveFoodAllergyHistoryUseCase from './domain/useCases/saveFoodAllergyHistoryUseCase';
 
 const diConfig = (): void => {
   container.register<FoodstuffRepository>(foodstuffRepository, {
@@ -38,6 +43,13 @@ const diConfig = (): void => {
   container.register<DailyMenuRepository>(dailyMenuRepository, {
     useToken: inMemoryDailyMenuRepository,
   });
+
+  container.register<FoodAllergyHistoryRepository>(
+    foodAllergyHistoryRepository,
+    {
+      useToken: inMemoryFoodAllergyHistoryRepository,
+    }
+  );
 
   /* in-memory repository */
 
@@ -59,6 +71,11 @@ const diConfig = (): void => {
   container.registerInstance(
     inMemoryDailyMenuRepository,
     new DailyMenuRepositoryInMemory()
+  );
+
+  container.registerInstance(
+    inMemoryFoodAllergyHistoryRepository,
+    new FoodAllergyHistoryRepositoryInMemory()
   );
 
   /* use cases */
@@ -105,6 +122,20 @@ const diConfig = (): void => {
       return new SaveDailyMenuUseCase(repos);
     },
   });
+
+  container.register<SaveFoodAllergyHistoryUseCase>(
+    SaveFoodAllergyHistoryUseCase,
+    {
+      useFactory: (
+        dependencyContainer: DependencyContainer
+      ): SaveFoodAllergyHistoryUseCase => {
+        const repos = dependencyContainer.resolve<FoodAllergyHistoryRepository>(
+          foodAllergyHistoryRepository
+        );
+        return new SaveFoodAllergyHistoryUseCase(repos);
+      },
+    }
+  );
 };
 
 export default diConfig;

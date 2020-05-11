@@ -19,6 +19,7 @@ export default interface FamilyMember extends FamilyMemberProps {
     key: K,
     value: FamilyMemberProps[K]
   ): this;
+  equals(other: FamilyMember): boolean;
 }
 
 class FamilyMemberClass
@@ -26,7 +27,9 @@ class FamilyMemberClass
     id: genId(),
     name: '',
   })
-  implements FamilyMember {}
+  implements FamilyMember {
+  equals = (other: FamilyMember): boolean => this.id === other.id;
+}
 
 export const makeFamilyMember = (
   props: Omit<FamilyMemberProps, 'id'> & { id?: FamilyMemberID }

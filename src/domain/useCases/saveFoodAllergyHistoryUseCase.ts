@@ -8,8 +8,6 @@ type Params = {
   foodAllergyHistory: FoodAllergyHistory;
 };
 
-type ReturnValue = TE.TaskEither<RepositoryError, FoodAllergyHistory>;
-
 /**
  * 食品アレルギー履歴を保存するためのユースケース
  */
@@ -18,11 +16,13 @@ export default class SaveFoodAllergyHistoryUseCase {
     readonly foodAllergyHistoryRepository: FoodAllergyHistoryRepository
   ) {}
 
-  execute(params: Params): ReturnValue {
+  execute = (
+    params: Params
+  ): TE.TaskEither<RepositoryError, FoodAllergyHistory> => {
     const { foodAllergyHistory } = params;
     return pipe(
       this.foodAllergyHistoryRepository.saveValue(foodAllergyHistory),
       TE.map(() => foodAllergyHistory)
     );
-  }
+  };
 }

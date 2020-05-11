@@ -84,6 +84,12 @@ export const editFoodstuffScreenPath = makeEditPathCreator(
   showFoodstuffScreenPath
 );
 
+/* アレルギー情報の追加 */
+
+export const addFoodAllergyHistoryScreenPath: PathCreator<{
+  id: string;
+}> = (props) => `${showFoodstuffScreenPath(props)}/add-allergy-history`;
+
 /* 家族メンバー */
 
 export const familyMembersScreenPath: PathCreator = () => '/family-members';

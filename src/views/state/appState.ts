@@ -33,6 +33,7 @@ import {
 import {
   isAllFoodAllergyHistoriesAction,
   allFoodAllergyHistoriesReducer,
+  AllFoodAllergyHistoriesAction,
 } from './appState/allFoodAllergyHistories';
 import RepositoryError from '../../errors/repositoryError';
 import initSeeds from '../../data/initSeeds';
@@ -120,6 +121,7 @@ export type AppStateAction =
   | AllDailyMenusAction
   | AllRecipesAction
   | AllFoodstuffsAction
+  | AllFoodAllergyHistoriesAction
   | AllFamilyMembersAction
   | AllFoodstuffsAction;
 

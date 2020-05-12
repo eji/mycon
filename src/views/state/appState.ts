@@ -8,7 +8,7 @@ import {
   isCalendarAction,
   calendarReducer,
 } from './appState/calendar';
-import DailyMenu from '../../domain/models/dailyMenu';
+import DailyMeal from '../../domain/models/dailyMeal';
 import Recipe from '../../domain/models/recipe';
 import { Action } from '../../types/action';
 import { ActionHandler } from '../../types/actionHandler';
@@ -46,10 +46,10 @@ import FoodstuffRepository from '../../domain/repositories/foodstuffRepository';
 import FamilyMemberRepository from '../../domain/repositories/familyMemberRepository';
 import RecipeRepository from '../../domain/repositories/recipeRepository';
 import {
-  AllDailyMenusAction,
-  isAllDailyMenusAction,
-  allDailyMenusReducer,
-} from './appState/allDailyMenus';
+  AllDailyMealsAction,
+  allDailyMealsReducer,
+  isAllDailyMealsAction,
+} from './appState/allDailyMeals';
 
 export type InitializedAppState = 'not yet' | 'initializing' | 'initialized';
 
@@ -64,7 +64,7 @@ export type AppState = {
   /**
    * 全ての献立
    */
-  allDailyMenus: { [key: string]: DailyMenu };
+  allDailyMeals: { [key: string]: DailyMeal };
 
   /**
    * 全てのレシピ
@@ -118,7 +118,7 @@ export type AppStateAction =
   | SelectBottomNaviAction
   | InitializeAppStateAction
   | CalendarAction
-  | AllDailyMenusAction
+  | AllDailyMealsAction
   | AllRecipesAction
   | AllFoodstuffsAction
   | AllFoodAllergyHistoriesAction
@@ -155,9 +155,9 @@ export const appStateReducer: Reducer<AppState, AppStateAction> = (
     calendar: isCalendarAction(action)
       ? calendarReducer(state.calendar, action)
       : state.calendar,
-    allDailyMenus: isAllDailyMenusAction(action)
-      ? allDailyMenusReducer(state.allDailyMenus, action)
-      : state.allDailyMenus,
+    allDailyMeals: isAllDailyMealsAction(action)
+      ? allDailyMealsReducer(state.allDailyMeals, action)
+      : state.allDailyMeals,
     allFoodstuffs: isAllFoodstuffsAction(action)
       ? allFoodstuffsReducer(state.allFoodstuffs, action)
       : state.allFoodstuffs,
@@ -185,7 +185,7 @@ export const appStateReducer: Reducer<AppState, AppStateAction> = (
 
 export const initAppState: AppState = {
   calendar: makeCalendar(),
-  allDailyMenus: {},
+  allDailyMeals: {},
   allRecipes: {},
   allFoodstuffs: {},
   allFamilyMembers: {},
@@ -235,7 +235,7 @@ export const initializingAppState = (): TE.TaskEither<
                   (allFoodstuffs): InitializeAppStateAction => {
                     const newAppState: AppState = {
                       calendar: makeCalendar(),
-                      allDailyMenus: {},
+                      allDailyMeals: {},
                       allRecipes: allRecipes.reduce(
                         (acc, recipe) => ({
                           ...acc,

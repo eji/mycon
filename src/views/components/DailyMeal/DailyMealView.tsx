@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles, createStyles, Box } from '@material-ui/core';
-import DailyMenu from '../../../domain/models/dailyMenu';
+import DailyMeal from '../../../domain/models/dailyMeal';
 import MealView from './MealView';
 
 const useStyles = makeStyles(() =>
@@ -14,20 +14,20 @@ const useStyles = makeStyles(() =>
 );
 
 type Props = {
-  dailyMenu: DailyMenu;
+  dailyMeal: DailyMeal;
 };
 
-const DailyMenuView: React.FC<Props> = (props: Props) => {
-  const { dailyMenu } = props;
+const DailyMealView: React.FC<Props> = (props: Props) => {
+  const { dailyMeal } = props;
   const classes = useStyles();
 
   return (
     <Box className={classes.root}>
-      {dailyMenu.meals.map((meal) => (
+      {dailyMeal.meals.map((meal) => (
         <MealView meal={meal} />
       ))}
     </Box>
   );
 };
 
-export default DailyMenuView;
+export default DailyMealView;

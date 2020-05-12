@@ -8,11 +8,11 @@ import {
 } from '@material-ui/core';
 import DoneIcon from '@material-ui/icons/Done';
 import { useHistory } from 'react-router-dom';
-import { showDailyMenuScreenPath } from '../../../routePaths';
+import { showDailyMealScreenPath } from '../../../routePaths';
 import { Week } from '../../../domain/models/calender/week';
 import { DayOfTheWeek } from '../../../domain/models/calender/dayOfTheWeek';
 import { appStateContext } from '../AppStateProvider';
-import { dailyMenuIDFromCalendarDate } from '../../../domain/models/dailyMenu';
+import { dailyMealIDFromCalendarDate } from '../../../domain/models/dailyMeal';
 
 const useStyle = makeStyles(() =>
   createStyles({
@@ -42,7 +42,7 @@ const MonthlyScheduleTableDayColumn: React.FC<MonthlyScheduleTableDayColumnProps
   props: MonthlyScheduleTableDayColumnProps
 ) => {
   const { appState } = useContext(appStateContext);
-  const { allDailyMenus } = appState;
+  const { allDailyMeals } = appState;
   const history = useHistory();
   const classes = useStyle();
   const { week, dayOfTheWeek } = props;
@@ -52,10 +52,10 @@ const MonthlyScheduleTableDayColumn: React.FC<MonthlyScheduleTableDayColumnProps
     return <></>;
   }
 
-  const dailyMenu = allDailyMenus[dailyMenuIDFromCalendarDate(targetDate)];
+  const dailyMeal = allDailyMeals[dailyMealIDFromCalendarDate(targetDate)];
 
   const handleClieck = (): void => {
-    history.push(showDailyMenuScreenPath({ calendarDate: targetDate }));
+    history.push(showDailyMealScreenPath({ calendarDate: targetDate }));
   };
 
   return (
@@ -68,7 +68,7 @@ const MonthlyScheduleTableDayColumn: React.FC<MonthlyScheduleTableDayColumnProps
         alignItems="flex-start"
       >
         <Box className={classes.day}>{targetDate.day}</Box>
-        {dailyMenu && (
+        {dailyMeal && (
           <Box className={classes.statusDone}>
             <DoneIcon />
           </Box>

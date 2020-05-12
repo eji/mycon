@@ -31,13 +31,11 @@ const useStyle = makeStyles((theme: Theme) =>
   })
 );
 
-type MenuItemDetailProps = {
+type Props = {
   handleClose: () => void;
 };
 
-const MenuItemDetail: React.FC<MenuItemDetailProps> = (
-  props: MenuItemDetailProps
-) => {
+const MealItemDetail: React.FC<Props> = (props: Props) => {
   const { handleClose } = props;
   const classes = useStyle();
   const rows = [
@@ -88,4 +86,4 @@ const MenuItemDetail: React.FC<MenuItemDetailProps> = (
   );
 };
 
-export default MenuItemDetail;
+export default MealItemDetail;

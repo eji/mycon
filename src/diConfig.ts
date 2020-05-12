@@ -7,8 +7,8 @@ import {
   recipeRepository,
   familyMemberRepository,
   inMemoryFamilyMemberRepository,
-  dailyMenuRepository,
-  inMemoryDailyMenuRepository,
+  dailyMealRepository,
+  inMemoryDailyMealRepository,
   inMemoryFoodAllergyHistoryRepository,
   foodAllergyHistoryRepository,
 } from './types/diTypes';
@@ -20,9 +20,9 @@ import SaveRecipeUseCase from './domain/useCases/saveRecipeUseCase';
 import FamilyMemberRepository from './domain/repositories/familyMemberRepository';
 import FamilyMemberRepositoryInMemory from './infrastructures/repositories/familyMemberRepository/familyMemberRepositoryInMemory';
 import SaveFamilyMemberUseCase from './domain/useCases/saveFamilyMemberUseCase';
-import SaveDailyMenuUseCase from './domain/useCases/saveDailyMenuUseCase';
-import DailyMenuRepository from './domain/repositories/dailyMenuRepository';
-import DailyMenuRepositoryInMemory from './infrastructures/repositories/dailyMenuRepository/dailyMenuRepositoryInMemory';
+import SaveDailyMealUseCase from './domain/useCases/saveDailyMealUseCase';
+import DailyMealRepository from './domain/repositories/dailyMealRepository';
+import DailyMealRepositoryInMemory from './infrastructures/repositories/dailyMealRepository/dailyMealRepositoryInMemory';
 import FoodAllergyHistoryRepositoryInMemory from './infrastructures/repositories/foodAllergyHistoryRepository/foodAllergyHistoryRepositoryInMemory';
 import FoodAllergyHistoryRepository from './domain/repositories/foodAllergyHistoryRepository';
 import SaveFoodAllergyHistoryUseCase from './domain/useCases/saveFoodAllergyHistoryUseCase';
@@ -40,8 +40,8 @@ const diConfig = (): void => {
     useToken: inMemoryFamilyMemberRepository,
   });
 
-  container.register<DailyMenuRepository>(dailyMenuRepository, {
-    useToken: inMemoryDailyMenuRepository,
+  container.register<DailyMealRepository>(dailyMealRepository, {
+    useToken: inMemoryDailyMealRepository,
   });
 
   container.register<FoodAllergyHistoryRepository>(
@@ -69,8 +69,8 @@ const diConfig = (): void => {
   );
 
   container.registerInstance(
-    inMemoryDailyMenuRepository,
-    new DailyMenuRepositoryInMemory()
+    inMemoryDailyMealRepository,
+    new DailyMealRepositoryInMemory()
   );
 
   container.registerInstance(
@@ -112,14 +112,14 @@ const diConfig = (): void => {
     },
   });
 
-  container.register<SaveDailyMenuUseCase>(SaveDailyMenuUseCase, {
+  container.register<SaveDailyMealUseCase>(SaveDailyMealUseCase, {
     useFactory: (
       dependencyContainer: DependencyContainer
-    ): SaveDailyMenuUseCase => {
-      const repos = dependencyContainer.resolve<DailyMenuRepository>(
-        dailyMenuRepository
+    ): SaveDailyMealUseCase => {
+      const repos = dependencyContainer.resolve<DailyMealRepository>(
+        dailyMealRepository
       );
-      return new SaveDailyMenuUseCase(repos);
+      return new SaveDailyMealUseCase(repos);
     },
   });
 

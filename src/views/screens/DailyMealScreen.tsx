@@ -10,11 +10,11 @@ import {
 import { useHistory, useParams } from 'react-router-dom';
 import SwipeableViews from 'react-swipeable-views';
 import Layout from '../layouts/Layout';
-import DailyMenuView from '../components/DailyMenu/DailyMenuView';
+import DailyMealView from '../components/DailyMeal/DailyMealView';
 import { appStateContext } from '../components/AppStateProvider';
 import { scheduleScreenPath } from '../../routePaths';
-import { calendarDateFromDailyMenuID } from '../../domain/models/dailyMenu';
-import NoDailyMenu from '../components/DailyMenu/NoDailyMenu';
+import { calendarDateFromDailyMealID } from '../../domain/models/dailyMeal';
+import NoDailyMeal from '../components/DailyMeal/NoDailyMeal';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -47,9 +47,9 @@ const TabPanel: React.FC<TabPanelProps> = (props: TabPanelProps) => {
   );
 };
 
-type DailyMenuScreenProps = {};
+type Props = {};
 
-const DailyMenuScreen: React.FC<DailyMenuScreenProps> = () => {
+const DailyMealScreen: React.FC<Props> = () => {
   const { id } = useParams();
   const { appState } = useContext(appStateContext);
   const history = useHistory();
@@ -62,7 +62,7 @@ const DailyMenuScreen: React.FC<DailyMenuScreenProps> = () => {
     return <></>;
   }
 
-  const calendarDate = calendarDateFromDailyMenuID(id);
+  const calendarDate = calendarDateFromDailyMealID(id);
   if (calendarDate == null) {
     history.replace(scheduleScreenPath());
     return <></>;
@@ -70,7 +70,7 @@ const DailyMenuScreen: React.FC<DailyMenuScreenProps> = () => {
 
   const title = `${calendarDate.year}年${calendarDate.month}月${calendarDate.day}日(${calendarDate.dayOfTheWeek})`;
 
-  const dailyMenu = appState.allDailyMenus[id];
+  const dailyMeal = appState.allDailyMeals[id];
 
   const handleChange = (
     event: React.ChangeEvent<{}>,
@@ -85,19 +85,19 @@ const DailyMenuScreen: React.FC<DailyMenuScreenProps> = () => {
 
   const handleBack = (): void => history.goBack();
 
-  if (dailyMenu == null) {
+  if (dailyMeal == null) {
     return (
       <Layout title={title} handleBack={handleBack}>
-        <NoDailyMenu calendarDate={calendarDate} />
+        <NoDailyMeal calendarDate={calendarDate} />
       </Layout>
     );
   }
 
   return (
     <Layout title={title} handleBack={handleBack}>
-      <DailyMenuView dailyMenu={dailyMenu} />
+      <DailyMealView dailyMeal={dailyMeal} />
     </Layout>
   );
 };
 
-export default DailyMenuScreen;
+export default DailyMealScreen;

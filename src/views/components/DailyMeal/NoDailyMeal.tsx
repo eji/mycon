@@ -4,11 +4,11 @@ import CalendarDate from '../../../domain/models/calender/calendarDate';
 import { addMealScreenPath } from '../../../routePaths';
 import NoItemView from '../NoItemView';
 
-type NoDailyMenuProps = {
+type Props = {
   calendarDate: CalendarDate;
 };
 
-const NoDailyMenu: React.FC<NoDailyMenuProps> = (props: NoDailyMenuProps) => {
+const NoDailyMeal: React.FC<Props> = (props: Props) => {
   const history = useHistory();
   const { calendarDate } = props;
 
@@ -25,4 +25,4 @@ const NoDailyMenu: React.FC<NoDailyMenuProps> = (props: NoDailyMenuProps) => {
   );
 };
 
-export default NoDailyMenu;
+export default NoDailyMeal;

@@ -3,20 +3,19 @@ import './App.css';
 import { Switch, Route, useLocation } from 'react-router-dom';
 import {
   scheduleScreenPath,
-  editDailyMenuScreenPath,
   recipesScreenPath,
   addRecipeScreenPath,
   foodstuffsScreenPath,
   addFoodstuffScreenPath,
   familyMembersScreenPath,
   addFamilyMemberScreenPath,
-  showDailyMenuScreenPath,
   addMealScreenPath,
   showFoodstuffScreenPath,
   showRecipeScreenPath,
+  editDailyMealScreenPath,
+  showDailyMealScreenPath,
 } from './routePaths';
 import ScheduleScreen from './views/screens/ScheduleScreen';
-import DailyMenuScreen from './views/screens/DailyMenuScreen';
 import RecipesScreen from './views/screens/RecipesScreen';
 import EditRecipeScreen from './views/screens/EditRecipeScreen';
 import FoodstuffsScreen from './views/screens/FoodstuffsScreen';
@@ -28,6 +27,7 @@ import AddMealScreen from './views/screens/AddMealScreen';
 import ShowFoodstuffScreen from './views/screens/ShowFoodstuffScreen';
 import ShowRecipeScreen from './views/screens/ShowRecipeScreen';
 import { isLocationState } from './locationState';
+import DailyMealScreen from './views/screens/DailyMealScreen';
 
 const AppSwitch: React.FC = () => {
   const location = useLocation();
@@ -45,14 +45,14 @@ const AppSwitch: React.FC = () => {
             <ScheduleScreen />
           </RequireInitApp>
         </Route>
-        <Route exact path={showDailyMenuScreenPath()}>
+        <Route exact path={showDailyMealScreenPath()}>
           <RequireInitApp>
-            <DailyMenuScreen />
+            <DailyMealScreen />
           </RequireInitApp>
         </Route>
-        <Route exact path={editDailyMenuScreenPath()}>
+        <Route exact path={editDailyMealScreenPath()}>
           <RequireInitApp>
-            <DailyMenuScreen />
+            <DailyMealScreen />
           </RequireInitApp>
         </Route>
         <Route path={addMealScreenPath()}>

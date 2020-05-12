@@ -1,6 +1,6 @@
 import { flow } from 'fp-ts/lib/function';
 import CalendarDate from './domain/models/calender/calendarDate';
-import { dailyMenuIDFromCalendarDate } from './domain/models/dailyMenu';
+import { dailyMealIDFromCalendarDate } from './domain/models/dailyMeal';
 import { MealID } from './domain/models/meal';
 
 type PathCreator<T = unknown> = (props?: T) => string;
@@ -26,26 +26,26 @@ export const scheduleScreenPath: PathCreator = () => '/';
 
 /* 一日のメニュー */
 
-export const dailyMenusScreenPath: PathCreator = () => '/daily-menus';
-export const showDailyMenuScreenPath: PathCreator<{
+export const dailyMealsScreenPath: PathCreator = () => '/daily-meals';
+export const showDailyMealScreenPath: PathCreator<{
   calendarDate: CalendarDate;
 }> = (props?: { calendarDate: CalendarDate }) => {
   const id =
-    props == null ? ':id' : dailyMenuIDFromCalendarDate(props.calendarDate);
-  return `${dailyMenusScreenPath()}/${id}`;
+    props == null ? ':id' : dailyMealIDFromCalendarDate(props.calendarDate);
+  return `${dailyMealsScreenPath()}/${id}`;
 };
 
-export const editDailyMenuScreenPath: PathCreator<{
+export const editDailyMealScreenPath: PathCreator<{
   calendarDate: CalendarDate;
 }> = (props?: { calendarDate: CalendarDate }) =>
-  `${showDailyMenuScreenPath(props)}/edit`;
+  `${showDailyMealScreenPath(props)}/edit`;
 
 /* 1回の食事 */
 
 export const mealsScreenPath: PathCreator<{
   calendarDate: CalendarDate;
 }> = (props?: { calendarDate: CalendarDate }) =>
-  `${showDailyMenuScreenPath(props)}/meals`;
+  `${showDailyMealScreenPath(props)}/meals`;
 
 export const addMealScreenPath: PathCreator<{
   calendarDate: CalendarDate;

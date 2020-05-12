@@ -23,8 +23,8 @@ import {
 } from '../forms/inputMealFormSchema';
 import Recipe from '../../domain/models/recipe';
 import RecipesList from '../components/Recipe/RecipesList';
-import { addMeal } from '../state/appState/allDailyMenus';
-import { calendarDateFromDailyMenuID } from '../../domain/models/dailyMenu';
+import { addMeal } from '../state/appState/allDailyMeals';
+import { calendarDateFromDailyMealID } from '../../domain/models/dailyMeal';
 import { scheduleScreenPath } from '../../routePaths';
 import { appStateContext } from '../components/AppStateProvider';
 
@@ -63,7 +63,7 @@ type Props = {};
 
 const AddMealScreen: React.FC<Props> = () => {
   const { appState, dispatch } = useContext(appStateContext);
-  const { allDailyMenus, allRecipes } = appState;
+  const { allDailyMeals, allRecipes } = appState;
   const classes = useStyles();
   const history = useHistory();
   const [open, setOpen] = useState(false);
@@ -72,7 +72,7 @@ const AddMealScreen: React.FC<Props> = () => {
     history.replace(scheduleScreenPath());
     return <></>;
   }
-  const calendarDate = calendarDateFromDailyMenuID(id);
+  const calendarDate = calendarDateFromDailyMealID(id);
   if (calendarDate == null) {
     history.replace(scheduleScreenPath());
     return <></>;
@@ -96,7 +96,12 @@ const AddMealScreen: React.FC<Props> = () => {
         validateOnChange={false}
         onSubmit={async (values): Promise<void> => {
           await pipe(
-            addMeal({ form: values, allDailyMenus, allRecipes, calendarDate }),
+            addMeal({
+              form: values,
+              allDailyMeals,
+              allRecipes,
+              calendarDate,
+            }),
             TE.map(dispatch),
             TE.map(() => history.goBack()),
             TE.mapLeft((error) => console.log(error))

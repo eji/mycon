@@ -3,27 +3,27 @@ import QueryError from '../../../errors/repositoryErrors/queryError';
 import CommandError from '../../../errors/repositoryErrors/commandError';
 import InMemoryStore from '../../../drivers/InMemoryStore';
 import NotFoundError from '../../../errors/repositoryErrors/queryErrors/notFoundError';
-import DailyMenuRepository from '../../../domain/repositories/dailyMenuRepository';
-import DailyMenu from '../../../domain/models/dailyMenu';
+import DailyMealRepository from '../../../domain/repositories/dailyMealRepository';
+import DailyMeal from '../../../domain/models/dailyMeal';
 import CalendarDate from '../../../domain/models/calender/calendarDate';
 
-export default class DailyMenuRepositoryInMemory
-  implements DailyMenuRepository {
-  readonly store: InMemoryStore<CalendarDate, DailyMenu>;
+export default class DailyMealRepositoryInMemory
+  implements DailyMealRepository {
+  readonly store: InMemoryStore<CalendarDate, DailyMeal>;
 
-  constructor(store?: InMemoryStore<CalendarDate, DailyMenu>) {
-    this.store = store || new InMemoryStore<CalendarDate, DailyMenu>();
+  constructor(store?: InMemoryStore<CalendarDate, DailyMeal>) {
+    this.store = store || new InMemoryStore<CalendarDate, DailyMeal>();
   }
 
   findByCalendarDate(
     calendarDate: CalendarDate
-  ): TaskEither<QueryError, DailyMenu> {
+  ): TaskEither<QueryError, DailyMeal> {
     const recipesOfTheDay = this.store.get(calendarDate);
     return fromOption(() => new NotFoundError())(recipesOfTheDay);
   }
 
-  saveValue(dailyMenu: DailyMenu): TaskEither<CommandError, boolean> {
-    this.store.set(dailyMenu.calendarDate, dailyMenu);
+  saveValue(dailyMeal: DailyMeal): TaskEither<CommandError, boolean> {
+    this.store.set(dailyMeal.calendarDate, dailyMeal);
     return right(true);
   }
 }

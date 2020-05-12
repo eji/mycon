@@ -10,7 +10,7 @@ import {
   Slide,
 } from '@material-ui/core';
 import { TransitionProps } from '@material-ui/core/transitions/transition';
-import MenuItemDetail from './MenuItemDetail';
+import MealItemDetail from './MealItemDetail';
 
 const useStyle = makeStyles(() =>
   createStyles({
@@ -37,7 +37,7 @@ const Transition = React.forwardRef(
 
 type Props = {};
 
-const MenuItem: React.FC<Props> = () => {
+const MealItem: React.FC<Props> = () => {
   const classes = useStyle();
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -63,10 +63,10 @@ const MenuItem: React.FC<Props> = () => {
         onClose={handleClose}
         TransitionComponent={Transition}
       >
-        <MenuItemDetail handleClose={handleClose} />
+        <MealItemDetail handleClose={handleClose} />
       </Dialog>
     </>
   );
 };
 
-export default MenuItem;
+export default MealItem;

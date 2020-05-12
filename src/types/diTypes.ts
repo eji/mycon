@@ -12,9 +12,9 @@ export const familyMemberRepository = 'familyMemberRepository';
 
 export const inMemoryFamilyMemberRepository = 'inMemoryFamilyMemberRepository';
 
-export const dailyMenuRepository = 'dailyMenuRepository';
+export const dailyMealRepository = 'dailyMealRepository';
 
-export const inMemoryDailyMenuRepository = 'inMemoryDailyMenuRepository';
+export const inMemoryDailyMealRepository = 'inMemoryDailyMealRepository';
 
 export const foodAllergyHistoryRepository = 'foodAllergyHistoryRepository';
 

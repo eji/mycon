@@ -2,19 +2,19 @@ import { Record } from 'immutable';
 import CalendarDate, { makeDate } from './calender/calendarDate';
 import Meal from './meal';
 
-export type DailyMenuID = string;
+export type DailyMealID = string;
 
-const dailyMenuIDRegexp = /^(\d{4})-(\d{1,2})-(\d{1,2})$/;
+const dailyMealIDRegexp = /^(\d{4})-(\d{1,2})-(\d{1,2})$/;
 
-export const dailyMenuIDFromCalendarDate = (
+export const dailyMealIDFromCalendarDate = (
   calendarDate: CalendarDate
-): DailyMenuID =>
+): DailyMealID =>
   `${calendarDate.year}-${calendarDate.month}-${calendarDate.day}`;
 
-export const calendarDateFromDailyMenuID = (
-  dailyMenuID: DailyMenuID
+export const calendarDateFromDailyMealID = (
+  dailyMealID: DailyMealID
 ): CalendarDate | null => {
-  const match = dailyMenuID.match(dailyMenuIDRegexp);
+  const match = dailyMealID.match(dailyMealIDRegexp);
   if (match == null) {
     return null;
   }
@@ -24,8 +24,8 @@ export const calendarDateFromDailyMenuID = (
   return makeDate({ year, month, day });
 };
 
-interface DailyMenuProps {
-  id: DailyMenuID;
+interface Props {
+  id: DailyMealID;
 
   /**
    * 対象の日
@@ -41,8 +41,8 @@ interface DailyMenuProps {
 /**
  * 一日のメニュー
  */
-export default interface DailyMenu extends DailyMenuProps {
-  set<K extends keyof DailyMenuProps>(key: K, value: DailyMenuProps[K]): this;
+export default interface DailyMeal extends Props {
+  set<K extends keyof Props>(key: K, value: Props[K]): this;
 
   /**
    * 食事を追加する
@@ -55,16 +55,16 @@ export default interface DailyMenu extends DailyMenuProps {
   removeMeal(meal: Meal): this;
 }
 
-class DailyMenuClass
-  extends Record<Readonly<DailyMenuProps>>({
+class DailyMealClass
+  extends Record<Readonly<Props>>({
     id: '',
     calendarDate: makeDate(),
     meals: [],
   })
-  implements DailyMenu {
-  static create(props: Omit<DailyMenuProps, 'id'>): DailyMenu {
-    const id = dailyMenuIDFromCalendarDate(props.calendarDate);
-    return new DailyMenuClass({ ...props, id });
+  implements DailyMeal {
+  static create(props: Omit<Props, 'id'>): DailyMeal {
+    const id = dailyMealIDFromCalendarDate(props.calendarDate);
+    return new DailyMealClass({ ...props, id });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -78,5 +78,5 @@ class DailyMenuClass
     this.set('meals', this.meals.filter(meal.notEquals));
 }
 
-export const makeDailyMenu = (props: Omit<DailyMenuProps, 'id'>): DailyMenu =>
-  DailyMenuClass.create(props);
+export const makeDailyMeal = (props: Omit<Props, 'id'>): DailyMeal =>
+  DailyMealClass.create(props);

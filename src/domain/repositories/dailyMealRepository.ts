@@ -1,12 +1,12 @@
 import { TaskEither } from 'fp-ts/lib/TaskEither';
 import QueryError from '../../errors/repositoryErrors/queryError';
 import CommandError from '../../errors/repositoryErrors/commandError';
-import DailyMenu from '../models/dailyMenu';
+import DailyMeal from '../models/dailyMeal';
 import CalendarDate from '../models/calender/calendarDate';
 
-export default interface DailyMenuRepository {
+export default interface DailyMealRepository {
   findByCalendarDate(
     calendarDate: CalendarDate
-  ): TaskEither<QueryError, DailyMenu>;
-  saveValue(dailyMenu: DailyMenu): TaskEither<CommandError, unknown>;
+  ): TaskEither<QueryError, DailyMeal>;
+  saveValue(dailyMeal: DailyMeal): TaskEither<CommandError, unknown>;
 }

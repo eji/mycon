@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import Layout from '../layouts/Layout';
 import { appStateContext } from '../components/AppStateProvider';
-import RecipesList from '../components/Recipe/RecipesList';
+import RecipesGridList from '../components/Recipe/RecipesGridList';
 import NoRecipe from '../components/Recipe/NoRecipe';
 
 type RecipesScreenProps = {};
@@ -13,7 +13,11 @@ const RecipesScreen: React.FC<RecipesScreenProps> = () => {
 
   return (
     <Layout title="レシピ一覧">
-      {recipes.length === 0 ? <NoRecipe /> : <RecipesList recipes={recipes} />}
+      {recipes.length === 0 ? (
+        <NoRecipe />
+      ) : (
+        <RecipesGridList recipes={recipes} />
+      )}
     </Layout>
   );
 };

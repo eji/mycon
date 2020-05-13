@@ -48,6 +48,8 @@ interface MealsProps {
 
 export type MealType = keyof MealsProps;
 
+export const mealTypes: MealType[] = ['breakfast', 'lunch', 'dinner', 'snack'];
+
 interface Props extends MealsProps {
   id: DailyMealID;
 

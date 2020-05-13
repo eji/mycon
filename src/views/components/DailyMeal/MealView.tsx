@@ -7,10 +7,10 @@ import {
   Toolbar,
 } from '@material-ui/core';
 import { useHistory, useLocation } from 'react-router-dom';
-import RecipesList from '../Recipe/RecipesList';
 import AddButton from '../common/AddButton';
 import { addRecipeToDailyMenuDialogPath } from '../../../routePaths';
 import DailyMeal, { MealType } from '../../../domain/models/dailyMeal';
+import RecipesList from '../Recipe/RecipesList';
 
 const useStyles = makeStyles(() =>
   createStyles({

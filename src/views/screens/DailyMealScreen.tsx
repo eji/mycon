@@ -7,6 +7,7 @@ import { scheduleScreenPath } from '../../routePaths';
 import {
   calendarDateFromDailyMealID,
   makeDefaultDailyMeal,
+  mealTypes,
 } from '../../domain/models/dailyMeal';
 import MealView from '../components/DailyMeal/MealView';
 
@@ -17,7 +18,9 @@ const useStyles = makeStyles((theme: Theme) =>
       overflowY: 'scroll',
       padding: theme.spacing(1),
     },
-    menuItemList: {},
+    meal: {
+      marginBottom: theme.spacing(3),
+    },
   })
 );
 
@@ -50,12 +53,14 @@ const DailyMealScreen: React.FC<Props> = () => {
   return (
     <Layout title={title} handleBack={handleBack}>
       <Box className={classes.root}>
-        <MealView dailyMeal={dailyMeal} mealType="breakfast" />
-        <MealView dailyMeal={dailyMeal} mealType="lunch" />
-        <MealView dailyMeal={dailyMeal} mealType="dinner" />
-        <MealView dailyMeal={dailyMeal} mealType="snack" />
+        {mealTypes.map(
+          (mealType): JSX.Element => (
+            <div className={classes.meal}>
+              <MealView dailyMeal={dailyMeal} mealType={mealType} />
+            </div>
+          )
+        )}
       </Box>
-      );
     </Layout>
   );
 };

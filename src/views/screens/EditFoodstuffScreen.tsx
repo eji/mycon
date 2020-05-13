@@ -16,8 +16,10 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  IconButton,
 } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
 import Layout from '../layouts/Layout';
 import { appStateContext } from '../components/AppStateProvider';
 import {
@@ -80,6 +82,27 @@ const useStyles = makeStyles((theme: Theme) =>
       '&:hover': {
         backgroundColor: theme.palette.primary.dark,
       },
+    },
+    selectPhotoButton: {
+      width: '100%',
+      height: 150,
+      backgroundColor: '#ddd',
+    },
+    selectPhotoInputLabel: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '100%',
+      height: 150,
+    },
+    selectPhotoButtonIcon: {
+      width: 100,
+      height: 100,
+      color: '#999',
+    },
+    selectPhotoInput: {
+      display: 'none',
     },
   })
 );
@@ -207,7 +230,20 @@ const AddFoodstuffScreen: React.FC<AddFoodstuffScreenProps> = () => {
                   fullWidth
                 />
               </div>
-              <input type="file" id="take-picture" accept="image/*" />
+              <ButtonBase className={classes.selectPhotoButton}>
+                <label
+                  htmlFor="take-picture"
+                  className={classes.selectPhotoInputLabel}
+                >
+                  <AddAPhotoIcon className={classes.selectPhotoButtonIcon} />
+                  <input
+                    type="file"
+                    id="take-picture"
+                    accept="image/*"
+                    className={classes.selectPhotoInput}
+                  />
+                </label>
+              </ButtonBase>
               <FormControl className={classes.selectCategoryArea}>
                 <InputLabel id="foodstuff-category-select-label">
                   カテゴリ

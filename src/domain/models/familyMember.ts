@@ -28,7 +28,9 @@ class FamilyMemberClass
     name: '',
   })
   implements FamilyMember {
-  equals = (other: FamilyMember): boolean => this.id === other.id;
+  equals(other: FamilyMember): boolean {
+    return this.id === other.id;
+  }
 }
 
 export const makeFamilyMember = (

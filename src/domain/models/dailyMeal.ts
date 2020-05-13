@@ -1,6 +1,6 @@
 import { Record } from 'immutable';
 import CalendarDate, { makeDate } from './calender/calendarDate';
-import Meal from './meal';
+import Meal, { makeMeal } from './meal';
 
 export type DailyMealID = string;
 
@@ -33,9 +33,24 @@ interface Props {
   calendarDate: CalendarDate;
 
   /**
-   * 食事一覧
+   * 朝食
    */
-  meals: Meal[];
+  breakfast: Meal;
+
+  /**
+   * 昼食
+   */
+  lunch: Meal;
+
+  /**
+   * 夕食
+   */
+  dinner: Meal;
+
+  /**
+   * おやつ
+   */
+  snack: Meal;
 }
 
 /**
@@ -43,40 +58,48 @@ interface Props {
  */
 export default interface DailyMeal extends Props {
   set<K extends keyof Props>(key: K, value: Props[K]): this;
-
-  /**
-   * 食事を追加する
-   */
-  addMeal(meal: Meal): this;
-
-  /**
-   * 食事を削除する
-   */
-  removeMeal(meal: Meal): this;
 }
 
-class DailyMealClass
-  extends Record<Readonly<Props>>({
-    id: '',
-    calendarDate: makeDate(),
-    meals: [],
-  })
-  implements DailyMeal {
-  static create(props: Omit<Props, 'id'>): DailyMeal {
-    const id = dailyMealIDFromCalendarDate(props.calendarDate);
-    return new DailyMealClass({ ...props, id });
-  }
+export const makeDailyMeal = (props: Omit<Props, 'id'>): DailyMeal => {
+  return class DailyMealClass
+    extends Record<Readonly<Props>>({
+      ...props,
+      id: '',
+      calendarDate: makeDate(),
+    })
+    implements DailyMeal {
+    static create(initProps: Omit<Props, 'id'>): DailyMeal {
+      const id = dailyMealIDFromCalendarDate(initProps.calendarDate);
+      return new DailyMealClass({ ...initProps, id });
+    }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private constructor(...args: any[]) {
-    super(...args);
-  }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    private constructor(...args: any[]) {
+      super(...args);
+    }
+  }.create(props);
+};
 
-  addMeal = (meal: Meal): this => this.set('meals', [...this.meals, meal]);
-
-  removeMeal = (meal: Meal): this =>
-    this.set('meals', this.meals.filter(meal.notEquals));
-}
-
-export const makeDailyMeal = (props: Omit<Props, 'id'>): DailyMeal =>
-  DailyMealClass.create(props);
+export const makeDefaultDailyMeal = (props: {
+  calendarDate: CalendarDate;
+}): DailyMeal => {
+  return makeDailyMeal({
+    calendarDate: props.calendarDate,
+    breakfast: makeMeal({
+      name: '朝食',
+      recipes: [],
+    }),
+    lunch: makeMeal({
+      name: '昼食',
+      recipes: [],
+    }),
+    dinner: makeMeal({
+      name: '夕食',
+      recipes: [],
+    }),
+    snack: makeMeal({
+      name: 'おやつ',
+      recipes: [],
+    }),
+  });
+};

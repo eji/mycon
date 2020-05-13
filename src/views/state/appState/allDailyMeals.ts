@@ -6,15 +6,10 @@ import { Action } from '../../../types/action';
 import { ActionHandler } from '../../../types/actionHandler';
 import createActionDistinguishFunction from '../../../utils/createActionDistinguishFunction';
 import RepositoryError from '../../../errors/repositoryError';
-import DailyMeal, {
-  makeDailyMeal,
-  dailyMealIDFromCalendarDate,
-} from '../../../domain/models/dailyMeal';
-import CalendarDate from '../../../domain/models/calender/calendarDate';
-import { InputMealForm } from '../../forms/inputMealFormSchema';
+import DailyMeal from '../../../domain/models/dailyMeal';
 import SaveDailyMealUseCase from '../../../domain/useCases/saveDailyMealUseCase';
+import MealType from '../../../types/mealType';
 import Recipe from '../../../domain/models/recipe';
-import { makeMeal } from '../../../domain/models/meal';
 
 export type AllDailyMeals = { [key: string]: DailyMeal };
 
@@ -63,21 +58,15 @@ export const allDailyMealsReducer: Reducer<
 
 /* action creator */
 
-export const addMeal = (params: {
-  form: InputMealForm;
-  calendarDate: CalendarDate;
-  allDailyMeals: { [key: string]: DailyMeal };
-  allRecipes: { [key: string]: Recipe };
+export const saveDailyMeal = (params: {
+  dailyMeal: DailyMeal;
+  mealType: MealType;
+  recipes: Recipe[];
 }): TE.TaskEither<RepositoryError, SaveDailyMealAction> => {
-  const { form, calendarDate, allDailyMeals, allRecipes } = params;
-  const meal = makeMeal({
-    ...form,
-    recipes: form.recipeIDs.map((rid) => allRecipes[rid]),
-  });
-  const id = dailyMealIDFromCalendarDate(calendarDate);
-  const dailyMeal =
-    allDailyMeals[id] || makeDailyMeal({ calendarDate, meals: [] });
-  const newDailyMeal = dailyMeal.addMeal(meal);
+  const { dailyMeal, mealType, recipes } = params;
+  const meal = dailyMeal[mealType];
+  const newMeal = recipes.reduce((m, r) => m.addRecipe(r), meal);
+  const newDailyMeal = dailyMeal.set(mealType, newMeal);
   const useCase = container.resolve(SaveDailyMealUseCase);
   return pipe(
     useCase.execute({ dailyMeal: newDailyMeal }),

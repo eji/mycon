@@ -1,61 +1,33 @@
-import React, { ReactNode, useContext } from 'react';
-import {
-  Tabs,
-  Tab,
-  Box,
-  useTheme,
-  makeStyles,
-  createStyles,
-} from '@material-ui/core';
+import React, { useContext } from 'react';
+import { Box, makeStyles, createStyles } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
-import SwipeableViews from 'react-swipeable-views';
 import Layout from '../layouts/Layout';
-import DailyMealView from '../components/DailyMeal/DailyMealView';
 import { appStateContext } from '../components/AppStateProvider';
 import { scheduleScreenPath } from '../../routePaths';
-import { calendarDateFromDailyMealID } from '../../domain/models/dailyMeal';
-import NoDailyMeal from '../components/DailyMeal/NoDailyMeal';
+import {
+  calendarDateFromDailyMealID,
+  makeDefaultDailyMeal,
+} from '../../domain/models/dailyMeal';
+import MealView from '../components/DailyMeal/MealView';
 
 const useStyles = makeStyles(() =>
   createStyles({
-    root: {},
-    tabContent: {
+    root: {
       height: '100%',
+      overflowY: 'scroll',
     },
+    menuItemList: {},
   })
 );
-
-type TabPanelProps = {
-  index: number;
-  selectedIndex: number;
-  children: ReactNode;
-};
-
-const TabPanel: React.FC<TabPanelProps> = (props: TabPanelProps) => {
-  const classes = useStyles();
-  const { index, selectedIndex, children } = props;
-  return (
-    <Box
-      role="tabpanel"
-      hidden={index !== selectedIndex}
-      id={`menu-tabpanel-${index}`}
-      aria-labelledby={`menu-tab-${index}`}
-      className={classes.tabContent}
-    >
-      {children}
-    </Box>
-  );
-};
 
 type Props = {};
 
 const DailyMealScreen: React.FC<Props> = () => {
   const { id } = useParams();
   const { appState } = useContext(appStateContext);
+  const { allDailyMeals } = appState;
   const history = useHistory();
-  const theme = useTheme();
-  const [value, setValue] = React.useState(0);
-  // const classes = useStyles();
+  const classes = useStyles();
 
   if (id == null) {
     history.replace(scheduleScreenPath());
@@ -70,32 +42,19 @@ const DailyMealScreen: React.FC<Props> = () => {
 
   const title = `${calendarDate.year}年${calendarDate.month}月${calendarDate.day}日(${calendarDate.dayOfTheWeek})`;
 
-  const dailyMeal = appState.allDailyMeals[id];
-
-  const handleChange = (
-    event: React.ChangeEvent<{}>,
-    newValue: number
-  ): void => {
-    setValue(newValue);
-  };
-
-  const handleChangeIndex = (index: number): void => {
-    setValue(index);
-  };
+  const dailyMeal = allDailyMeals[id] || makeDefaultDailyMeal({ calendarDate });
 
   const handleBack = (): void => history.goBack();
 
-  if (dailyMeal == null) {
-    return (
-      <Layout title={title} handleBack={handleBack}>
-        <NoDailyMeal calendarDate={calendarDate} />
-      </Layout>
-    );
-  }
-
   return (
     <Layout title={title} handleBack={handleBack}>
-      <DailyMealView dailyMeal={dailyMeal} />
+      <Box className={classes.root}>
+        <MealView dailyMeal={dailyMeal} mealType="breakfast" />
+        <MealView dailyMeal={dailyMeal} mealType="lunch" />
+        <MealView dailyMeal={dailyMeal} mealType="dinner" />
+        <MealView dailyMeal={dailyMeal} mealType="snack" />
+      </Box>
+      );
     </Layout>
   );
 };

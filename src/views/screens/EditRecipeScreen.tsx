@@ -66,8 +66,7 @@ type EditRecipeScreenProps = {};
 
 const EditRecipeScreen: React.FC<EditRecipeScreenProps> = () => {
   const { appState, dispatch } = useContext(appStateContext);
-  const { allRecipes, allFoodstuffs } = appState;
-  const recipes = Object.values(allRecipes);
+  const { allFoodstuffs } = appState;
   const classes = useStyles();
   const history = useHistory();
   const [open, setOpen] = useState(false);

@@ -18,11 +18,19 @@ import {
   ButtonBase,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import { Link } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import * as A from 'fp-ts/lib/Array';
+import * as TE from 'fp-ts/lib/TaskEither';
+import { pipe } from 'remeda';
 import { appStateContext } from '../AppStateProvider';
 import { addRecipeScreenPath } from '../../../routePaths';
 import Recipe, { eqRecipe } from '../../../domain/models/recipe';
+import {
+  calendarDateFromDailyMealID,
+  makeDefaultDailyMeal,
+} from '../../../domain/models/dailyMeal';
+import { saveDailyMeal } from '../../state/appState/allDailyMeals';
+import MealType from '../../../types/mealType';
 
 const useStyles = makeStyles(() => {
   return createStyles({
@@ -78,25 +86,50 @@ const useStyles = makeStyles(() => {
   });
 });
 
-interface Props {
-  open: boolean;
-  handleClose: () => unknown;
-  handleSelected: (recipes: Recipe[]) => void;
-}
-
-const SelectRecipesDialog: React.FC<Props> = (props: Props) => {
-  const { open, handleClose, handleSelected } = props;
-  const { appState } = useContext(appStateContext);
-  const { allRecipes } = appState;
+const SelectRecipesDialog: React.FC = () => {
+  const { appState, dispatch } = useContext(appStateContext);
+  const { allDailyMeals, allRecipes } = appState;
   const recipes = Object.values(allRecipes);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const classes = useStyles();
   const [selectedRecipes, setRecipes] = useState<Recipe[]>([]);
+  const history = useHistory();
+  const { id, mealType } = useParams();
+
+  if (id == null || mealType == null) {
+    history.goBack();
+    return null;
+  }
+
+  const calendarDate = calendarDateFromDailyMealID(id);
+  if (calendarDate == null) {
+    history.goBack();
+    return null;
+  }
+
+  const dailyMeal = allDailyMeals[id] || makeDefaultDailyMeal({ calendarDate });
+
+  const handleClose = (): void => {
+    history.goBack();
+  };
+
+  const handleSelected = async (): Promise<void> => {
+    await pipe(
+      saveDailyMeal({
+        dailyMeal,
+        mealType: mealType as MealType,
+        recipes: selectedRecipes,
+      }),
+      TE.map(dispatch),
+      TE.map(handleClose),
+      TE.mapLeft((): void => console.log('hogeeeeeeeeee'))
+    )();
+  };
 
   return (
     <Dialog
-      open={open}
+      open
       onClose={handleClose}
       aria-labelledby="レシピを選択"
       fullScreen={fullScreen}
@@ -153,10 +186,7 @@ const SelectRecipesDialog: React.FC<Props> = (props: Props) => {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button
-            color="primary"
-            onClick={(): void => handleSelected(selectedRecipes)}
-          >
+          <Button color="primary" onClick={handleSelected}>
             選択
           </Button>
         </DialogActions>

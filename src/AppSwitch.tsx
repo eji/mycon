@@ -9,11 +9,11 @@ import {
   addFoodstuffScreenPath,
   familyMembersScreenPath,
   addFamilyMemberScreenPath,
-  addMealScreenPath,
   showFoodstuffScreenPath,
   showRecipeScreenPath,
   editDailyMealScreenPath,
   showDailyMealScreenPath,
+  addRecipeToDailyMenuDialogPath,
 } from './routePaths';
 import ScheduleScreen from './views/screens/ScheduleScreen';
 import RecipesScreen from './views/screens/RecipesScreen';
@@ -23,11 +23,11 @@ import EditFoodstuffScreen from './views/screens/EditFoodstuffScreen';
 import FamilyMembersScreen from './views/screens/FamilyMembersScreen';
 import EditFamilyMemberScreen from './views/screens/EditFamilyMemberScreen';
 import RequireInitApp from './views/components/common/RequireInitApp';
-import AddMealScreen from './views/screens/AddMealScreen';
 import ShowFoodstuffScreen from './views/screens/ShowFoodstuffScreen';
 import ShowRecipeScreen from './views/screens/ShowRecipeScreen';
 import { isLocationState } from './locationState';
 import DailyMealScreen from './views/screens/DailyMealScreen';
+import SelectRecipesDialog from './views/components/Meal/SelectRecipesDialog';
 
 const AppSwitch: React.FC = () => {
   const location = useLocation();
@@ -53,11 +53,6 @@ const AppSwitch: React.FC = () => {
         <Route exact path={editDailyMealScreenPath()}>
           <RequireInitApp>
             <DailyMealScreen />
-          </RequireInitApp>
-        </Route>
-        <Route path={addMealScreenPath()}>
-          <RequireInitApp>
-            <AddMealScreen />
           </RequireInitApp>
         </Route>
         <Route exact path={recipesScreenPath()}>
@@ -101,6 +96,14 @@ const AppSwitch: React.FC = () => {
           </RequireInitApp>
         </Route>
       </Switch>
+
+      {background && (
+        <Switch location={location}>
+          <Route path={addRecipeToDailyMenuDialogPath()}>
+            <SelectRecipesDialog />
+          </Route>
+        </Switch>
+      )}
     </>
   );
 };

@@ -1,6 +1,5 @@
 import { Record } from 'immutable';
 import { Eq } from 'fp-ts/lib/Eq';
-import * as F from 'fp-ts/lib/function';
 import Recipe from './recipe';
 import { genId } from './id';
 
@@ -48,20 +47,24 @@ class MealClass
     recipes: [],
   })
   implements Meal {
-  addRecipe = (recipe: Recipe): this => {
+  addRecipe(recipe: Recipe): this {
     return this.set('recipes', [...this.recipes, recipe]);
-  };
+  }
 
-  removeRecipe = (recipe: Recipe): this => {
+  removeRecipe(recipe: Recipe): this {
     return this.set(
       'recipes',
       this.recipes.filter((r) => !r.equals(recipe))
     );
-  };
+  }
 
-  equals = (other: Meal): boolean => this.id === other.id;
+  equals(other: Meal): boolean {
+    return this.id === other.id;
+  }
 
-  notEquals = F.not(this.equals);
+  notEquals(other: Meal): boolean {
+    return !this.equals(other);
+  }
 }
 
 export const makeMeal = (props: {

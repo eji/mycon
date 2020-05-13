@@ -1,4 +1,4 @@
-import React, { useContext, useState, ReactElement } from 'react';
+import React, { useContext, ReactElement } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -6,8 +6,6 @@ import {
   DialogContentText,
   DialogActions,
   Button,
-  useTheme,
-  useMediaQuery,
   createStyles,
   makeStyles,
   FormControl,

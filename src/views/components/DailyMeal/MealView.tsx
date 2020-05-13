@@ -6,9 +6,12 @@ import {
   Paper,
   Toolbar,
 } from '@material-ui/core';
-import Meal from '../../../domain/models/meal';
+import { useHistory, useLocation } from 'react-router-dom';
 import RecipesList from '../Recipe/RecipesList';
 import AddButton from '../common/AddButton';
+import MealType from '../../../types/mealType';
+import { addRecipeToDailyMenuDialogPath } from '../../../routePaths';
+import DailyMeal from '../../../domain/models/dailyMeal';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -20,19 +23,33 @@ const useStyles = makeStyles(() =>
 );
 
 type Props = {
-  meal: Meal;
+  dailyMeal: DailyMeal;
+  mealType: MealType;
 };
 
 const MealView: React.FC<Props> = (props: Props) => {
-  const { meal } = props;
+  const { dailyMeal, mealType } = props;
+  const history = useHistory();
   const classes = useStyles();
+  const location = useLocation();
+  const meal = dailyMeal[mealType];
+
+  const handleClick = (): void => {
+    history.push(
+      addRecipeToDailyMenuDialogPath({
+        calendarDate: dailyMeal.calendarDate,
+        mealType,
+      }),
+      { background: location }
+    );
+  };
 
   return (
     <>
       <Paper>
         <Toolbar>
           <Typography className={classes.mealTitle}>{meal.name}</Typography>
-          <AddButton onClick={(): void => {}} />
+          <AddButton onClick={handleClick} />
         </Toolbar>
       </Paper>
       <RecipesList recipes={meal.recipes} />

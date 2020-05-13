@@ -55,16 +55,20 @@ class FoodstuffClass
     category: 'その他',
   })
   implements Foodstuff {
-  addNutrients = (nutrients: Nutrient[]): this =>
-    this.set('nutrients', merge(this.nutrients, nutrients));
+  addNutrients(nutrients: Nutrient[]): this {
+    return this.set('nutrients', merge(this.nutrients, nutrients));
+  }
 
-  removeNutrients = (nutrients: Nutrient[]): this =>
-    this.set(
+  removeNutrients(nutrients: Nutrient[]): this {
+    return this.set(
       'nutrients',
       this.nutrients.filterNot((item) => nutrients.includes(item))
     );
+  }
 
-  equals = (other: Foodstuff): boolean => this.id === other.id;
+  equals(other: Foodstuff): boolean {
+    return this.id === other.id;
+  }
 }
 
 export const makeFoodstuff = (props: {

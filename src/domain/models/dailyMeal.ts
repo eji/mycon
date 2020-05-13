@@ -24,14 +24,7 @@ export const calendarDateFromDailyMealID = (
   return makeDate({ year, month, day });
 };
 
-interface Props {
-  id: DailyMealID;
-
-  /**
-   * 対象の日
-   */
-  calendarDate: CalendarDate;
-
+interface MealsProps {
   /**
    * 朝食
    */
@@ -51,6 +44,17 @@ interface Props {
    * おやつ
    */
   snack: Meal;
+}
+
+export type MealType = keyof MealsProps;
+
+interface Props extends MealsProps {
+  id: DailyMealID;
+
+  /**
+   * 対象の日
+   */
+  calendarDate: CalendarDate;
 }
 
 /**

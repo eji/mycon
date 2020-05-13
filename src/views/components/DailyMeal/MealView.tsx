@@ -9,9 +9,8 @@ import {
 import { useHistory, useLocation } from 'react-router-dom';
 import RecipesList from '../Recipe/RecipesList';
 import AddButton from '../common/AddButton';
-import MealType from '../../../types/mealType';
 import { addRecipeToDailyMenuDialogPath } from '../../../routePaths';
-import DailyMeal from '../../../domain/models/dailyMeal';
+import DailyMeal, { MealType } from '../../../domain/models/dailyMeal';
 
 const useStyles = makeStyles(() =>
   createStyles({

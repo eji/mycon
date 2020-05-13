@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Box, makeStyles, createStyles } from '@material-ui/core';
+import { Box, makeStyles, createStyles, Theme } from '@material-ui/core';
 import { useHistory, useParams } from 'react-router-dom';
 import Layout from '../layouts/Layout';
 import { appStateContext } from '../components/AppStateProvider';
@@ -10,11 +10,12 @@ import {
 } from '../../domain/models/dailyMeal';
 import MealView from '../components/DailyMeal/MealView';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       height: '100%',
       overflowY: 'scroll',
+      padding: theme.spacing(1),
     },
     menuItemList: {},
   })

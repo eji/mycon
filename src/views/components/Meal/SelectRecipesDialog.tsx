@@ -28,9 +28,9 @@ import Recipe, { eqRecipe } from '../../../domain/models/recipe';
 import {
   calendarDateFromDailyMealID,
   makeDefaultDailyMeal,
+  MealType,
 } from '../../../domain/models/dailyMeal';
 import { saveDailyMeal } from '../../state/appState/allDailyMeals';
-import MealType from '../../../types/mealType';
 
 const useStyles = makeStyles(() => {
   return createStyles({

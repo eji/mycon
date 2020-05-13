@@ -98,7 +98,7 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
           className={classes.bottomNavi}
         >
           <BottomNavigationAction
-            label="スケジュール"
+            label="献立"
             icon={<EventIcon />}
             onClick={goTo(scheduleScreenPath())}
           />

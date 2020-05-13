@@ -207,6 +207,7 @@ const AddFoodstuffScreen: React.FC<AddFoodstuffScreenProps> = () => {
                   fullWidth
                 />
               </div>
+              <input type="file" id="take-picture" accept="image/*" />
               <FormControl className={classes.selectCategoryArea}>
                 <InputLabel id="foodstuff-category-select-label">
                   カテゴリ

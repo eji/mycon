@@ -1,4 +1,4 @@
-import React, { useContext, ReactElement } from 'react';
+import React, { useContext, ReactElement, useState } from 'react';
 import { Formik, Form } from 'formik';
 import { pipe } from 'fp-ts/lib/pipeable';
 import { map, mapLeft } from 'fp-ts/lib/TaskEither';
@@ -16,10 +16,8 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  IconButton,
 } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
-import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
 import Layout from '../layouts/Layout';
 import { appStateContext } from '../components/AppStateProvider';
 import {
@@ -38,6 +36,7 @@ import Nutrient, {
   PROTEINS,
 } from '../../domain/models/nutrient';
 import { foodstuffCategories } from '../../domain/models/foodstuffCategory';
+import ImageUploader from '../components/common/ImageUploader';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -83,27 +82,6 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: theme.palette.primary.dark,
       },
     },
-    selectPhotoButton: {
-      width: '100%',
-      height: 150,
-      backgroundColor: '#ddd',
-    },
-    selectPhotoInputLabel: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: '100%',
-      height: 150,
-    },
-    selectPhotoButtonIcon: {
-      width: 100,
-      height: 100,
-      color: '#999',
-    },
-    selectPhotoInput: {
-      display: 'none',
-    },
   })
 );
 
@@ -113,6 +91,7 @@ const AddFoodstuffScreen: React.FC<AddFoodstuffScreenProps> = () => {
   const history = useHistory();
   const classes = useStyles();
   const { dispatch } = useContext(appStateContext);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<null | string>(null);
 
   const initValues: AddFoodstuffForm = {
     name: '',
@@ -202,128 +181,121 @@ const AddFoodstuffScreen: React.FC<AddFoodstuffScreenProps> = () => {
   };
 
   return (
-    <Layout title="食材の追加" handleBack={handleBack} hideBottomNavi>
-      <Formik
-        initialValues={initValues}
-        validationSchema={addFoodstuffFormSchema}
-        validateOnChange={false}
-        onSubmit={handleSubmit}
-      >
-        {({
-          values,
-          handleChange,
-          handleBlur,
-          submitForm,
-          isSubmitting,
-          setFieldValue,
-        }): ReactElement => (
-          <Form className={classes.root}>
-            <div className={classes.inputArea}>
-              <div className={classes.textField}>
-                <TextField
-                  type="text"
-                  name="name"
-                  label="食材名"
-                  value={values.name}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  fullWidth
-                />
-              </div>
-              <ButtonBase className={classes.selectPhotoButton}>
-                <label
-                  htmlFor="take-picture"
-                  className={classes.selectPhotoInputLabel}
-                >
-                  <AddAPhotoIcon className={classes.selectPhotoButtonIcon} />
-                  <input
-                    type="file"
-                    id="take-picture"
-                    accept="image/*"
-                    className={classes.selectPhotoInput}
+    <>
+      <Layout title="食材の追加" handleBack={handleBack} hideBottomNavi>
+        <Formik
+          initialValues={initValues}
+          validationSchema={addFoodstuffFormSchema}
+          validateOnChange={false}
+          onSubmit={handleSubmit}
+        >
+          {({
+            values,
+            handleChange,
+            handleBlur,
+            submitForm,
+            isSubmitting,
+            setFieldValue,
+          }): ReactElement => (
+            <Form className={classes.root}>
+              <div className={classes.inputArea}>
+                <div className={classes.textField}>
+                  <TextField
+                    type="text"
+                    name="name"
+                    label="食材名"
+                    value={values.name}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    fullWidth
                   />
-                </label>
-              </ButtonBase>
-              <FormControl className={classes.selectCategoryArea}>
-                <InputLabel id="foodstuff-category-select-label">
-                  カテゴリ
-                </InputLabel>
-                <Select
-                  labelId="foodstuff-category-select-label"
-                  id="foodstuff-category-select"
-                  value={values.category}
-                  onChange={(
-                    event: React.ChangeEvent<{ value: unknown }>
-                  ): void => {
-                    setFieldValue('category', event.target.value as string);
+                </div>
+                <ImageUploader
+                  handleUploadImage={(imageUrl: string): void => {
+                    setUploadedImageUrl(imageUrl);
                   }}
+                />
+                <FormControl className={classes.selectCategoryArea}>
+                  <InputLabel id="foodstuff-category-select-label">
+                    カテゴリ
+                  </InputLabel>
+                  <Select
+                    labelId="foodstuff-category-select-label"
+                    id="foodstuff-category-select"
+                    value={values.category}
+                    onChange={(
+                      event: React.ChangeEvent<{ value: unknown }>
+                    ): void => {
+                      setFieldValue('category', event.target.value as string);
+                    }}
+                  >
+                    {foodstuffCategories.map((foodstuffCategory) => (
+                      <MenuItem value={foodstuffCategory}>
+                        {foodstuffCategory}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <Grid
+                  container
+                  xs={12}
+                  direction="column"
+                  alignItems="stretch"
+                  justify="flex-start"
+                  spacing={2}
+                  className={classes.nutrients}
                 >
-                  {foodstuffCategories.map((foodstuffCategory) => (
-                    <MenuItem value={foodstuffCategory}>
-                      {foodstuffCategory}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <Grid
-                container
-                xs={12}
-                direction="column"
-                alignItems="stretch"
-                justify="flex-start"
-                spacing={2}
-                className={classes.nutrients}
+                  {nutrientList({
+                    section: '炭水化物',
+                    nutrients: CARBOHYDRATES,
+                    setFieldValue,
+                    values: values.nutrients as Nutrient[],
+                  })}
+                  {nutrientList({
+                    section: 'タンパク質',
+                    nutrients: PROTEINS,
+                    setFieldValue,
+                    values: values.nutrients as Nutrient[],
+                  })}
+                  {nutrientList({
+                    section: '脂質',
+                    nutrients: FATS,
+                    setFieldValue,
+                    values: values.nutrients as Nutrient[],
+                  })}
+                  {nutrientList({
+                    section: 'ミネラル',
+                    nutrients: MINERALS,
+                    setFieldValue,
+                    values: values.nutrients as Nutrient[],
+                  })}
+                  {nutrientList({
+                    section: '脂溶性ビタミン',
+                    nutrients: FAT_SOLUBLE_VITAMINS,
+                    setFieldValue,
+                    values: values.nutrients as Nutrient[],
+                  })}
+                  {nutrientList({
+                    section: '水溶性ビタミン',
+                    nutrients: WATER_SOLUBLE_VITAMINS,
+                    setFieldValue,
+                    values: values.nutrients as Nutrient[],
+                  })}
+                </Grid>
+              </div>
+              <ButtonBase
+                type="button"
+                disabled={isSubmitting}
+                className={classes.button}
+                onClick={submitForm}
               >
-                {nutrientList({
-                  section: '炭水化物',
-                  nutrients: CARBOHYDRATES,
-                  setFieldValue,
-                  values: values.nutrients as Nutrient[],
-                })}
-                {nutrientList({
-                  section: 'タンパク質',
-                  nutrients: PROTEINS,
-                  setFieldValue,
-                  values: values.nutrients as Nutrient[],
-                })}
-                {nutrientList({
-                  section: '脂質',
-                  nutrients: FATS,
-                  setFieldValue,
-                  values: values.nutrients as Nutrient[],
-                })}
-                {nutrientList({
-                  section: 'ミネラル',
-                  nutrients: MINERALS,
-                  setFieldValue,
-                  values: values.nutrients as Nutrient[],
-                })}
-                {nutrientList({
-                  section: '脂溶性ビタミン',
-                  nutrients: FAT_SOLUBLE_VITAMINS,
-                  setFieldValue,
-                  values: values.nutrients as Nutrient[],
-                })}
-                {nutrientList({
-                  section: '水溶性ビタミン',
-                  nutrients: WATER_SOLUBLE_VITAMINS,
-                  setFieldValue,
-                  values: values.nutrients as Nutrient[],
-                })}
-              </Grid>
-            </div>
-            <ButtonBase
-              type="button"
-              disabled={isSubmitting}
-              className={classes.button}
-              onClick={submitForm}
-            >
-              <Typography>登録</Typography>
-            </ButtonBase>
-          </Form>
-        )}
-      </Formik>
-    </Layout>
+                <Typography>登録</Typography>
+              </ButtonBase>
+            </Form>
+          )}
+        </Formik>
+      </Layout>
+    </>
   );
 };
 

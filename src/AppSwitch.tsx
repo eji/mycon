@@ -40,41 +40,61 @@ const AppSwitch: React.FC = () => {
   return (
     <>
       <Switch location={background || location}>
-        <RequireInitApp>
-          <Route exact path={scheduleScreenPath()}>
+        <Route exact path={scheduleScreenPath()}>
+          <RequireInitApp>
             <ScheduleScreen />
-          </Route>
-          <Route exact path={showDailyMealScreenPath()}>
+          </RequireInitApp>
+        </Route>
+        <Route exact path={showDailyMealScreenPath()}>
+          <RequireInitApp>
             <DailyMealScreen />
-          </Route>
-          <Route exact path={editDailyMealScreenPath()}>
+          </RequireInitApp>
+        </Route>
+        <Route exact path={editDailyMealScreenPath()}>
+          <RequireInitApp>
             <DailyMealScreen />
-          </Route>
-          <Route exact path={recipesScreenPath()}>
+          </RequireInitApp>
+        </Route>
+        <Route exact path={recipesScreenPath()}>
+          <RequireInitApp>
             <RecipesScreen />
-          </Route>
-          <Route exact path={addRecipeScreenPath()}>
+          </RequireInitApp>
+        </Route>
+        <Route exact path={addRecipeScreenPath()}>
+          <RequireInitApp>
             <EditRecipeScreen />
-          </Route>
-          <Route exact path={showRecipeScreenPath()}>
+          </RequireInitApp>
+        </Route>
+        <Route exact path={showRecipeScreenPath()}>
+          <RequireInitApp>
             <ShowRecipeScreen />
-          </Route>
-          <Route exact path={foodstuffsScreenPath()}>
+          </RequireInitApp>
+        </Route>
+        <Route exact path={foodstuffsScreenPath()}>
+          <RequireInitApp>
             <FoodstuffsScreen />
-          </Route>
-          <Route exact path={addFoodstuffScreenPath()}>
+          </RequireInitApp>
+        </Route>
+        <Route exact path={addFoodstuffScreenPath()}>
+          <RequireInitApp>
             <EditFoodstuffScreen />
-          </Route>
-          <Route exact path={showFoodstuffScreenPath()}>
+          </RequireInitApp>
+        </Route>
+        <Route exact path={showFoodstuffScreenPath()}>
+          <RequireInitApp>
             <ShowFoodstuffScreen />
-          </Route>
-          <Route exact path={familyMembersScreenPath()}>
+          </RequireInitApp>
+        </Route>
+        <Route exact path={familyMembersScreenPath()}>
+          <RequireInitApp>
             <FamilyMembersScreen />
-          </Route>
-          <Route path={addFamilyMemberScreenPath()}>
+          </RequireInitApp>
+        </Route>
+        <Route path={addFamilyMemberScreenPath()}>
+          <RequireInitApp>
             <EditFamilyMemberScreen />
-          </Route>
-        </RequireInitApp>
+          </RequireInitApp>
+        </Route>
       </Switch>
 
       {background && (

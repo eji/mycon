@@ -211,6 +211,7 @@ const AddFoodstuffScreen: React.FC<AddFoodstuffScreenProps> = () => {
                   />
                 </div>
                 <ImageUploader
+                  dialogTitle="食材の画像"
                   handleUploadImage={(imageUrl: string): void => {
                     setUploadedImageUrl(imageUrl);
                   }}

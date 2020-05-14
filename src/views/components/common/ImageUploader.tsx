@@ -86,12 +86,13 @@ const resizeImage = async (imageFile: File): Promise<ResizeResult> => {
 };
 
 type Props = {
+  dialogTitle: string;
   registeredImageUrl?: string | null;
   handleUploadImage: (url: string) => void;
 };
 
 const ImageUploader: React.FC<Props> = (props: Props) => {
-  const { handleUploadImage } = props;
+  const { dialogTitle, handleUploadImage } = props;
   const registeredImageUrl = props?.registeredImageUrl || null;
   const classes = useStyles();
   const [uploadedImageUrl, setUploadedImageUrl] = useState<null | string>(
@@ -108,6 +109,9 @@ const ImageUploader: React.FC<Props> = (props: Props) => {
   };
 
   const handleDeleteImage = (): void => {
+    if (uploadedImageUrl) {
+      URL.revokeObjectURL(uploadedImageUrl);
+    }
     setUploadedImageUrl(null);
     handleCloseDialog();
   };
@@ -130,6 +134,11 @@ const ImageUploader: React.FC<Props> = (props: Props) => {
     if (files == null || files.length === 0) {
       return;
     }
+
+    if (uploadedImageUrl) {
+      URL.revokeObjectURL(uploadedImageUrl);
+    }
+
     const file = files[0];
     const result = await resizeImage(file);
     handleUploadImage(result.thumbnailUrl);
@@ -173,7 +182,7 @@ const ImageUploader: React.FC<Props> = (props: Props) => {
             open={openDialog}
           >
             {/* TODO: 後で直すこと */}
-            <DialogTitle id="simple-dialog-title">食材の写真</DialogTitle>
+            <DialogTitle id="simple-dialog-title">{dialogTitle}</DialogTitle>
             <Divider />
             <List>
               <ListItem button onClick={handleChangeImage} key="change-photo">

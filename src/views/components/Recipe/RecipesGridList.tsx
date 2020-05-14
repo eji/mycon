@@ -42,7 +42,7 @@ const RecipesGridList: React.FC<RecipesListProps> = (
               history.push(showRecipeScreenPath({ id: recipe.id }));
             }}
           >
-            <img src="/images/no_image.svg" alt={recipe.name} />
+            <img src="/images/no_image.jpg" alt={recipe.name} />
             <GridListTileBar title={recipe.name} />
           </ButtonBase>
         </GridListTile>

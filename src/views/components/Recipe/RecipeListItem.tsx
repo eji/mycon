@@ -49,7 +49,7 @@ const RecipeListItem: React.FC<Props> = (props: Props) => {
     <Card key={recipe.id} className={classes.root}>
       <CardActionArea className={classes.actionArea} onClick={handleClick}>
         <img
-          src="/images/no_image.svg"
+          src="/images/no_image.jpg"
           alt={recipe.name}
           className={classes.img}
         />

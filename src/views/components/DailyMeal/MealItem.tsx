@@ -54,7 +54,7 @@ const MealItem: React.FC<Props> = () => {
       <Card className={classes.root}>
         <CardHeader title="おかゆ" />
         <CardActionArea onClick={handleOpen}>
-          <CardMedia image="/images/no_image.svg" className={classes.media} />
+          <CardMedia image="/images/no_image.jpg" className={classes.media} />
         </CardActionArea>
       </Card>
       <Dialog

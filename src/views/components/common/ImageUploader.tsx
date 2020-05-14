@@ -52,7 +52,7 @@ const resizeImage = async (imageFile: File): Promise<ResizeResult> => {
       rejectFunc: () => void
     ): void => {
       const img = new Image();
-      img.onload = function (): unknown {
+      img.onload = (): unknown => {
         const max = 300;
         if (img.width > max) {
           const oc = document.createElement('canvas');
@@ -188,8 +188,11 @@ const ImageUploader: React.FC<Props> = (props: Props) => {
               <ListItem button onClick={handleChangeImage} key="change-photo">
                 <ListItemText primary="写真の変更" />
               </ListItem>
-              <ListItem button onClick={handleDeleteImage} key="change-photo">
+              <ListItem button onClick={handleDeleteImage} key="delete-photo">
                 <ListItemText primary="写真の削除" />
+              </ListItem>
+              <ListItem button onClick={handleCloseDialog} key="cancel">
+                <ListItemText primary="キャンセル" />
               </ListItem>
             </List>
           </Dialog>

@@ -30,6 +30,7 @@ import {
   inputRecipeFormSchema,
 } from '../forms/inputRecipeFormSchema';
 import { addRecipe } from '../state/appState/allRecipes';
+import ImageUploader from '../components/common/ImageUploader';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -115,6 +116,10 @@ const EditRecipeScreen: React.FC<EditRecipeScreenProps> = () => {
                   value={values.name}
                   onChange={handleChange}
                   onBlur={handleBlur}
+                />
+                <ImageUploader
+                  dialogTitle="レシピの画像"
+                  handleUploadImage={(): void => {}}
                 />
                 <Typography>材料</Typography>
                 <TableContainer

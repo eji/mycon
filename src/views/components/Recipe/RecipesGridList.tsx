@@ -33,7 +33,7 @@ const RecipesGridList: React.FC<RecipesListProps> = (
   const history = useHistory();
 
   return (
-    <GridList cellHeight={180} className={classes.root}>
+    <GridList cellHeight={180} className={classes.root} spacing={0}>
       {recipes.map((recipe) => (
         <GridListTile key={recipe.id}>
           <ButtonBase

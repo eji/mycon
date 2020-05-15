@@ -9,15 +9,16 @@ import {
   ListItem,
   ListItemText,
   Divider,
+  Theme,
 } from '@material-ui/core';
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     selectPhotoButton: {
       width: '100%',
       height: 150,
-      backgroundColor: '#ddd',
+      backgroundColor: theme.palette.background.paper,
     },
     selectPhotoInputLabel: {
       display: 'flex',
@@ -30,7 +31,7 @@ const useStyles = makeStyles(() =>
     selectPhotoButtonIcon: {
       width: 100,
       height: 100,
-      color: '#999',
+      color: theme.palette.text.hint,
     },
     selectPhotoInput: {
       display: 'none',

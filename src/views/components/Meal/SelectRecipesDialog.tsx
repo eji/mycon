@@ -16,6 +16,7 @@ import {
   createStyles,
   makeStyles,
   ButtonBase,
+  Theme,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { Link, useHistory, useParams } from 'react-router-dom';
@@ -32,15 +33,15 @@ import {
 } from '../../../domain/models/dailyMeal';
 import { saveDailyMeal } from '../../state/appState/allDailyMeals';
 
-const useStyles = makeStyles(() => {
+const useStyles = makeStyles((theme: Theme) => {
   return createStyles({
     root: {},
     addRecipeLink: {
       textDecoration: 'none',
     },
     addRecipe: {
-      color: '#888',
-      borderColor: '#888',
+      color: theme.palette.text.secondary,
+      borderColor: theme.palette.text.secondary,
       height: '100%',
       width: '100%',
       borderWidth: '3px',

@@ -96,11 +96,17 @@ export type AppState = {
   /* UIのステート */
 
   bottomNaviIndex: number;
+
+  /**
+   * ダークモードの設定
+   */
+  darkMode: boolean;
 };
 
 /* action messages */
 const selectBottomNaviMsg = 'selectBottomNavi';
 const initializeAppStateMsg = 'initializeAppState';
+const darkModeMsg = 'darkMode';
 
 /* actions */
 
@@ -114,9 +120,12 @@ type InitializeAppStateAction = Action<
   { status: InitializedAppState; newAppState?: AppState }
 >;
 
+type DarkModeAction = Action<typeof darkModeMsg, { darkMode: boolean }>;
+
 export type AppStateAction =
   | SelectBottomNaviAction
   | InitializeAppStateAction
+  | DarkModeAction
   | CalendarAction
   | AllDailyMealsAction
   | AllRecipesAction
@@ -142,6 +151,13 @@ const initializeAppStateHandler: ActionHandler<
     return appState;
   }
   return { ...appState, ...newAppState, initializeAppState: status };
+};
+
+const darkModeHandler: ActionHandler<AppState, DarkModeAction> = (
+  appState,
+  { darkMode }
+) => {
+  return { ...appState, darkMode };
 };
 
 /* reducer */
@@ -176,6 +192,8 @@ export const appStateReducer: Reducer<AppState, AppStateAction> = (
       return selectBottomNaviHandler(newState, action);
     case initializeAppStateMsg:
       return initializeAppStateHandler(newState, action);
+    case darkModeMsg:
+      return darkModeHandler(newState, action);
     default:
       return newState;
   }
@@ -195,6 +213,7 @@ export const initAppState: AppState = {
   },
   initializeAppState: 'not yet',
   bottomNaviIndex: 0,
+  darkMode: false,
 };
 
 /* action creator */
@@ -263,6 +282,7 @@ export const initializingAppState = (): TE.TaskEither<
                       },
                       initializeAppState: 'initialized',
                       bottomNaviIndex: 0,
+                      darkMode: false,
                     };
                     return {
                       type: initializeAppStateMsg,
@@ -279,3 +299,8 @@ export const initializingAppState = (): TE.TaskEither<
     )
   );
 };
+
+export const changeDarkMode = (darkMode: boolean): DarkModeAction => ({
+  type: darkModeMsg,
+  darkMode,
+});

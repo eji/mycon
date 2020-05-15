@@ -45,7 +45,7 @@ const NoItemView: React.FC<NoItemViewProps> = (props: NoItemViewProps) => {
   return (
     <Box className={classes.root}>
       <Box className={classes.textArea}>
-        <Typography>{message}</Typography>
+        <Typography color="textPrimary">{message}</Typography>
       </Box>
       <Box className={classes.buttonArea}>
         <Button

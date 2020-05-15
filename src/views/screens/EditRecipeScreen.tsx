@@ -121,7 +121,7 @@ const EditRecipeScreen: React.FC<EditRecipeScreenProps> = () => {
                   dialogTitle="レシピの画像"
                   handleUploadImage={(): void => {}}
                 />
-                <Typography>材料</Typography>
+                <Typography color="textSecondary">材料</Typography>
                 <TableContainer
                   component={Paper}
                   className={classes.tableContainer}

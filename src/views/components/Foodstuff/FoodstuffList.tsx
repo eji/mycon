@@ -8,9 +8,10 @@ import {
   Theme,
   createStyles,
   ButtonBase,
+  Typography,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Foodstuff } from '../../../domain/models/foodstuff';
 import {
   addFoodstuffScreenPath,
@@ -59,7 +60,10 @@ const FoodstuffList: React.FC<FoodstuffListProps> = (
             onClick={goTo(showFoodstuffScreenPath({ id: foodstuff.id }))}
           >
             <ListItem className={classes.foodstuffListItem}>
-              <ListItemText primary={foodstuff.name} />
+              <ListItemText
+                primary={foodstuff.name}
+                primaryTypographyProps={{ color: 'textPrimary' }}
+              />
             </ListItem>
           </ButtonBase>
         ))}

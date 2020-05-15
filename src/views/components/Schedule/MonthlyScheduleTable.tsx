@@ -10,6 +10,7 @@ import {
   TableBody,
   Grid,
   IconButton,
+  Typography,
 } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
@@ -27,17 +28,6 @@ const useStyles = makeStyles(() =>
     controlBar: {
       height: 70,
       textAlign: 'center',
-      backgroundColor: '#ddd',
-    },
-    weekdays: {
-      width: '100vw',
-      backgroundColor: '#ddd',
-    },
-    weekdaysSaturday: {
-      color: 'blue',
-    },
-    weekdaysSunday: {
-      color: 'red',
     },
   })
 );
@@ -72,7 +62,9 @@ const MonthlyScheduleTable: React.FC<MonthlyScheduleTableProps> = () => {
           </IconButton>
         </Grid>
         <Grid item xs>
-          {`${calendar.year}年${calendar.currentMonth}月`}
+          <Typography color="textPrimary">
+            {`${calendar.year}年${calendar.currentMonth}月`}
+          </Typography>
         </Grid>
         <Grid item xs={2}>
           <IconButton onClick={goToNextMonth}>

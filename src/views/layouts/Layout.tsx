@@ -17,6 +17,8 @@ import EventIcon from '@material-ui/icons/Event';
 import { useHistory } from 'react-router-dom';
 import AppleIcon from '@material-ui/icons/Apple';
 import GroupIcon from '@material-ui/icons/Group';
+import Brightness5Icon from '@material-ui/icons/Brightness5';
+import Brightness4Icon from '@material-ui/icons/Brightness4';
 import {
   scheduleScreenPath,
   recipesScreenPath,
@@ -24,7 +26,7 @@ import {
   familyMembersScreenPath,
 } from '../../routePaths';
 import { appStateContext } from '../components/AppStateProvider';
-import { selectBottomNavi } from '../state/appState';
+import { selectBottomNavi, changeDarkMode } from '../state/appState';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,6 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       height: '100vh',
+      backgroundColor: theme.palette.background.default,
     },
     backButton: {
       marginRight: theme.spacing(2),
@@ -47,6 +50,10 @@ const useStyles = makeStyles((theme: Theme) =>
       flex: 'none',
       width: '100vw',
     },
+    title: {
+      flexGrow: 1,
+    },
+    colorSchemeButton: {},
   })
 );
 
@@ -62,12 +69,16 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
   const history = useHistory();
   const classes = useStyles();
   const { appState, dispatch } = useContext(appStateContext);
-  const { bottomNaviIndex } = appState;
+  const { bottomNaviIndex, darkMode } = appState;
 
   const goTo = useCallback(
     (path: string): (() => void) => (): void => history.replace(path),
     [history]
   );
+
+  const handleDarkMode = useCallback((): void => {
+    dispatch(changeDarkMode(!darkMode));
+  }, [darkMode]);
 
   return (
     <Box className={classes.root}>
@@ -84,7 +95,15 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
               <ArrowBackIcon />
             </IconButton>
           )}
-          <Typography variant="h6">{title}</Typography>
+          <Typography variant="h6" className={classes.title}>
+            {title}
+          </Typography>
+          <IconButton
+            onClick={handleDarkMode}
+            className={classes.colorSchemeButton}
+          >
+            {darkMode ? <Brightness5Icon /> : <Brightness4Icon />}
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Box className={classes.contentArea}>{children}</Box>

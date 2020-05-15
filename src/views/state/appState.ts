@@ -100,7 +100,7 @@ export type AppState = {
   /**
    * ダークモードの設定
    */
-  darkMode: boolean;
+  darkMode?: boolean;
 };
 
 /* action messages */
@@ -213,7 +213,7 @@ export const initAppState: AppState = {
   },
   initializeAppState: 'not yet',
   bottomNaviIndex: 0,
-  darkMode: false,
+  darkMode: undefined,
 };
 
 /* action creator */
@@ -282,7 +282,7 @@ export const initializingAppState = (): TE.TaskEither<
                       },
                       initializeAppState: 'initialized',
                       bottomNaviIndex: 0,
-                      darkMode: false,
+                      darkMode: undefined,
                     };
                     return {
                       type: initializeAppStateMsg,

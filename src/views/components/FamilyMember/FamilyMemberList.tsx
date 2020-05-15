@@ -43,7 +43,10 @@ const FamilyMemberList: React.FC<FamilyMemberListProps> = (
       <List>
         {familyMembers.map((familyMember) => (
           <ListItem>
-            <ListItemText primary={familyMember.name} />
+            <ListItemText
+              primary={familyMember.name}
+              primaryTypographyProps={{ color: 'textPrimary' }}
+            />
           </ListItem>
         ))}
       </List>

@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     appBar: {
       flex: 'none',
+      boxShadow: 'none',
     },
     contentArea: {
       flex: 'auto',
@@ -82,7 +83,7 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
 
   return (
     <Box className={classes.root}>
-      <AppBar position="static" className={classes.appBar}>
+      <AppBar position="static" className={classes.appBar} color="transparent">
         <Toolbar>
           {handleBack && (
             <IconButton
@@ -92,10 +93,14 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
               className={classes.backButton}
               onClick={handleBack}
             >
-              <ArrowBackIcon />
+              <ArrowBackIcon color="action" />
             </IconButton>
           )}
-          <Typography variant="h6" className={classes.title}>
+          <Typography
+            variant="h6"
+            className={classes.title}
+            color="textPrimary"
+          >
             {title}
           </Typography>
           <IconButton

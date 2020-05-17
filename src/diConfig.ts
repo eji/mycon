@@ -26,6 +26,7 @@ import DailyMealRepositoryInMemory from './infrastructures/repositories/dailyMea
 import FoodAllergyHistoryRepositoryInMemory from './infrastructures/repositories/foodAllergyHistoryRepository/foodAllergyHistoryRepositoryInMemory';
 import FoodAllergyHistoryRepository from './domain/repositories/foodAllergyHistoryRepository';
 import SaveFoodAllergyHistoryUseCase from './domain/useCases/saveFoodAllergyHistoryUseCase';
+import GetAllFoodstuffsUseCase from './domain/useCases/getAllFoodstuffsUseCase';
 
 const diConfig = (): void => {
   container.register<FoodstuffRepository>(foodstuffRepository, {
@@ -136,6 +137,17 @@ const diConfig = (): void => {
       },
     }
   );
+
+  container.register<GetAllFoodstuffsUseCase>(GetAllFoodstuffsUseCase, {
+    useFactory: (
+      dependencyContainer: DependencyContainer
+    ): GetAllFoodstuffsUseCase => {
+      const repos = dependencyContainer.resolve<FoodstuffRepository>(
+        foodstuffRepository
+      );
+      return new GetAllFoodstuffsUseCase(repos);
+    },
+  });
 };
 
 export default diConfig;

@@ -28,7 +28,5 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    "src/views/components/Recipe/NoRecipetsx",
-    "src/domain/useCases/addRecipeUseCasets"
   ]
 }

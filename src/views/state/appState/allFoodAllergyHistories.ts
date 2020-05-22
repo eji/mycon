@@ -88,6 +88,9 @@ export const addFoodAllergyHistory = (params: {
   const useCase = container.resolve(SaveFoodAllergyHistoryUseCase);
   return pipe(
     useCase.execute({ foodAllergyHistory }),
-    TE.map(() => ({ type: addFoodAllergyHistoryMsg, foodAllergyHistory }))
+    TE.map((savedFoodAllergyHistory) => ({
+      type: addFoodAllergyHistoryMsg,
+      foodAllergyHistory: savedFoodAllergyHistory,
+    }))
   );
 };

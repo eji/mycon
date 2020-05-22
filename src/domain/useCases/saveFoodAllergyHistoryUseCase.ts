@@ -1,11 +1,12 @@
 import * as TE from 'fp-ts/lib/TaskEither';
-import { pipe } from 'fp-ts/lib/pipeable';
 import RepositoryError from '../../errors/repositoryError';
-import FoodAllergyHistory from '../models/foodAllergyHistory';
+import FoodAllergyHistory, {
+  UnpersistedFoodAllergyHistory,
+} from '../models/foodAllergyHistory';
 import FoodAllergyHistoryRepository from '../repositories/foodAllergyHistoryRepository';
 
 type Params = {
-  foodAllergyHistory: FoodAllergyHistory;
+  foodAllergyHistory: FoodAllergyHistory | UnpersistedFoodAllergyHistory;
 };
 
 /**
@@ -18,11 +19,6 @@ export default class SaveFoodAllergyHistoryUseCase {
 
   execute = (
     params: Params
-  ): TE.TaskEither<RepositoryError, FoodAllergyHistory> => {
-    const { foodAllergyHistory } = params;
-    return pipe(
-      this.foodAllergyHistoryRepository.saveValue(foodAllergyHistory),
-      TE.map(() => foodAllergyHistory)
-    );
-  };
+  ): TE.TaskEither<RepositoryError, FoodAllergyHistory> =>
+    this.foodAllergyHistoryRepository.saveValue(params.foodAllergyHistory);
 }

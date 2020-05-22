@@ -1,7 +1,8 @@
 import { Record } from 'immutable';
-import ID, { genId } from './id';
+import ID from './id';
 import FamilyMember from './familyMember';
 import { Foodstuff } from './foodstuff';
+import Unpersisted from '../../types/unpersisted';
 
 export type FoodAllergyHistoryID = ID;
 
@@ -29,15 +30,20 @@ export default interface FoodAllergyHistory extends FoodAllergyHistoryProps {
   ): this;
 }
 
-export const makeFoodAllergyHistory = (
-  props: Omit<FoodAllergyHistoryProps, 'id'> & { id?: FoodAllergyHistoryID }
-): FoodAllergyHistory => {
-  const id = props?.id || genId();
+export type UnpersistedFoodAllergyHistory = Unpersisted<FoodAllergyHistory>;
 
-  return new (class
-    extends Record<FoodAllergyHistoryProps>({
-      ...props,
-      id,
-    })
-    implements FoodAllergyHistory {})(props);
-};
+export function makeFoodAllergyHistory(
+  props: FoodAllergyHistoryProps
+): FoodAllergyHistory;
+export function makeFoodAllergyHistory(
+  props: Omit<FoodAllergyHistoryProps, 'id'> & { id?: FoodAllergyHistoryID }
+): UnpersistedFoodAllergyHistory;
+export function makeFoodAllergyHistory(
+  props: Omit<FoodAllergyHistoryProps, 'id'> & { id?: FoodAllergyHistoryID }
+): unknown {
+  return new (class extends Record<
+    Omit<FoodAllergyHistoryProps, 'id'> & { id?: FoodAllergyHistoryID }
+  >({
+    ...props,
+  }) {})(props);
+}

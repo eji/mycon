@@ -1,10 +1,14 @@
 import { TaskEither } from 'fp-ts/lib/TaskEither';
-import QueryError from '../../errors/repositoryErrors/queryError';
-import CommandError from '../../errors/repositoryErrors/commandError';
-import FamilyMember, { FamilyMemberID } from '../models/familyMember';
+import FamilyMember, {
+  FamilyMemberID,
+  UnpersistedFamilyMember,
+} from '../models/familyMember';
+import BaseError from '../../errors/baseError';
 
 export default interface FamilyMemberRepository {
-  findById(id: FamilyMemberID): TaskEither<QueryError, FamilyMember>;
-  all(): TaskEither<QueryError, FamilyMember[]>;
-  saveValue(familyMember: FamilyMember): TaskEither<CommandError, unknown>;
+  findById(id: FamilyMemberID): TaskEither<BaseError, FamilyMember>;
+  all(): TaskEither<BaseError, FamilyMember[]>;
+  saveValue(
+    familyMember: FamilyMember | UnpersistedFamilyMember
+  ): TaskEither<BaseError, FamilyMember>;
 }

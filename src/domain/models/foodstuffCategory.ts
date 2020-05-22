@@ -20,3 +20,7 @@ export const foodstuffCategories: FoodstuffCategory[] = [
   '果実',
   'その他',
 ];
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const isFoodstuffCategory = (value: any): value is FoodstuffCategory =>
+  foodstuffCategories.includes(value);

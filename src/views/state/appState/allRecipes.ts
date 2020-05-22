@@ -73,6 +73,6 @@ export const addRecipe = (params: {
   const recipe = makeRecipe({ ...form, ingredients });
   return pipe(
     useCase.execute({ recipe }),
-    TE.map(() => ({ type: addRecipeMsg, newRecipe: recipe }))
+    TE.map((savedRecipe) => ({ type: addRecipeMsg, newRecipe: savedRecipe }))
   );
 };

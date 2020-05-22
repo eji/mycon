@@ -1,10 +1,17 @@
 import * as TE from 'fp-ts/lib/TaskEither';
+import * as A from 'fp-ts/lib/Array';
 import QueryError from '../../../errors/repositoryErrors/queryError';
 import CommandError from '../../../errors/repositoryErrors/commandError';
-import InMemoryStore from '../../../drivers/InMemoryStore';
+import InMemoryStore from '../../../drivers/inMemoryStore';
 import FoodstuffRepository from '../../../domain/repositories/foodstuffRepository';
-import { Foodstuff, FoodstuffID } from '../../../domain/models/foodstuff';
+import {
+  Foodstuff,
+  FoodstuffID,
+  UnpersistedFoodstuff,
+  makeFoodstuff,
+} from '../../../domain/models/foodstuff';
 import foodstuffSeeds from '../../../data/seeds/foodstuffs';
+import { genId } from '../../../domain/models/id';
 
 export default class FoodstuffRepositoryInMemory
   implements FoodstuffRepository {
@@ -20,13 +27,23 @@ export default class FoodstuffRepositoryInMemory
     return TE.right(this.store.values());
   }
 
-  saveValue(foodstuff: Foodstuff): TE.TaskEither<CommandError, unknown> {
-    return this.saveValues([foodstuff]);
-  }
+  saveValue = (
+    foodstuff: Foodstuff | UnpersistedFoodstuff
+  ): TE.TaskEither<CommandError, Foodstuff> => {
+    const id = foodstuff.id || genId();
+    const newFoodstuff = makeFoodstuff({
+      id,
+      name: foodstuff.name,
+      category: foodstuff.category,
+      nutrients: Array.from(foodstuff.nutrients),
+    });
+    this.store.set(id, newFoodstuff);
+    return TE.right(newFoodstuff);
+  };
 
-  saveValues(foodstuffs: Foodstuff[]): TE.TaskEither<CommandError, unknown> {
-    return TE.right(
-      foodstuffs.forEach((foodstuff) => this.store.set(foodstuff.id, foodstuff))
-    );
-  }
+  saveValues = (
+    foodstuffs: (Foodstuff | UnpersistedFoodstuff)[]
+  ): TE.TaskEither<CommandError, Foodstuff[]> => {
+    return A.array.sequence(TE.taskEither)(foodstuffs.map(this.saveValue));
+  };
 }

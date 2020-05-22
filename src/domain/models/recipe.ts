@@ -2,6 +2,7 @@ import { Record } from 'immutable';
 import { Eq } from 'fp-ts/lib/Eq';
 import ID, { genId } from './id';
 import RecipeIngredient from './recipeIngredient';
+import Unpersisted from '../../types/unpersisted';
 
 /**
  * レシピID
@@ -30,20 +31,21 @@ export default interface Recipe extends Readonly<RecipeProps>, Eq<Recipe> {
   equals(other: Recipe): boolean;
 }
 
-class RecipeClass
-  extends Record<RecipeProps>({
-    id: genId(),
-    name: '',
-    ingredients: [],
-  })
-  implements Recipe {}
+export type UnpersistedRecipe = Unpersisted<Recipe>;
 
-export const makeRecipe = (
+class RecipeClass extends Record<RecipeProps>({
+  id: genId(),
+  name: '',
+  ingredients: [],
+}) {}
+
+export function makeRecipe(props: RecipeProps): Recipe;
+export function makeRecipe(props: Omit<RecipeProps, 'id'>): UnpersistedRecipe;
+export function makeRecipe(
   props: Omit<RecipeProps, 'id'> & { id?: RecipeID }
-): Recipe => {
-  const id = props.id || genId();
-  return new RecipeClass({ ...props, id });
-};
+): unknown {
+  return new RecipeClass({ ...props, id: props.id });
+}
 
 export const eqRecipe: Eq<Recipe> = {
   equals: (a: Recipe, b: Recipe) => a.id === b.id,

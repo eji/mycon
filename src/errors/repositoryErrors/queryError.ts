@@ -1,3 +1,3 @@
 import RepositoryError from '../repositoryError';
 
-export default class QueryError extends RepositoryError {}
+export default abstract class QueryError extends RepositoryError {}

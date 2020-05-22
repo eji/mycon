@@ -67,9 +67,9 @@ export const saveFamilyMember = (
   const familyMember = makeFamilyMember(form);
   return pipe(
     useCase.execute({ familyMember }),
-    TE.map(() => ({
+    TE.map((savedFamilyMember) => ({
       type: saveFamilyMemberMsg,
-      familyMember,
+      familyMember: savedFamilyMember,
     }))
   );
 };

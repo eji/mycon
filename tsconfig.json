@@ -28,5 +28,6 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
+    "src/infrastructures/repositories/recipeRepository/recipeRepositoryInAppServer.ts",
   ]
 }

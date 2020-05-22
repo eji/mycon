@@ -1,13 +1,15 @@
 import * as TE from 'fp-ts/lib/TaskEither';
 import { pipe } from 'fp-ts/lib/pipeable';
-import QueryError from '../../../errors/repositoryErrors/queryError';
-import CommandError from '../../../errors/repositoryErrors/commandError';
-import InMemoryStore from '../../../drivers/InMemoryStore';
+import InMemoryStore from '../../../drivers/inMemoryStore';
 import NotFoundError from '../../../errors/repositoryErrors/queryErrors/notFoundError';
 import FamilyMember, {
   FamilyMemberID,
+  UnpersistedFamilyMember,
+  makeFamilyMember,
 } from '../../../domain/models/familyMember';
 import FamilyMemberRepository from '../../../domain/repositories/familyMemberRepository';
+import BaseError from '../../../errors/baseError';
+import { genId } from '../../../domain/models/id';
 
 export default class FamilyMemberRepositoryInMemory
   implements FamilyMemberRepository {
@@ -17,17 +19,23 @@ export default class FamilyMemberRepositoryInMemory
     this.store = store || new InMemoryStore<FamilyMemberID, FamilyMember>();
   }
 
-  all = (): TE.TaskEither<QueryError, FamilyMember[]> =>
+  all = (): TE.TaskEither<BaseError, FamilyMember[]> =>
     TE.right(this.store.values());
 
-  findById = (id: FamilyMemberID): TE.TaskEither<QueryError, FamilyMember> =>
+  findById = (id: FamilyMemberID): TE.TaskEither<BaseError, FamilyMember> =>
     pipe(
       this.store.get(id),
       TE.fromOption(() => new NotFoundError())
     );
 
   saveValue = (
-    familyMember: FamilyMember
-  ): TE.TaskEither<CommandError, unknown> =>
-    TE.right(this.store.set(familyMember.id, familyMember));
+    familyMember: FamilyMember | UnpersistedFamilyMember
+  ): TE.TaskEither<BaseError, FamilyMember> => {
+    const newFamilyMember = makeFamilyMember({
+      id: familyMember.id || genId(),
+      name: familyMember.name,
+    });
+    this.store.set(newFamilyMember.id, newFamilyMember);
+    return TE.right(newFamilyMember);
+  };
 }

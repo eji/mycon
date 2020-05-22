@@ -1,5 +1,6 @@
 import { Record } from 'immutable';
 import ID, { genId } from './id';
+import Unpersisted from '../../types/unpersisted';
 
 export type FamilyMemberID = ID;
 
@@ -22,6 +23,8 @@ export default interface FamilyMember extends FamilyMemberProps {
   equals(other: FamilyMember): boolean;
 }
 
+export type UnpersistedFamilyMember = Unpersisted<FamilyMember>;
+
 class FamilyMemberClass
   extends Record<FamilyMemberProps>({
     id: genId(),
@@ -33,9 +36,16 @@ class FamilyMemberClass
   }
 }
 
-export const makeFamilyMember = (
-  props: Omit<FamilyMemberProps, 'id'> & { id?: FamilyMemberID }
-): FamilyMember => {
-  const id = props?.id || genId();
-  return new FamilyMemberClass({ ...props, id });
-};
+export function makeFamilyMember(props: {
+  id: FamilyMemberID;
+  name: string;
+}): FamilyMember;
+export function makeFamilyMember(props: {
+  name: string;
+}): UnpersistedFamilyMember;
+export function makeFamilyMember(props: {
+  id?: FamilyMemberID;
+  name: string;
+}): unknown {
+  return new FamilyMemberClass({ ...props, id: props.id });
+}

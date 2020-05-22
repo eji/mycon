@@ -13,7 +13,6 @@ export default class GetAllFoodstuffsUseCase {
     this.foodstuffRepository = foodstuffRepository;
   }
 
-  execute(): TE.TaskEither<RepositoryError, Foodstuff[]> {
-    return this.foodstuffRepository.all();
-  }
+  execute = (): TE.TaskEither<RepositoryError, Foodstuff[]> =>
+    this.foodstuffRepository.all();
 }

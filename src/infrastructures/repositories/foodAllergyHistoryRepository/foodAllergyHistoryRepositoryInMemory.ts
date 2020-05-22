@@ -1,34 +1,35 @@
 import * as TE from 'fp-ts/lib/TaskEither';
-import * as O from 'fp-ts/lib/Option';
 import * as A from 'fp-ts/lib/Array';
 import { pipe } from 'fp-ts/lib/pipeable';
-import QueryError from '../../../errors/repositoryErrors/queryError';
-import CommandError from '../../../errors/repositoryErrors/commandError';
-import InMemoryStore from '../../../drivers/InMemoryStore';
+import InMemoryStore from '../../../drivers/inMemoryStore';
 import FamilyMember from '../../../domain/models/familyMember';
 import FoodAllergyHistoryRepository from '../../../domain/repositories/foodAllergyHistoryRepository';
 import FoodAllergyHistory, {
   FoodAllergyHistoryID,
+  UnpersistedFoodAllergyHistory,
+  makeFoodAllergyHistory,
 } from '../../../domain/models/foodAllergyHistory';
 import { Foodstuff } from '../../../domain/models/foodstuff';
+import BaseError from '../../../errors/baseError';
+import { genId } from '../../../domain/models/id';
 
 export default class FoodAllergyHistoryRepositoryInMemory
   implements FoodAllergyHistoryRepository {
-  readonly store: InMemoryStore<FoodAllergyHistoryID, FoodAllergyHistory[]>;
+  readonly store: InMemoryStore<FoodAllergyHistoryID, FoodAllergyHistory>;
 
-  constructor(
-    store?: InMemoryStore<FoodAllergyHistoryID, FoodAllergyHistory[]>
-  ) {
+  constructor(store?: InMemoryStore<FoodAllergyHistoryID, FoodAllergyHistory>) {
     this.store =
-      store || new InMemoryStore<FoodAllergyHistoryID, FoodAllergyHistory[]>();
+      store || new InMemoryStore<FoodAllergyHistoryID, FoodAllergyHistory>();
   }
+
+  all = (): TE.TaskEither<BaseError, FoodAllergyHistory[]> =>
+    TE.right(this.store.values());
 
   findAllByFoodstuff = (
     foodstuff: Foodstuff
-  ): TE.TaskEither<QueryError, FoodAllergyHistory[]> => {
+  ): TE.TaskEither<BaseError, FoodAllergyHistory[]> => {
     return pipe(
       this.store.values(),
-      A.flatten,
       A.filter((history) => history.foodstuff.equals(foodstuff)),
       TE.right
     );
@@ -36,31 +37,28 @@ export default class FoodAllergyHistoryRepositoryInMemory
 
   findAllByFamilyMember = (
     familyMember: FamilyMember
-  ): TE.TaskEither<QueryError, FoodAllergyHistory[]> => {
+  ): TE.TaskEither<BaseError, FoodAllergyHistory[]> => {
     return pipe(
       this.store.values(),
-      A.flatten,
       A.filter((history) => history.familyMember.equals(familyMember)),
       TE.right
     );
   };
 
   saveValue = (
-    foodAllergyHistory: FoodAllergyHistory
-  ): TE.TaskEither<CommandError, unknown> =>
-    pipe(
-      this.store.get(foodAllergyHistory.id),
-      O.getOrElse<FoodAllergyHistory[]>(() => [] as FoodAllergyHistory[]),
-      (histories) =>
-        this.store.set(foodAllergyHistory.id, [
-          ...histories,
-          foodAllergyHistory,
-        ]),
-      TE.right
-    );
+    foodAllergyHistory: FoodAllergyHistory | UnpersistedFoodAllergyHistory
+  ): TE.TaskEither<BaseError, FoodAllergyHistory> => {
+    const newFoodAllergyHistory = makeFoodAllergyHistory({
+      id: foodAllergyHistory.id || genId(),
+      familyMember: foodAllergyHistory.familyMember,
+      foodstuff: foodAllergyHistory.foodstuff,
+    });
+    this.store.set(newFoodAllergyHistory.id, newFoodAllergyHistory);
+    return TE.right(newFoodAllergyHistory);
+  };
 
   saveValues = (
-    foodAllergyHistories: FoodAllergyHistory[]
-  ): TE.TaskEither<CommandError, unknown> =>
-    TE.right(foodAllergyHistories.forEach(this.saveValue));
+    foodAllergyHistories: (FoodAllergyHistory | UnpersistedFoodAllergyHistory)[]
+  ): TE.TaskEither<BaseError, FoodAllergyHistory[]> =>
+    A.array.sequence(TE.taskEither)(foodAllergyHistories.map(this.saveValue));
 }

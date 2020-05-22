@@ -144,3 +144,7 @@ export const NUTRIENTS = [
   ...MINERALS,
   ...VITAMINS,
 ];
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const isNutrient = (value: any): value is Nutrient =>
+  NUTRIENTS.includes(value);

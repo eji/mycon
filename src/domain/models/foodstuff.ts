@@ -1,7 +1,8 @@
 import { Record, Set, merge } from 'immutable';
-import ID, { genId } from './id';
+import ID from './id';
 import Nutrient from './nutrient';
 import FoodstuffCategory from './foodstuffCategory';
+import Unpersisted from '../../types/unpersisted';
 
 /**
  * 食材ID
@@ -12,7 +13,7 @@ interface FoodstuffProps {
   /**
    * 食材ID
    */
-  id: FoodstuffID;
+  id?: FoodstuffID;
 
   /**
    * 食材名
@@ -30,10 +31,7 @@ interface FoodstuffProps {
   category: FoodstuffCategory;
 }
 
-/**
- * 食材
- */
-export interface Foodstuff extends Readonly<FoodstuffProps> {
+interface FoodstuffMethods {
   /**
    * 栄養素を追加
    */
@@ -45,16 +43,30 @@ export interface Foodstuff extends Readonly<FoodstuffProps> {
   removeNutrients(nutrients: Nutrient[]): this;
 
   equals(other: Foodstuff): boolean;
+
+  toJSON(): FoodstuffProps;
 }
 
-class FoodstuffClass
-  extends Record<FoodstuffProps>({
-    id: genId(),
-    name: '',
-    nutrients: Set(),
-    category: 'その他',
-  })
-  implements Foodstuff {
+/**
+ * 食材
+ */
+export interface Foodstuff
+  extends Readonly<FoodstuffProps>,
+    Readonly<FoodstuffMethods> {
+  /**
+   * 食材ID
+   */
+  id: FoodstuffID;
+}
+
+export type UnpersistedFoodstuff = Unpersisted<Foodstuff>;
+
+class FoodstuffClass extends Record<FoodstuffProps & { id?: FoodstuffID }>({
+  id: undefined,
+  name: '',
+  nutrients: Set(),
+  category: 'その他',
+}) {
   addNutrients(nutrients: Nutrient[]): this {
     return this.set('nutrients', merge(this.nutrients, nutrients));
   }
@@ -71,13 +83,24 @@ class FoodstuffClass
   }
 }
 
-export const makeFoodstuff = (props: {
+export function makeFoodstuff(props: {
+  name: string;
+  nutrients: Nutrient[];
+  category: FoodstuffCategory;
+}): UnpersistedFoodstuff;
+export function makeFoodstuff(props: {
+  id: FoodstuffID;
+  name: string;
+  nutrients: Nutrient[];
+  category: FoodstuffCategory;
+}): Foodstuff;
+
+export function makeFoodstuff(props: {
   id?: FoodstuffID;
   name: string;
   nutrients: Nutrient[];
   category: FoodstuffCategory;
-}): Foodstuff => {
-  const id = props.id || genId();
+}): Foodstuff | UnpersistedFoodstuff {
   const nutrientSet = Set(props.nutrients);
-  return new FoodstuffClass({ ...props, id, nutrients: nutrientSet });
-};
+  return new FoodstuffClass({ ...props, id: props.id, nutrients: nutrientSet });
+}

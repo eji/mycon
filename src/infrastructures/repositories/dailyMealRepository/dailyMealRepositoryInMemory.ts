@@ -1,10 +1,10 @@
 import * as TE from 'fp-ts/lib/TaskEither';
-import InMemoryStore from '../../../drivers/inMemoryStore';
 import NotFoundError from '../../../errors/repositoryErrors/queryErrors/notFoundError';
 import DailyMealRepository from '../../../domain/repositories/dailyMealRepository';
 import DailyMeal from '../../../domain/models/dailyMeal';
 import CalendarDate from '../../../domain/models/calender/calendarDate';
 import BaseError from '../../../errors/baseError';
+import InMemoryStore from '../../../drivers/inMemoryStore';
 
 export default class DailyMealRepositoryInMemory
   implements DailyMealRepository {

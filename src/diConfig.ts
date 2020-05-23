@@ -119,21 +119,21 @@ const diConfig = (): void => {
   container.registerInstance(
     appServerFoodstuffRepository,
     new FoodstuffRepositoryAppServer(
-      new RestClient(container.resolve(restmRestClient), '/foodstuffs')
+      new RestClient(container.resolve(restmRestClient), '/api/foodstuffs')
     )
   );
 
   container.registerInstance(
     appServerRecipeRepository,
     new RecipeRepositoryAppServer(
-      new RestClient(container.resolve(restmRestClient), '/recipes')
+      new RestClient(container.resolve(restmRestClient), '/api/recipes')
     )
   );
 
   container.registerInstance(
     appServerFamilyMemberRepository,
     new FamilyMemberRepositoryAppServer(
-      new RestClient(container.resolve(restmRestClient), '/family_members')
+      new RestClient(container.resolve(restmRestClient), '/api/family_members')
     )
   );
 
@@ -150,7 +150,7 @@ const diConfig = (): void => {
   container.registerInstance(
     appServerDailyMealRepository,
     new DailyMealRepositoryAppServer(
-      new RestClient(container.resolve(restmRestClient), '/daily_meals')
+      new RestClient(container.resolve(restmRestClient), '/api/daily_meals')
     )
   );
 

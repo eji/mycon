@@ -13,6 +13,7 @@ import {
   initializingAppState,
   failedInitializeAppState,
 } from '../../state/appState';
+import inspect from '../../../utils/taskEitherHelpers';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -44,6 +45,7 @@ const RequireInitApp: React.FC<Props> = (props: Props) => {
         await pipe(
           initializingAppState(),
           TE.map(dispatch),
+          TE.mapLeft(inspect(console.error)),
           TE.mapLeft(() => {
             dispatch(failedInitializeAppState());
           })

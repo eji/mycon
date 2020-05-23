@@ -23,10 +23,6 @@ export const isCreateFoodstuffRequest = (
 
   const { name, nutrients, category } = input;
 
-  console.log('bbbbbbbbbbbbbbbbbbb');
-  console.log(nutrients);
-  console.log(category);
-  console.log(isFoodstuffCategory(category));
   return (
     typeof name === 'string' &&
     isFoodstuffCategory(category) &&
@@ -46,8 +42,6 @@ export const requestFromFoodstuff = (
 export const getCreateFoodstuffRequest = (
   request: NowRequest
 ): E.Either<InvalidRequestError, CreatFoodstuffRequest> => {
-  console.log('aaaaaaaaaaaaaaaaaaaaaaa');
-  console.log(request.body);
   if (isCreateFoodstuffRequest(request.body)) {
     return E.right(request.body);
   }

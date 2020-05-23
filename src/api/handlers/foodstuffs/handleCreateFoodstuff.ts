@@ -17,16 +17,12 @@ const handleCreateFoodstuff: ApiHandler = (
   pipe(
     getCreateFoodstuffRequest(request),
     E.map((input) => makeFoodstuff(input)),
-    E.map(inspect((val) => console.error(val))),
-    E.mapLeft(inspect((val) => console.error(val))),
     TE.fromEither,
     TE.chain((inputFoodstuff) =>
       container
         .resolve<SaveFoodstuffUseCase>(SaveFoodstuffUseCase)
         .execute({ foodstuff: inputFoodstuff })
     ),
-    TE.map(inspect((val) => console.error(val))),
-    TE.mapLeft(inspect((val) => console.error(val))),
     TE.map((addedFoodstuff) => ({
       foodstuff: {
         id: addedFoodstuff.id,

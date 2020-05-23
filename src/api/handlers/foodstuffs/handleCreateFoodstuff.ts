@@ -9,6 +9,7 @@ import BaseError from '../../../errors/baseError';
 import FoodstuffResponse from './responses/foodstuffResponse';
 import { ApiHandler } from '../handleRequest';
 import { getCreateFoodstuffRequest } from './requests/createFoodstuffRequest';
+import inspect from '../../../utils/taskEitherHelpers';
 
 const handleCreateFoodstuff: ApiHandler = (
   request: NowRequest
@@ -16,12 +17,16 @@ const handleCreateFoodstuff: ApiHandler = (
   pipe(
     getCreateFoodstuffRequest(request.body),
     E.map((input) => makeFoodstuff(input)),
+    E.map(inspect((val) => console.error(val))),
+    E.mapLeft(inspect((val) => console.error(val))),
     TE.fromEither,
     TE.chain((inputFoodstuff) =>
       container
         .resolve<SaveFoodstuffUseCase>(SaveFoodstuffUseCase)
         .execute({ foodstuff: inputFoodstuff })
     ),
+    TE.map(inspect((val) => console.error(val))),
+    TE.mapLeft(inspect((val) => console.error(val))),
     TE.map((addedFoodstuff) => ({
       foodstuff: {
         id: addedFoodstuff.id,
@@ -29,7 +34,8 @@ const handleCreateFoodstuff: ApiHandler = (
         category: addedFoodstuff.category,
         nutrients: Array.from(addedFoodstuff.nutrients),
       },
-    }))
+    })),
+    TE.mapLeft(inspect((val) => console.error(val)))
   );
 
 export default handleCreateFoodstuff;

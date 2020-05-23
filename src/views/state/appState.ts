@@ -51,7 +51,11 @@ import {
   isAllDailyMealsAction,
 } from './appState/allDailyMeals';
 
-export type InitializedAppState = 'not yet' | 'initializing' | 'initialized';
+export type InitializedAppState =
+  | 'not yet'
+  | 'initializing'
+  | 'initialized'
+  | 'failed';
 
 export type AppState = {
   /* ドメインモデル */
@@ -303,4 +307,9 @@ export const initializingAppState = (): TE.TaskEither<
 export const changeDarkMode = (darkMode: boolean): DarkModeAction => ({
   type: darkModeMsg,
   darkMode,
+});
+
+export const failedInitializeAppState = (): InitializeAppStateAction => ({
+  type: 'initializeAppState',
+  status: 'failed',
 });

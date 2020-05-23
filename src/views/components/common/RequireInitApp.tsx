@@ -6,11 +6,14 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
 import { pipe } from 'fp-ts/lib/pipeable';
 import * as TE from 'fp-ts/lib/TaskEither';
 import { appStateContext } from '../AppStateProvider';
-import { initializingAppState } from '../../state/appState';
+import {
+  initializingAppState,
+  failedInitializeAppState,
+} from '../../state/appState';
+import inspect from '../../../utils/taskEitherHelpers';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -42,7 +45,10 @@ const RequireInitApp: React.FC<Props> = (props: Props) => {
         await pipe(
           initializingAppState(),
           TE.map(dispatch),
-          TE.mapLeft((e) => console.error(e))
+          TE.mapLeft(inspect((e) => console.error(e))),
+          TE.mapLeft(() => {
+            dispatch(failedInitializeAppState());
+          })
         )();
       })();
     }
@@ -55,7 +61,22 @@ const RequireInitApp: React.FC<Props> = (props: Props) => {
     </Container>
   );
 
-  return <>{initializeAppState === 'initialized' ? children : loadingView}</>;
+  const failedView = (
+    <Container className={classes.root}>
+      <Typography>初期化に失敗しました</Typography>
+      <CircularProgress />
+    </Container>
+  );
+
+  if (initializeAppState === 'initialized') {
+    return <>{children}</>;
+  }
+
+  if (initializeAppState === 'failed') {
+    return failedView;
+  }
+
+  return loadingView;
 };
 
 export default RequireInitApp;

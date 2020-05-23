@@ -45,7 +45,6 @@ const RequireInitApp: React.FC<Props> = (props: Props) => {
         await pipe(
           initializingAppState(),
           TE.map(dispatch),
-          TE.mapLeft(inspect((e) => console.error(e))),
           TE.mapLeft(() => {
             dispatch(failedInitializeAppState());
           })

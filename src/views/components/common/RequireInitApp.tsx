@@ -64,7 +64,6 @@ const RequireInitApp: React.FC<Props> = (props: Props) => {
   const failedView = (
     <Container className={classes.root}>
       <Typography>初期化に失敗しました</Typography>
-      <CircularProgress />
     </Container>
   );
 

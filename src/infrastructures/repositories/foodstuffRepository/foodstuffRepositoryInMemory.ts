@@ -2,7 +2,6 @@ import * as TE from 'fp-ts/lib/TaskEither';
 import * as A from 'fp-ts/lib/Array';
 import QueryError from '../../../errors/repositoryErrors/queryError';
 import CommandError from '../../../errors/repositoryErrors/commandError';
-import InMemoryStore from '../../../drivers/inMemoryStore';
 import FoodstuffRepository from '../../../domain/repositories/foodstuffRepository';
 import {
   Foodstuff,
@@ -12,6 +11,7 @@ import {
 } from '../../../domain/models/foodstuff';
 import foodstuffSeeds from '../../../data/seeds/foodstuffs';
 import { genId } from '../../../domain/models/id';
+import InMemoryStore from '../../../drivers/inMemoryStore';
 
 export default class FoodstuffRepositoryInMemory
   implements FoodstuffRepository {

@@ -39,7 +39,11 @@ const RequireInitApp: React.FC<Props> = (props: Props) => {
     if (initializeAppState === 'not yet') {
       (async (): Promise<void> => {
         dispatch({ type: 'initializeAppState', status: 'initializing' });
-        await pipe(initializingAppState(), TE.map(dispatch))();
+        await pipe(
+          initializingAppState(),
+          TE.map(dispatch),
+          TE.mapLeft((e) => console.error(e))
+        )();
       })();
     }
   }, [initializeAppState]);

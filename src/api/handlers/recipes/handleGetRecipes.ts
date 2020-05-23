@@ -7,6 +7,7 @@ import RecipesResponse, {
   responseFromRecipes,
 } from './responses/recipesResponse';
 import GetAllRecipesUseCase from '../../../domain/useCases/getAllRecipesUseCase';
+import inspect from '../../../utils/taskEitherHelpers';
 
 const handleGetRecipes: ApiHandler = (): TE.TaskEither<
   BaseError,
@@ -15,10 +16,7 @@ const handleGetRecipes: ApiHandler = (): TE.TaskEither<
   pipe(
     container.resolve<GetAllRecipesUseCase>(GetAllRecipesUseCase).execute(),
     TE.map(responseFromRecipes),
-    TE.mapLeft((e) => {
-      console.log(e);
-      return e;
-    })
+    TE.mapLeft(inspect(console.error))
   );
 
 export default handleGetRecipes;

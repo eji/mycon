@@ -152,7 +152,7 @@ const initializeAppStateHandler: ActionHandler<
   InitializeAppStateAction
 > = (appState, { status, newAppState }) => {
   if (typeof newAppState === 'undefined') {
-    return appState;
+    return { ...appState, initializeAppState: status };
   }
   return { ...appState, ...newAppState, initializeAppState: status };
 };

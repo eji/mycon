@@ -6,6 +6,8 @@ import HttpError from '../errors/httpError';
 import NotFoundError from '../errors/repositoryErrors/queryErrors/notFoundError';
 import InvalidResponseError from '../errors/httpErrors/invalidResponseError';
 import BaseError from '../errors/baseError';
+import RecievedErrorResponseError from '../errors/receivedErrorResponseError';
+import { isErrorResponse } from '../api/responses/errorResponse';
 
 type RestmClientError = Error & { statusCode: number };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -60,11 +62,18 @@ export default class RestClient {
   ): TE.TaskEither<BaseError, T> => {
     return pipe(
       TE.tryCatch(fetchFunc, makeHttpError),
-      TE.chain((res) =>
-        res.result == null || res.statusCode === 404
-          ? TE.left(new NotFoundError())
-          : TE.right(res.result)
-      )
+      TE.chain(
+        (res): TE.TaskEither<BaseError, T> =>
+          res.result == null || res.statusCode === 404
+            ? TE.left(new NotFoundError())
+            : TE.right(res.result)
+      ),
+      TE.chain((res) => {
+        if (isErrorResponse(res)) {
+          return TE.left(new RecievedErrorResponseError(res));
+        }
+        return TE.right(res);
+      })
     );
   };
 }

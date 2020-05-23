@@ -1,32 +1,38 @@
 import BaseError from '../../errors/baseError';
 import ErrorCode, { makeServerErrorCode } from '../../types/errorCode';
 
+type ErrorResponseValue = {
+  errorCode: ErrorCode;
+  errorMessage: string;
+};
+
 type ErrorResponse = {
-  error: {
-    errorCode: ErrorCode;
-    errorMessage: string;
-  };
+  error: ErrorResponseValue;
 };
 
 export default ErrorResponse;
 
+export const isErrorResponseValue = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value: any
+): value is ErrorResponseValue => {
+  if (value == null || typeof value !== 'object') {
+    return false;
+  }
+
+  return (
+    typeof value.errorCode === 'string' &&
+    typeof value.errorMessage === 'string'
+  );
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const isErrorResponse = (value: any): value is ErrorResponse => {
-  if (value == null) {
+  if (value == null || typeof value !== 'object') {
     return false;
   }
 
-  if (typeof value !== 'object') {
-    return false;
-  }
-
-  const { error } = value;
-  if (typeof error !== 'object') {
-    return false;
-  }
-
-  const { errorCode, errorMessage } = error;
-  return errorCode === 'string' && errorMessage === 'string';
+  return isErrorResponseValue(value.error);
 };
 
 export function makeErrorResponse(

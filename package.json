@@ -54,6 +54,7 @@
       "last 1 safari version"
     ]
   },
+  "proxy": "http://localhost:3000",
   "devDependencies": {
     "@types/history": "^4.7.5",
     "@types/jest": "^25.2.1",

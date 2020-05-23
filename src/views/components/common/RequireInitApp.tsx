@@ -13,7 +13,6 @@ import {
   initializingAppState,
   failedInitializeAppState,
 } from '../../state/appState';
-import inspect from '../../../utils/taskEitherHelpers';
 
 const useStyles = makeStyles(() =>
   createStyles({

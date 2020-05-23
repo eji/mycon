@@ -10,7 +10,7 @@ import {
 import RestClient from '../../../drivers/restClient';
 import BaseError from '../../../errors/baseError';
 import FoodstuffsResponse, {
-  responseToFoodstuffs,
+  foodstuffsFromResponse,
 } from '../../../api/handlers/foodstuffs/responses/foodstuffsResponse';
 import * as createReq from '../../../api/handlers/foodstuffs/requests/createFoodstuffRequest';
 import * as replaceReq from '../../../api/handlers/foodstuffs/requests/replaceFoodstuffRequest';
@@ -26,7 +26,7 @@ export default class FoodstuffRepositoryAppServer
   all = (): TE.TaskEither<BaseError, Foodstuff[]> =>
     pipe(
       this.restClient.all<FoodstuffsResponse>(),
-      TE.map(responseToFoodstuffs)
+      TE.map(foodstuffsFromResponse)
     );
 
   saveValue = (

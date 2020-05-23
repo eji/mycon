@@ -44,6 +44,7 @@ import FoodAllergyHistoryRepositoryAppServer from './infrastructures/repositorie
 import GetAllFoodAllergyHistoriesUseCase from './domain/useCases/getAllFoodAllergyHistoriesUseCase';
 import GetAllDailyMealsUseCase from './domain/useCases/getAllDailyMealsUseCase';
 import DailyMealRepositoryAppServer from './infrastructures/repositories/dailyMealRepository/dailyMealRepositoryAppServer';
+import apiUrl from './api/apiUrl';
 
 const diConfig = (): void => {
   container.register<FoodstuffRepository>(foodstuffRepository, {
@@ -111,7 +112,7 @@ const diConfig = (): void => {
   container.registerInstance(
     restmRestClient,
     // TODO: 直すこと
-    new restm.RestClient('MyConClient', 'https://mycon.now.sh')
+    new restm.RestClient('MyConClient', apiUrl)
   );
 
   /* appServer repository */

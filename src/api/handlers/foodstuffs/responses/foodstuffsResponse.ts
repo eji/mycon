@@ -33,6 +33,6 @@ export const isFoodstuffsResponse = (
   );
 };
 
-export const responseToFoodstuffs = (
+export const foodstuffsFromResponse = (
   response: FoodstuffsResponse
 ): Foodstuff[] => response.foodstuffs.map(foodstuffFromResponseValue);

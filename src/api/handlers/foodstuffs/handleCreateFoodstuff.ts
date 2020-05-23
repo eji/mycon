@@ -15,7 +15,7 @@ const handleCreateFoodstuff: ApiHandler = (
   request: NowRequest
 ): TE.TaskEither<BaseError, FoodstuffResponse> =>
   pipe(
-    getCreateFoodstuffRequest(request.body),
+    getCreateFoodstuffRequest(request),
     E.map((input) => makeFoodstuff(input)),
     E.map(inspect((val) => console.error(val))),
     E.mapLeft(inspect((val) => console.error(val))),

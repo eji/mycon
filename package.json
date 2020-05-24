@@ -7,6 +7,9 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.51",
     "@now/node": "^1.6.1",
+    "@sentry/browser": "^5.15.5",
+    "@sentry/integrations": "^5.15.5",
+    "@sentry/node": "5.15.5",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -35,7 +38,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "tsc -p tsconfig.production.json && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable @typescript-eslint/no-namespace */
 import 'reflect-metadata';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -5,6 +7,20 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import diConfig from './diConfig';
+
+/**
+ * for Sentry
+ *
+ * This allows TypeScript to detect our global value
+ */
+declare global {
+  namespace NodeJS {
+    interface Global {
+      __rootdir__: string;
+    }
+  }
+}
+global.__rootdir__ = __dirname || process.cwd();
 
 diConfig();
 

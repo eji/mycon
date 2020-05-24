@@ -6,6 +6,8 @@ import NotImplementedError from '../../errors/requestErrors/serverErrors/notImpl
 import { makeErrorResponse } from '../responses/errorResponse';
 import BaseError from '../../errors/baseError';
 import ApiResponse from '../apiResponse';
+import inspect from '../../utils/taskEitherHelpers';
+import * as ErrorTracker from '../../utils/errorTracker';
 
 export type ApiHandler = (
   request: NowRequest
@@ -36,10 +38,11 @@ const selectHandler = (
   }
 };
 
-const makeErrorHandler = (response: NowResponse): ((error: Error) => void) => {
-  return (error: Error): void => {
+const makeErrorHandler = (response: NowResponse): ((error: Error) => Error) => {
+  return (error: Error): Error => {
     const res = makeErrorResponse(error);
     response.status(200).send(res);
+    return error;
   };
 };
 
@@ -55,11 +58,14 @@ const handleRequest = (
         TE.fromEither,
         TE.chain((handler) => handler(request)),
         TE.map(response.status(200).send),
-        TE.mapLeft(handleError)
+        TE.mapLeft(handleError),
+        TE.mapLeft(inspect(ErrorTracker.captureException))
       )();
     } catch (error) {
       handleError(error);
+      ErrorTracker.captureException(error);
     }
+    await ErrorTracker.flush();
   };
 };
 

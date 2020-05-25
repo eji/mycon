@@ -32,7 +32,10 @@ export const captureException = isBrowser()
   ? SentryBrowser.captureException
   : SentryNode.captureException;
 
-export const flush = async (
-  timeout: number | undefined = 2000
-): Promise<boolean> =>
-  isBrowser() ? SentryBrowser.flush(timeout) : SentryNode.flush(timeout);
+const flushTimeout = 2000;
+export const flush = async (): Promise<boolean> => {
+  const result = isBrowser()
+    ? await SentryBrowser.flush(flushTimeout)
+    : await SentryNode.flush(flushTimeout);
+  return result;
+};

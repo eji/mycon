@@ -58,12 +58,10 @@ const handleRequest = (
         TE.fromEither,
         TE.chain((handler) => handler(request)),
         TE.map(response.status(200).send),
-        TE.mapLeft(handleError),
-        TE.mapLeft(inspect(ErrorTracker.captureException))
+        TE.mapLeft(handleError)
       )();
     } catch (error) {
       handleError(error);
-      ErrorTracker.captureException(error);
     }
     await ErrorTracker.flush();
   };

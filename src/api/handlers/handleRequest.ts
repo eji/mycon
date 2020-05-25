@@ -8,21 +8,22 @@ import NotImplementedError from '../../errors/requestErrors/serverErrors/notImpl
 import { makeErrorResponse } from '../responses/errorResponse';
 import BaseError from '../../errors/baseError';
 import ApiResponse from '../apiResponse';
-import * as ErrorTracker from '../../utils/errorTracker';
+import * as ErrorTracker from '../../utils/errorTrackerForServer';
+import inspect from '../../utils/taskEitherHelpers';
 
-/**
- * for Sentry
- *
- * This allows TypeScript to detect our global value
- */
-declare global {
-  namespace NodeJS {
-    interface Global {
-      __rootdir__: string;
-    }
-  }
-}
-global.__rootdir__ = __dirname || process.cwd();
+// /**
+//  * for Sentry
+//  *
+//  * This allows TypeScript to detect our global value
+//  */
+// declare global {
+//   namespace NodeJS {
+//     interface Global {
+//       __rootdir__: string;
+//     }
+//   }
+// }
+// global.__rootdir__ = __dirname || process.cwd();
 
 ErrorTracker.initErrorTracker();
 
@@ -75,7 +76,8 @@ const handleRequest = (
         TE.fromEither,
         TE.chain((handler) => handler(request)),
         TE.map(response.status(200).send),
-        TE.mapLeft(handleError)
+        TE.mapLeft(handleError),
+        TE.mapLeft(inspect(ErrorTracker.captureException))
       )();
     } catch (error) {
       ErrorTracker.captureException(error);

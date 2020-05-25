@@ -7,7 +7,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import diConfig from './diConfig';
-import { initErrorTracker } from './utils/errorTracker';
+import { initErrorTracker } from './utils/errorTrackerForBrowser';
 
 /**
  * for Sentry

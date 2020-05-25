@@ -6,7 +6,6 @@ import NotImplementedError from '../../errors/requestErrors/serverErrors/notImpl
 import { makeErrorResponse } from '../responses/errorResponse';
 import BaseError from '../../errors/baseError';
 import ApiResponse from '../apiResponse';
-import inspect from '../../utils/taskEitherHelpers';
 import * as ErrorTracker from '../../utils/errorTracker';
 
 export type ApiHandler = (

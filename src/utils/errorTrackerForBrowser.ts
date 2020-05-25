@@ -1,6 +1,8 @@
+/* eslint-disable no-console */
 /* eslint-disable no-underscore-dangle */
 import * as SentryBrowser from '@sentry/browser';
 import { RewriteFrames } from '@sentry/integrations';
+import { Severity } from '@sentry/browser';
 import isBrowser from './isBrowser';
 
 export const initErrorTracker = (): void => {
@@ -17,9 +19,18 @@ export const initErrorTracker = (): void => {
   }
 };
 
-export const { captureException } = SentryBrowser;
+export const captureException = (exception: unknown): string => {
+  console.error(exception);
+  return SentryBrowser.captureException(exception);
+};
 
-export const { captureMessage } = SentryBrowser;
+export const captureMessage = (
+  message: string,
+  level?: Severity | undefined
+): string => {
+  console.info(message);
+  return SentryBrowser.captureMessage(message, level);
+};
 
 const flushTimeout = 2000;
 export const flush = async (): Promise<boolean> => {

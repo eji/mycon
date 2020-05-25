@@ -62,10 +62,9 @@ const handleRequest = (
         TE.mapLeft(handleError)
       )();
     } catch (error) {
+      ErrorTracker.captureException(error);
       handleError(error);
     }
-    ErrorTracker.captureMessage('hogeeeeeeeeeeeeeeetssssssssssssssssssssshiPe');
-    console.error('hogeeeeee');
     await ErrorTracker.flush();
   };
 };

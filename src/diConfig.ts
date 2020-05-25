@@ -45,6 +45,7 @@ import GetAllFoodAllergyHistoriesUseCase from './domain/useCases/getAllFoodAller
 import GetAllDailyMealsUseCase from './domain/useCases/getAllDailyMealsUseCase';
 import DailyMealRepositoryAppServer from './infrastructures/repositories/dailyMealRepository/dailyMealRepositoryAppServer';
 import apiUrl from './api/apiUrl';
+import GetAllRecipesUseCase from './domain/useCases/getAllRecipesUseCase';
 
 const diConfig = (): void => {
   container.register<FoodstuffRepository>(foodstuffRepository, {
@@ -249,6 +250,17 @@ const diConfig = (): void => {
       },
     }
   );
+
+  container.register<GetAllRecipesUseCase>(GetAllRecipesUseCase, {
+    useFactory: (
+      dependencyContainer: DependencyContainer
+    ): GetAllRecipesUseCase => {
+      const repos = dependencyContainer.resolve<RecipeRepository>(
+        recipeRepository
+      );
+      return new GetAllRecipesUseCase(repos);
+    },
+  });
 
   container.register<GetAllDailyMealsUseCase>(GetAllDailyMealsUseCase, {
     useFactory: (

@@ -49,6 +49,8 @@ const makeErrorHandler = (response: NowResponse): ((error: Error) => Error) => {
 const handleRequest = (
   handlers: Handlers
 ): ((request: NowRequest, response: NowResponse) => Promise<void>) => {
+  ErrorTracker.initErrorTracker();
+
   return async (request: NowRequest, response: NowResponse): Promise<void> => {
     const handleError = makeErrorHandler(response);
     try {

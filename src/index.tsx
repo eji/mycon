@@ -7,6 +7,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import diConfig from './diConfig';
+import { initErrorTracker } from './utils/errorTracker';
 
 /**
  * for Sentry
@@ -22,6 +23,7 @@ declare global {
 }
 global.__rootdir__ = __dirname || process.cwd();
 
+initErrorTracker();
 diConfig();
 
 ReactDOM.render(

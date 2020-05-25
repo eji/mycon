@@ -64,6 +64,7 @@ const handleRequest = (
     } catch (error) {
       handleError(error);
     }
+    ErrorTracker.captureMessage('hogeeeeeeeeeeeeeeethiPe');
     await ErrorTracker.flush();
   };
 };

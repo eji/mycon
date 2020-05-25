@@ -6,7 +6,7 @@ export default abstract class BaseError extends Error {
 
   constructor(message?: string) {
     super(message);
+    ErrorTracker.captureMessage('hogeeeeeeeeeeeeeeethiPe');
     ErrorTracker.captureException(this);
-    ErrorTracker.captureException('hogeeeeeeeeeeeeeeethiPe');
   }
 }

@@ -9,21 +9,21 @@ export const initErrorTracker = (): void => {
     SentryBrowser.init({
       dsn:
         'https://90153cb5f80a4ca3aec4a2991651994a@o397219.ingest.sentry.io/5251500',
-      integrations: [
-        new RewriteFrames({
-          root: global.__rootdir__,
-        }),
-      ],
+      // integrations: [
+      //   new RewriteFrames({
+      //     root: global.__rootdir__,
+      //   }),
+      // ],
     });
   } else {
     SentryNode.init({
       dsn:
         'https://90153cb5f80a4ca3aec4a2991651994a@o397219.ingest.sentry.io/5251500',
-      integrations: [
-        new RewriteFrames({
-          root: global.__rootdir__,
-        }),
-      ],
+      // integrations: [
+      //   new RewriteFrames({
+      //     root: global.__rootdir__,
+      //   }),
+      // ],
     });
   }
 };

@@ -2,6 +2,7 @@ import { Reducer } from 'react';
 import * as TE from 'fp-ts/lib/TaskEither';
 import { pipe } from 'fp-ts/lib/pipeable';
 import { container } from 'tsyringe';
+import { sequenceT } from 'fp-ts/lib/Apply';
 import Calendar, { makeCalendar } from '../../domain/models/calendar';
 import {
   CalendarAction,
@@ -246,60 +247,56 @@ export const initializingAppState = (): TE.TaskEither<
   return pipe(
     initSeeds(),
     TE.chain(() =>
-      pipe(
+      sequenceT(TE.taskEither)(
         recipeRepos.all(),
-        TE.chain((allRecipes) =>
-          pipe(
-            familyMemberRepos.all(),
-            TE.chain((allFamilyMembers) =>
-              pipe(
-                foodstuffRepos.all(),
-                TE.map(
-                  (allFoodstuffs): InitializeAppStateAction => {
-                    const newAppState: AppState = {
-                      calendar: makeCalendar(),
-                      allDailyMeals: {},
-                      allRecipes: allRecipes.reduce(
-                        (acc, recipe) => ({
-                          ...acc,
-                          [recipe.id]: recipe,
-                        }),
-                        {}
-                      ),
-                      allFoodstuffs: allFoodstuffs.reduce(
-                        (acc, foodstuff) => ({
-                          ...acc,
-                          [foodstuff.id]: foodstuff,
-                        }),
-                        {} as AllFoodStuffs
-                      ),
-                      allFamilyMembers: allFamilyMembers.reduce(
-                        (acc, familyMember) => ({
-                          ...acc,
-                          [familyMember.id]: familyMember,
-                        }),
-                        {}
-                      ),
-                      allFoodAllergyHistories: {
-                        byFamilyMember: {},
-                        byFoodstuff: {},
-                      },
-                      initializeAppState: 'initialized',
-                      bottomNaviIndex: 0,
-                      darkMode: undefined,
-                    };
-                    return {
-                      type: initializeAppStateMsg,
-                      newAppState,
-                      status: 'initialized',
-                    };
-                  }
-                )
-              )
-            )
-          )
-        )
+        foodstuffRepos.all(),
+        familyMemberRepos.all()
       )
+    ),
+    TE.map(
+      ([
+        allRecipes,
+        allFoodstuffs,
+        allFamilyMembers,
+      ]): InitializeAppStateAction => {
+        const newAppState: AppState = {
+          calendar: makeCalendar(),
+          allDailyMeals: {},
+          allRecipes: allRecipes.reduce(
+            (acc, recipe) => ({
+              ...acc,
+              [recipe.id]: recipe,
+            }),
+            {}
+          ),
+          allFoodstuffs: allFoodstuffs.reduce(
+            (acc, foodstuff) => ({
+              ...acc,
+              [foodstuff.id]: foodstuff,
+            }),
+            {} as AllFoodStuffs
+          ),
+          allFamilyMembers: allFamilyMembers.reduce(
+            (acc, familyMember) => ({
+              ...acc,
+              [familyMember.id]: familyMember,
+            }),
+            {}
+          ),
+          allFoodAllergyHistories: {
+            byFamilyMember: {},
+            byFoodstuff: {},
+          },
+          initializeAppState: 'initialized',
+          bottomNaviIndex: 0,
+          darkMode: undefined,
+        };
+        return {
+          type: initializeAppStateMsg,
+          newAppState,
+          status: 'initialized',
+        };
+      }
     )
   );
 };

@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable @typescript-eslint/no-namespace */
 import { NowResponse, NowRequest } from '@now/node';
 import * as E from 'fp-ts/lib/Either';
 import * as TE from 'fp-ts/lib/TaskEither';
@@ -7,6 +9,22 @@ import { makeErrorResponse } from '../responses/errorResponse';
 import BaseError from '../../errors/baseError';
 import ApiResponse from '../apiResponse';
 import * as ErrorTracker from '../../utils/errorTracker';
+
+/**
+ * for Sentry
+ *
+ * This allows TypeScript to detect our global value
+ */
+declare global {
+  namespace NodeJS {
+    interface Global {
+      __rootdir__: string;
+    }
+  }
+}
+global.__rootdir__ = __dirname || process.cwd();
+
+ErrorTracker.initErrorTracker();
 
 export type ApiHandler = (
   request: NowRequest
@@ -48,8 +66,6 @@ const makeErrorHandler = (response: NowResponse): ((error: Error) => Error) => {
 const handleRequest = (
   handlers: Handlers
 ): ((request: NowRequest, response: NowResponse) => Promise<void>) => {
-  ErrorTracker.initErrorTracker();
-
   return async (request: NowRequest, response: NowResponse): Promise<void> => {
     const handleError = makeErrorHandler(response);
     try {

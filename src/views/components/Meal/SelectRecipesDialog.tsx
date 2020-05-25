@@ -123,8 +123,7 @@ const SelectRecipesDialog: React.FC = () => {
         recipes: selectedRecipes,
       }),
       TE.map(dispatch),
-      TE.map(handleClose),
-      TE.mapLeft((): void => console.log('hogeeeeeeeeee'))
+      TE.map(handleClose)
     )();
   };
 

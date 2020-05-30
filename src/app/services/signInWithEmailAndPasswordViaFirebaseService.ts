@@ -52,7 +52,6 @@ export default class SignInWithEmailAndPasswordViaFirebaseService {
         this.firebaseAuth.signInWithEmailAndPassword(email, password),
       // TODO: 認証エラーに直すこと
       (e) => {
-        console.log('bbbbbbbbbbbb');
         console.error(e);
         return new NotFoundError();
       }
@@ -72,10 +71,9 @@ export default class SignInWithEmailAndPasswordViaFirebaseService {
   private getIdTokenFromFirebaseUser = (
     user: firebase.User
   ): TE.TaskEither<BaseError, string> => {
-    console.log('aaaaaaaaaaa💩');
     return pipe(
       TE.tryCatch(
-        user.getIdToken,
+        () => user.getIdToken(),
         // TODO: 認証エラーに直すこと
         (e) => {
           console.log(e);
@@ -87,8 +85,8 @@ export default class SignInWithEmailAndPasswordViaFirebaseService {
 
   private sendSignedInRequest = (
     idToken: string
-  ): TE.TaskEither<BaseError, User> =>
-    pipe(
+  ): TE.TaskEither<BaseError, User> => {
+    return pipe(
       this.restClient.create<SignedInRequest, SignedInResponse>({
         idToken,
       }),
@@ -103,4 +101,5 @@ export default class SignInWithEmailAndPasswordViaFirebaseService {
         return e;
       })
     );
+  };
 }

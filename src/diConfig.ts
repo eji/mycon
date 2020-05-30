@@ -1,5 +1,6 @@
 import { container, DependencyContainer } from 'tsyringe';
 import * as restm from 'typed-rest-client/RestClient';
+import firebase from 'firebase';
 import FoodstuffRepository from './domain/repositories/foodstuffRepository';
 import {
   foodstuffRepository,
@@ -18,6 +19,10 @@ import {
   appServerRecipeRepository,
   appServerFoodAllergyHistoryRepository,
   appServerDailyMealRepository,
+  appUserContextToken as userContextToken,
+  userRepositoryToken,
+  inMemoryUserRepository,
+  appServerUserRepository,
 } from './types/diTypes';
 import FoodstuffRepositoryInMemory from './infrastructures/repositories/foodstuffRepository/foodstuffRepositoryInMemory';
 import SaveFoodstuffUseCase from './domain/useCases/saveFoodstuffUseCase';
@@ -46,8 +51,20 @@ import GetAllDailyMealsUseCase from './domain/useCases/getAllDailyMealsUseCase';
 import DailyMealRepositoryAppServer from './infrastructures/repositories/dailyMealRepository/dailyMealRepositoryAppServer';
 import apiUrl from './api/apiUrl';
 import GetAllRecipesUseCase from './domain/useCases/getAllRecipesUseCase';
+import userContext from './app/contexts/userContext';
+import SignedInService from './app/services/signedInService';
+import UserRepository from './domain/repositories/userRepository';
+import firebaseIdTokenUtil from './utils/firebaseIdTokenUtil';
+import UserRepositoryInMemory from './infrastructures/repositories/userRepository/userRepositoryInMemory';
+import UserRepositoryAppServer from './infrastructures/repositories/userRepository/userRepositoryAppServer';
+import SignInWithEmailAndPasswordViaFirebaseService from './app/services/signInWithEmailAndPasswordViaFirebaseService';
 
 const diConfig = (): void => {
+  /** contexts */
+  container.registerInstance(userContextToken, userContext);
+
+  /** repositories */
+
   container.register<FoodstuffRepository>(foodstuffRepository, {
     useToken: isBrowser()
       ? appServerFoodstuffRepository
@@ -81,6 +98,10 @@ const diConfig = (): void => {
     }
   );
 
+  container.register<UserRepository>(userRepositoryToken, {
+    useToken: isBrowser() ? appServerUserRepository : inMemoryUserRepository,
+  });
+
   /* in-memory repository */
 
   container.registerInstance(
@@ -106,6 +127,11 @@ const diConfig = (): void => {
   container.registerInstance(
     inMemoryFoodAllergyHistoryRepository,
     new FoodAllergyHistoryRepositoryInMemory()
+  );
+
+  container.registerInstance(
+    inMemoryUserRepository,
+    new UserRepositoryInMemory()
   );
 
   /* rest client */
@@ -156,7 +182,15 @@ const diConfig = (): void => {
     )
   );
 
-  /* use cases */
+  container.registerInstance(
+    appServerUserRepository,
+    new UserRepositoryAppServer(
+      new RestClient(container.resolve(restmRestClient), '/api/users')
+    )
+  );
+
+  /** use cases */
+
   container.register<SaveFoodstuffUseCase>(SaveFoodstuffUseCase, {
     useFactory: (
       dependencyContainer: DependencyContainer
@@ -272,6 +306,26 @@ const diConfig = (): void => {
       return new GetAllDailyMealsUseCase(repos);
     },
   });
+
+  /** services */
+
+  container.register<SignedInService>(SignedInService, {
+    useFactory: (dependencyContainer: DependencyContainer): SignedInService => {
+      const repos = dependencyContainer.resolve<UserRepository>(
+        userRepositoryToken
+      );
+      return new SignedInService(firebaseIdTokenUtil, repos);
+    },
+  });
+
+  container.registerInstance<SignInWithEmailAndPasswordViaFirebaseService>(
+    SignInWithEmailAndPasswordViaFirebaseService,
+    new SignInWithEmailAndPasswordViaFirebaseService(
+      firebase.auth(),
+      new RestClient(container.resolve(restmRestClient), '/api/signed_in'),
+      userContext
+    )
+  );
 };
 
 export default diConfig;

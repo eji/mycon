@@ -9,6 +9,8 @@ import FoodAllergyHistoriesResponse from './handlers/foodAllergyHistories/respon
 import FoodAllergyHistoryResponse from './handlers/foodAllergyHistories/responses/foodAllergyHistoryResponse';
 import DailyMealsResponse from './handlers/dailyMeals/responses/dailyMealsResponse';
 import DailyMealResponse from './handlers/dailyMeals/responses/dailyMealResponse';
+import UserResponse from './handlers/users/responses/userResponse';
+import SignedInResponse from './handlers/signedIn/responses/signedInResponse';
 
 type ApiResponse =
   | ErrorResponse
@@ -21,6 +23,8 @@ type ApiResponse =
   | FoodAllergyHistoryResponse
   | FoodAllergyHistoriesResponse
   | DailyMealResponse
-  | DailyMealsResponse;
+  | DailyMealsResponse
+  | UserResponse
+  | SignedInResponse;
 
 export default ApiResponse;

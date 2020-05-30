@@ -2,9 +2,9 @@ import 'reflect-metadata';
 import handleGetFoodstuffs from '../src/api/handlers/foodstuffs/handleGetFoodstuffs';
 import handleRequest from '../src/api/handlers/handleRequest';
 import handleCreateFoodstuff from '../src/api/handlers/foodstuffs/handleCreateFoodstuff';
-import diConfig from '../src/diConfig';
+import initApi from '../src/api/initApi';
 
-diConfig();
+initApi();
 
 export default handleRequest({
   /** 食材一覧の取得 */

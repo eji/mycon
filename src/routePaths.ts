@@ -25,6 +25,9 @@ const makeEditPathCreator = (
   return `${basePathCreator(props)}/edit`;
 };
 
+/* サインイン画面 */
+export const signInScreenPath: PathCreator = () => '/sign-in';
+
 export const scheduleScreenPath: PathCreator = () => '/';
 
 /* 一日のメニュー */

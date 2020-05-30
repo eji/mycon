@@ -33,7 +33,16 @@ export const inMemoryFoodAllergyHistoryRepository =
 export const appServerFoodAllergyHistoryRepository =
   'appServerFoodAllergyHistoryRepository';
 
+export const userRepositoryToken = 'userRepositoryToken';
+
+export const inMemoryUserRepository = 'inMemoryUserRepository';
+
+export const appServerUserRepository = 'appServerUserRepository';
+
 /* rest client */
 
 export const restClient = 'restClient';
 export const restmRestClient = 'restmRestClient';
+
+/** contexts */
+export const appUserContextToken = 'appUserContextToken';

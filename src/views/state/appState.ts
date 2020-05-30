@@ -51,6 +51,7 @@ import {
   allDailyMealsReducer,
   isAllDailyMealsAction,
 } from './appState/allDailyMeals';
+import User from '../../domain/models/user';
 
 export type InitializedAppState =
   | 'not yet'
@@ -93,6 +94,9 @@ export type AppState = {
     byFamilyMember: { [key: string]: FoodAllergyHistory };
     byFoodstuff: { [key: string]: FoodAllergyHistory };
   };
+
+  /** 現在サインイン中のユーザー */
+  currentAppUser: User | null;
 
   /* アプリのステート */
 
@@ -219,6 +223,7 @@ export const initAppState: AppState = {
   initializeAppState: 'not yet',
   bottomNaviIndex: 0,
   darkMode: undefined,
+  currentAppUser: null,
 };
 
 /* action creator */
@@ -290,6 +295,7 @@ export const initializingAppState = (): TE.TaskEither<
           initializeAppState: 'initialized',
           bottomNaviIndex: 0,
           darkMode: undefined,
+          currentAppUser: null,
         };
         return {
           type: initializeAppStateMsg,

@@ -14,6 +14,7 @@ import {
   editDailyMealScreenPath,
   showDailyMealScreenPath,
   addRecipeToDailyMenuDialogPath,
+  signInScreenPath,
 } from './routePaths';
 import ScheduleScreen from './views/screens/ScheduleScreen';
 import RecipesScreen from './views/screens/RecipesScreen';
@@ -28,6 +29,7 @@ import ShowRecipeScreen from './views/screens/ShowRecipeScreen';
 import { isLocationState } from './locationState';
 import DailyMealScreen from './views/screens/DailyMealScreen';
 import SelectRecipesDialog from './views/components/Meal/SelectRecipesDialog';
+import NewSignInScreen from './views/screens/NewSignInScreen';
 
 const AppSwitch: React.FC = () => {
   const location = useLocation();
@@ -40,6 +42,9 @@ const AppSwitch: React.FC = () => {
   return (
     <>
       <Switch location={background || location}>
+        <Route exact path={signInScreenPath()}>
+          <NewSignInScreen />
+        </Route>
         <Route exact path={scheduleScreenPath()}>
           <RequireInitApp>
             <ScheduleScreen />

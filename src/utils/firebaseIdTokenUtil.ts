@@ -8,6 +8,7 @@ import base64url from 'base64-url';
 import BaseError from '../errors/baseError';
 import NotFoundError from '../errors/repositoryErrors/queryErrors/notFoundError';
 import { firebaseProjectId, firebaseIdTokenIssuer } from '../firebaseConfig';
+import inspect from './taskEitherHelpers';
 
 /** 公開鍵情報 */
 
@@ -19,8 +20,7 @@ type PublicKeyInfo = {
 
 type PublicKeyInfos = PublicKeyInfo[];
 
-const publicKeysUrl =
-  'https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com';
+const publicKeysUrl = 'https://www.googleapis.com';
 
 /**
  * Friebase IDトークンのヘッダー
@@ -55,8 +55,9 @@ const getExpirationTimeFromHeader = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   headers: Record<string, any>
 ): E.Either<BaseError, number> => {
-  if ('Cache-Control' in headers) {
-    const cacheControl = headers['Cache-Control'] as string | undefined;
+  console.log(headers);
+  if ('cache-control' in headers) {
+    const cacheControl = headers['cache-control'] as string | undefined;
     if (typeof cacheControl === 'undefined') {
       return E.left(new NotFoundError());
     }
@@ -65,7 +66,7 @@ const getExpirationTimeFromHeader = (
       return E.left(new NotFoundError());
     }
     const maxAge = Number.parseInt(match[1], 10);
-    const expirationTime = Date.now() + maxAge;
+    const expirationTime = Date.now() + maxAge * 1000;
     return E.right(expirationTime);
   }
   return E.left(new NotFoundError());
@@ -87,9 +88,16 @@ const getHeadersAndResponseResult = (
 const fetchPublicKeys = (): TE.TaskEither<BaseError, PublicKeyInfos> =>
   pipe(
     TE.tryCatch(
-      () => restClient.get<PublicKeyApiResponseType>('/'),
-      () => new NotFoundError()
+      () =>
+        restClient.get<PublicKeyApiResponseType>(
+          '/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com'
+        ),
+      (e) => {
+        console.error(e);
+        return new NotFoundError();
+      }
     ),
+    TE.map(inspect((res) => console.log(res))),
     TE.chainEitherK(getHeadersAndResponseResult),
     TE.chainEitherK(([headers, result]) =>
       pipe(
@@ -157,7 +165,11 @@ const isFirebaseIdTokenHeader = (
   value: any
 ): value is FirebaseIdTokenHeader => {
   if (value != null && typeof value === 'object') {
-    return value.alg === 'RS256' && typeof value.kid === 'string';
+    return (
+      typeof value.alg === 'string' &&
+      value.alg === 'RS256' &&
+      typeof value.kid === 'string'
+    );
   }
   return false;
 };
@@ -173,7 +185,7 @@ const isFirebaseIdTokenPayload = (
       typeof value.aud === 'string' &&
       typeof value.iss === 'string' &&
       typeof value.sub === 'string' &&
-      typeof value.auth_time === 'string' &&
+      typeof value.auth_time === 'number' &&
       typeof value.email === 'string'
     );
   }
@@ -189,13 +201,15 @@ const separateIdToken = (
     return E.left(new NotFoundError());
   }
 
-  const decodedHeader = base64url.decode(header);
-  const decodedPayload = base64url.decode(payload);
+  const decodedHeader = JSON.parse(base64url.decode(header));
+  const decodedPayload = JSON.parse(base64url.decode(payload));
 
   if (
     !isFirebaseIdTokenHeader(decodedHeader) ||
     !isFirebaseIdTokenPayload(decodedPayload)
   ) {
+    console.log(!isFirebaseIdTokenHeader(decodedHeader));
+    console.log(!isFirebaseIdTokenPayload(decodedPayload));
     return E.left(new NotFoundError());
   }
   return E.right([decodedHeader, decodedPayload]);
@@ -211,7 +225,7 @@ const verifyIdTokenWithCertKey = (
   );
 
 const verifyIdTokenPayload = (payload: FirebaseIdTokenPayload): boolean => {
-  const now = Date.now();
+  const now = Math.floor(Date.now() / 1000);
   return (
     payload.aud === firebaseProjectId &&
     payload.iss === firebaseIdTokenIssuer &&

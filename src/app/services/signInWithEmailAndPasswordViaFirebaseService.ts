@@ -46,7 +46,6 @@ export default class SignInWithEmailAndPasswordViaFirebaseService {
     email: string,
     password: string
   ): TE.TaskEither<BaseError, firebase.auth.UserCredential> => {
-    console.log('aaaaaaaaaaaaaaaaaaa');
     return TE.tryCatch(
       (): Promise<firebase.auth.UserCredential> =>
         this.firebaseAuth.signInWithEmailAndPassword(email, password),

@@ -21,6 +21,8 @@ type PublicKeyInfo = {
 type PublicKeyInfos = PublicKeyInfo[];
 
 const publicKeysUrl = 'https://www.googleapis.com';
+const publicKeysPath =
+  '/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com';
 
 /**
  * Friebase IDトークンのヘッダー
@@ -55,7 +57,6 @@ const getExpirationTimeFromHeader = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   headers: Record<string, any>
 ): E.Either<BaseError, number> => {
-  console.log(headers);
   if ('cache-control' in headers) {
     const cacheControl = headers['cache-control'] as string | undefined;
     if (typeof cacheControl === 'undefined') {
@@ -88,10 +89,7 @@ const getHeadersAndResponseResult = (
 const fetchPublicKeys = (): TE.TaskEither<BaseError, PublicKeyInfos> =>
   pipe(
     TE.tryCatch(
-      () =>
-        restClient.get<PublicKeyApiResponseType>(
-          '/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com'
-        ),
+      () => restClient.get<PublicKeyApiResponseType>(publicKeysPath),
       (e) => {
         console.error(e);
         return new NotFoundError();
@@ -208,8 +206,6 @@ const separateIdToken = (
     !isFirebaseIdTokenHeader(decodedHeader) ||
     !isFirebaseIdTokenPayload(decodedPayload)
   ) {
-    console.log(!isFirebaseIdTokenHeader(decodedHeader));
-    console.log(!isFirebaseIdTokenPayload(decodedPayload));
     return E.left(new NotFoundError());
   }
   return E.right([decodedHeader, decodedPayload]);

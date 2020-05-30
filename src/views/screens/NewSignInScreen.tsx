@@ -98,8 +98,6 @@ const NewSignInScreen: React.FC = () => {
               await pipe(
                 signInService.execute(values),
                 TE.mapLeft((e) => console.error(e)),
-                TE.mapLeft(() => console.error('EEEEEEEEEEE')),
-                TE.map(() => console.log('hogeeeeeeeeeeeeeee')),
                 TE.map((): unknown => history.replace('/')),
                 TE.mapLeft((error): void => {
                   // TODO: 直すこと

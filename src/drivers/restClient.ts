@@ -63,17 +63,6 @@ export default class RestClient {
   ): TE.TaskEither<BaseError, T> => {
     return pipe(
       TE.tryCatch(fetchFunc, makeHttpError),
-      TE.map(
-        inspect((res) => {
-          console.error(res);
-        })
-      ),
-      TE.mapLeft(
-        inspect((e) => {
-          console.error(e);
-          console.log('aaaaaaaaaaaaa');
-        })
-      ),
       TE.chain(
         (res): TE.TaskEither<BaseError, T> =>
           res.result == null || res.statusCode === 404

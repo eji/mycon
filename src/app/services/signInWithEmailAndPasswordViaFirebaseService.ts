@@ -90,16 +90,7 @@ export default class SignInWithEmailAndPasswordViaFirebaseService {
       this.restClient.create<SignedInRequest, SignedInResponse>({
         idToken,
       }),
-      TE.map(userFromSignedInResponse),
-      TE.map((res) => {
-        console.log('rooooooooooooooooooooooooo');
-        return res;
-      }),
-      TE.mapLeft((e) => {
-        console.log('エラ');
-        console.log(e);
-        return e;
-      })
+      TE.map(userFromSignedInResponse)
     );
   };
 }

@@ -196,6 +196,8 @@ const separateIdToken = (
   }
 
   if (!isFirebaseIdTokenHeader(header) || !isFirebaseIdTokenPayload(payload)) {
+    console.log(header);
+    console.log(payload);
     return E.left(new NotFoundError());
   }
   return E.right([header, payload, signature]);

@@ -4,6 +4,7 @@ import * as A from 'fp-ts/lib/Array';
 import * as jwt from 'jsonwebtoken';
 import { RestClient, IRestResponse } from 'typed-rest-client';
 import { pipe } from 'fp-ts/lib/pipeable';
+import base64url from 'base64-url';
 import BaseError from '../errors/baseError';
 import NotFoundError from '../errors/repositoryErrors/queryErrors/notFoundError';
 import { firebaseProjectId, firebaseIdTokenIssuer } from '../firebaseConfig';
@@ -181,26 +182,23 @@ const isFirebaseIdTokenPayload = (
 
 const separateIdToken = (
   idToken: string
-): E.Either<
-  BaseError,
-  [FirebaseIdTokenHeader, FirebaseIdTokenPayload, string]
-> => {
-  const [header, payload, signature] = idToken.split('.');
-  if (
-    typeof header === 'undefined' ||
-    typeof payload === 'undefined' ||
-    typeof signature === 'undefined'
-  ) {
+): E.Either<BaseError, [FirebaseIdTokenHeader, FirebaseIdTokenPayload]> => {
+  const [header, payload] = idToken.split('.');
+  if (typeof header === 'undefined' || typeof payload === 'undefined') {
     // TODO: 直すこと
     return E.left(new NotFoundError());
   }
 
-  if (!isFirebaseIdTokenHeader(header) || !isFirebaseIdTokenPayload(payload)) {
-    console.log(header);
-    console.log(payload);
+  const decodedHeader = base64url.decode(header);
+  const decodedPayload = base64url.decode(payload);
+
+  if (
+    !isFirebaseIdTokenHeader(decodedHeader) ||
+    !isFirebaseIdTokenPayload(decodedPayload)
+  ) {
     return E.left(new NotFoundError());
   }
-  return E.right([header, payload, signature]);
+  return E.right([decodedHeader, decodedPayload]);
 };
 
 const verifyIdTokenWithCertKey = (

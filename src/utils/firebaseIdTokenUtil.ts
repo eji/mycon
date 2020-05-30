@@ -49,7 +49,7 @@ const addKeysToCache = (keys: PublicKeyInfos): PublicKeyInfos => {
 
 const restClient = new RestClient('typed-rest-client', publicKeysUrl);
 
-const cacheControlHeaderRegExp = /^max-age=(\d+)$/;
+const cacheControlHeaderRegExp = /max-age=(\d+)/;
 
 const getExpirationTimeFromHeader = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -229,13 +229,13 @@ const verifyIdToken = (
 ): TE.TaskEither<BaseError, FirebaseIdTokenPayload> =>
   pipe(
     TE.fromEither(separateIdToken(idToken)),
-    TE.chain(([header, payload]) =>
-      pipe(
+    TE.chain(([header, payload]) => {
+      return pipe(
         findPublicKey(header.kid),
         TE.chainEitherK((cert) => verifyIdTokenWithCertKey(idToken, cert)),
         TE.map(() => payload)
-      )
-    ),
+      );
+    }),
     TE.filterOrElse(verifyIdTokenPayload, () => new NotFoundError())
   );
 

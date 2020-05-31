@@ -1,12 +1,12 @@
 import * as E from 'fp-ts/lib/Either';
 import { NowRequest } from '@now/node';
-import InvalidRequestError from '../../../../errors/requestErrors/clientErrors/invalidRequestError';
 import {
   MealRequestValue,
   isMealRequestValue,
   requestValueFromMeal,
 } from '../../../commons/mealRequestValue';
 import DailyMeal from '../../../../domain/models/dailyMeal';
+import AppError from '../../../../errors/AppError';
 
 export type ReplaceDailyMealRequestBody = {
   breakfast: MealRequestValue;
@@ -49,14 +49,14 @@ export const requestFromDailyMeal = (
 
 export const getReplaceDailyMealRequest = (
   request: NowRequest
-): E.Either<InvalidRequestError, ReplaceDailyMealRequest> => {
+): E.Either<AppError, ReplaceDailyMealRequest> => {
   const { id } = request.query;
   if (id == null || typeof id !== 'string') {
-    return E.left(new InvalidRequestError());
+    return E.left(new AppError('http_req/invalid_request_error'));
   }
 
   if (!isReplaceDailyMealRequestBody(request.body)) {
-    return E.left(new InvalidRequestError());
+    return E.left(new AppError('http_req/invalid_request_error'));
   }
 
   return E.right({

@@ -8,9 +8,9 @@ import createActionDistinguishFunction from '../../../utils/createActionDistingu
 import { AddFoodstuffForm } from '../../forms/addFoodstuffFormSchema';
 import { Foodstuff, makeFoodstuff } from '../../../domain/models/foodstuff';
 import SaveFoodstuffUseCase from '../../../domain/useCases/saveFoodstuffUseCase';
-import RepositoryError from '../../../errors/repositoryError';
 import Nutrient from '../../../domain/models/nutrient';
 import FoodstuffCategory from '../../../domain/models/foodstuffCategory';
+import AppError from '../../../errors/AppError';
 
 export type AllFoodStuffs = { [key: string]: Foodstuff };
 
@@ -60,7 +60,7 @@ export const allFoodstuffsReducer: Reducer<
 
 export const addFoodstuff = (
   form: AddFoodstuffForm
-): TaskEither<RepositoryError, AddFoodstuffAction> => {
+): TaskEither<AppError, AddFoodstuffAction> => {
   const useCase = container.resolve(SaveFoodstuffUseCase);
   const foodstuff = makeFoodstuff({
     name: form.name,

@@ -5,14 +5,14 @@ import * as TE from 'fp-ts/lib/TaskEither';
 import * as E from 'fp-ts/lib/Either';
 import SaveFoodstuffUseCase from '../../../domain/useCases/saveFoodstuffUseCase';
 import { makeFoodstuff, Foodstuff } from '../../../domain/models/foodstuff';
-import BaseError from '../../../errors/baseError';
 import FoodstuffResponse from './responses/foodstuffResponse';
 import { ApiHandler } from '../handleRequest';
 import { getReplaceFoodstuffRequest } from './requests/replaceFoodstuffRequest';
+import AppError from '../../../errors/AppError';
 
 const handleReplaceFoodstuff: ApiHandler = (
   request: NowRequest
-): TE.TaskEither<BaseError, FoodstuffResponse> =>
+): TE.TaskEither<AppError, FoodstuffResponse> =>
   pipe(
     getReplaceFoodstuffRequest(request),
     E.map((input) => makeFoodstuff(input) as Foodstuff),

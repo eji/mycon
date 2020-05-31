@@ -2,7 +2,6 @@ import { container } from 'tsyringe';
 import { NowRequest } from '@now/node';
 import { pipe } from 'fp-ts/lib/pipeable';
 import * as TE from 'fp-ts/lib/TaskEither';
-import BaseError from '../../../errors/baseError';
 import { ApiHandler } from '../handleRequest';
 import inspect from '../../../utils/taskEitherHelpers';
 import {
@@ -14,17 +13,18 @@ import SignedInResponse, {
   signedInResponseFromUser,
 } from './responses/signedInResponse';
 import User from '../../../domain/models/user';
+import AppError from '../../../errors/AppError';
 
 const executeSingedInService = (
   request: SignedInRequest
-): TE.TaskEither<BaseError, User> =>
+): TE.TaskEither<AppError, User> =>
   container
     .resolve<SignedInService>(SignedInService)
     .execute({ idToken: request.idToken });
 
 const handleCreateSignedIn: ApiHandler = (
   request: NowRequest
-): TE.TaskEither<BaseError, SignedInResponse> =>
+): TE.TaskEither<AppError, SignedInResponse> =>
   pipe(
     TE.fromEither(getSignedInRequest(request)),
     TE.chain(executeSingedInService),

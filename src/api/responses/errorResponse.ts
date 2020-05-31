@@ -1,5 +1,5 @@
-import BaseError from '../../errors/baseError';
-import ErrorCode, { makeServerErrorCode } from '../../types/errorCode';
+import ErrorCode from '../../errors/errorCode';
+import AppError from '../../errors/AppError';
 
 type ErrorResponseValue = {
   errorCode: ErrorCode;
@@ -36,7 +36,7 @@ export const isErrorResponse = (value: any): value is ErrorResponse => {
 };
 
 export function makeErrorResponse(
-  error: BaseError,
+  error: AppError,
   errorMessage?: string
 ): ErrorResponse;
 export function makeErrorResponse(
@@ -49,20 +49,20 @@ export function makeErrorResponse(
 ): ErrorResponse {
   const message = errorMessage || '';
 
-  if (error instanceof BaseError) {
+  if (error instanceof AppError) {
     return { error: { errorCode: error.errorCode, errorMessage: message } };
   }
   if (error instanceof Error) {
     return {
       error: {
-        errorCode: makeServerErrorCode('unhandled_error'),
+        errorCode: 'unhandled_error',
         errorMessage: message,
       },
     };
   }
   return {
     error: {
-      errorCode: makeServerErrorCode('unknown_error'),
+      errorCode: 'unknown_error',
       errorMessage: message,
     },
   };

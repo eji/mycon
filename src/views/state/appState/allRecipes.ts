@@ -6,11 +6,11 @@ import { Action } from '../../../types/action';
 import { ActionHandler } from '../../../types/actionHandler';
 import createActionDistinguishFunction from '../../../utils/createActionDistinguishFunction';
 import { Foodstuff } from '../../../domain/models/foodstuff';
-import RepositoryError from '../../../errors/repositoryError';
 import Recipe, { makeRecipe } from '../../../domain/models/recipe';
 import { InputRecipeForm } from '../../forms/inputRecipeFormSchema';
 import SaveRecipeUseCase from '../../../domain/useCases/saveRecipeUseCase';
 import { makeRecipeIngredient } from '../../../domain/models/recipeIngredient';
+import AppError from '../../../errors/AppError';
 
 export type AllRecipes = { [key: string]: Recipe };
 
@@ -61,7 +61,7 @@ export const allRecipesReducer: Reducer<AllRecipes, AllRecipesAction> = (
 export const addRecipe = (params: {
   form: InputRecipeForm;
   allFoodstuffs: { [key: string]: Foodstuff };
-}): TE.TaskEither<RepositoryError, AddRecipeAction> => {
+}): TE.TaskEither<AppError, AddRecipeAction> => {
   const { form, allFoodstuffs } = params;
   const useCase = container.resolve(SaveRecipeUseCase);
   const ingredients = form.ingredients.map((ingredient) =>

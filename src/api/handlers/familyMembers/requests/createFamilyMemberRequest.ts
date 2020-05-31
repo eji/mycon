@@ -1,7 +1,7 @@
 import * as E from 'fp-ts/lib/Either';
 import { NowRequest } from '@now/node';
 import { UnpersistedFamilyMember } from '../../../../domain/models/familyMember';
-import InvalidRequestError from '../../../../errors/requestErrors/clientErrors/invalidRequestError';
+import AppError from '../../../../errors/AppError';
 
 export type CreateFamilyMemberRequest = {
   name: string;
@@ -27,7 +27,7 @@ export const requestFromFamilyMember = (
 
 export const getCreateFamilyMemberRequest = (
   request: NowRequest
-): E.Either<InvalidRequestError, CreateFamilyMemberRequest> =>
+): E.Either<AppError, CreateFamilyMemberRequest> =>
   isCreateFamilyMemberRequest(request.body)
     ? E.right(request.body)
-    : E.left(new InvalidRequestError());
+    : E.left(new AppError('http_req/invalid_request_error'));

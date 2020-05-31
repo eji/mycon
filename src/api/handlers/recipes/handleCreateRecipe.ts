@@ -5,7 +5,6 @@ import * as TE from 'fp-ts/lib/TaskEither';
 import * as E from 'fp-ts/lib/Either';
 import * as A from 'fp-ts/lib/Array';
 import { Foodstuff } from '../../../domain/models/foodstuff';
-import BaseError from '../../../errors/baseError';
 import { ApiHandler } from '../handleRequest';
 import {
   getCreateRecipeRequest,
@@ -15,20 +14,20 @@ import { makeRecipe, UnpersistedRecipe } from '../../../domain/models/recipe';
 import SaveRecipeUseCase from '../../../domain/useCases/saveRecipeUseCase';
 import RecipeResponse, { responseFromRecipe } from './responses/recipeResponse';
 import GetAllFoodstuffsUseCase from '../../../domain/useCases/getAllFoodstuffsUseCase';
-import NotFoundError from '../../../errors/repositoryErrors/queryErrors/notFoundError';
 import { makeRecipeIngredient } from '../../../domain/models/recipeIngredient';
+import AppError from '../../../errors/AppError';
 
 const findFoodstuff = (
   foodstuffs: Foodstuff[],
   foodstuffId: string
-): E.Either<NotFoundError, Foodstuff> =>
-  E.fromNullable(new NotFoundError())(
+): E.Either<AppError, Foodstuff> =>
+  E.fromNullable(new AppError('repos/not_found_error'))(
     foodstuffs.find((foodstuff) => foodstuff.id === foodstuffId)
   );
 
 const handleCreateRecipe: ApiHandler = (
   request: NowRequest
-): TE.TaskEither<BaseError, RecipeResponse> =>
+): TE.TaskEither<AppError, RecipeResponse> =>
   pipe(
     // TODO: 直すこと
     container
@@ -36,9 +35,7 @@ const handleCreateRecipe: ApiHandler = (
       .execute(),
 
     TE.chainEitherK(
-      (
-        foodstuffs
-      ): E.Either<NotFoundError, [CreatRecipeRequest, Foodstuff[]]> =>
+      (foodstuffs): E.Either<AppError, [CreatRecipeRequest, Foodstuff[]]> =>
         pipe(
           getCreateRecipeRequest(request),
           E.map((req) => [req, foodstuffs])
@@ -46,7 +43,7 @@ const handleCreateRecipe: ApiHandler = (
     ),
 
     TE.chainEitherK(
-      ([input, foodstuffs]): E.Either<NotFoundError, UnpersistedRecipe> =>
+      ([input, foodstuffs]): E.Either<AppError, UnpersistedRecipe> =>
         pipe(
           A.array.sequence(E.either)(
             input.ingredients.map((i) =>

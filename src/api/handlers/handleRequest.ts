@@ -4,12 +4,11 @@ import { NowResponse, NowRequest } from '@now/node';
 import * as E from 'fp-ts/lib/Either';
 import * as TE from 'fp-ts/lib/TaskEither';
 import { pipe } from 'fp-ts/lib/pipeable';
-import NotImplementedError from '../../errors/requestErrors/serverErrors/notImplementedError';
 import { makeErrorResponse } from '../responses/errorResponse';
-import BaseError from '../../errors/baseError';
 import ApiResponse from '../apiResponse';
 import * as ErrorTracker from '../../utils/errorTrackerForServer';
 import inspect from '../../utils/taskEitherHelpers';
+import AppError from '../../errors/AppError';
 
 // /**
 //  * for Sentry
@@ -29,7 +28,7 @@ ErrorTracker.initErrorTracker();
 
 export type ApiHandler = (
   request: NowRequest
-) => TE.TaskEither<BaseError, ApiResponse>;
+) => TE.TaskEither<AppError, ApiResponse>;
 
 type Handlers = {
   get?: ApiHandler;
@@ -72,7 +71,7 @@ const handleRequest = (
     try {
       await pipe(
         selectHandler(request.method, handlers),
-        E.fromNullable(new NotImplementedError()),
+        E.fromNullable(new AppError('http_req/not_implemented_error')),
         TE.fromEither,
         TE.chain((handler) => handler(request)),
         TE.map(response.status(200).send),

@@ -11,8 +11,8 @@ import FoodAllergyHistory, {
 import { AddFoodAllergyHistoryForm } from '../../forms/addFoodAllergyHistoryFormSchema';
 import { Foodstuff } from '../../../domain/models/foodstuff';
 import FamilyMember from '../../../domain/models/familyMember';
-import RepositoryError from '../../../errors/repositoryError';
 import SaveFoodAllergyHistoryUseCase from '../../../domain/useCases/saveFoodAllergyHistoryUseCase';
+import AppError from '../../../errors/AppError';
 
 export type AllFoodAllergyHistories = {
   byFamilyMember: { [key: string]: FoodAllergyHistory };
@@ -78,7 +78,7 @@ export const addFoodAllergyHistory = (params: {
   form: AddFoodAllergyHistoryForm;
   foodstuff: Foodstuff;
   allFamilyMembers: { [key: string]: FamilyMember };
-}): TE.TaskEither<RepositoryError, AddFoodAllergyHistoryAction> => {
+}): TE.TaskEither<AppError, AddFoodAllergyHistoryAction> => {
   const { form, foodstuff, allFamilyMembers } = params;
   const familyMember = allFamilyMembers[form.familyMemberID];
   const foodAllergyHistory = makeFoodAllergyHistory({

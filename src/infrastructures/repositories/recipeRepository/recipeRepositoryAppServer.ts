@@ -13,35 +13,35 @@ import RecipesResponse, {
 import RecipeResponse, {
   recipeFromResponse,
 } from '../../../api/handlers/recipes/responses/recipeResponse';
-import BaseError from '../../../errors/baseError';
 import { isPersisted } from '../../../types/unpersisted';
 import * as createReq from '../../../api/handlers/recipes/requests/createRecipeRequest';
 import * as replaceReq from '../../../api/handlers/recipes/requests/replaceRecipeRequest';
+import AppError from '../../../errors/AppError';
 
 export default class RecipeRepositoryAppServer implements RecipeRepository {
   constructor(readonly restClient: RestClient) {}
 
-  all = (): TE.TaskEither<BaseError, Recipe[]> =>
+  all = (): TE.TaskEither<AppError, Recipe[]> =>
     pipe(this.restClient.all<RecipesResponse>(), TE.map(recipesFromResponse));
 
-  findById = (id: RecipeID): TE.TaskEither<BaseError, Recipe> =>
+  findById = (id: RecipeID): TE.TaskEither<AppError, Recipe> =>
     pipe(this.restClient.show<RecipeResponse>(id), TE.map(recipeFromResponse));
 
   saveValue = (
     recipe: Recipe | UnpersistedRecipe
-  ): TE.TaskEither<BaseError, Recipe> =>
+  ): TE.TaskEither<AppError, Recipe> =>
     isPersisted<Recipe>(recipe)
       ? this.replaceValue(recipe)
       : this.createValue(recipe);
 
   saveValues = (
     recipes: (Recipe | UnpersistedRecipe)[]
-  ): TE.TaskEither<BaseError, Recipe[]> =>
+  ): TE.TaskEither<AppError, Recipe[]> =>
     A.array.sequence(TE.taskEither)(recipes.map(this.saveValue));
 
   private createValue = (
     recipe: UnpersistedRecipe
-  ): TE.TaskEither<BaseError, Recipe> =>
+  ): TE.TaskEither<AppError, Recipe> =>
     pipe(
       createReq.requestFromRecipe(recipe),
       (request) =>
@@ -51,7 +51,7 @@ export default class RecipeRepositoryAppServer implements RecipeRepository {
       TE.map(recipeFromResponse)
     );
 
-  private replaceValue = (recipe: Recipe): TE.TaskEither<BaseError, Recipe> =>
+  private replaceValue = (recipe: Recipe): TE.TaskEither<AppError, Recipe> =>
     pipe(
       replaceReq.requestFromRecipe(recipe),
       (request) =>

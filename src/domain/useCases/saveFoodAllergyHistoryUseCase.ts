@@ -1,9 +1,9 @@
 import * as TE from 'fp-ts/lib/TaskEither';
-import RepositoryError from '../../errors/repositoryError';
 import FoodAllergyHistory, {
   UnpersistedFoodAllergyHistory,
 } from '../models/foodAllergyHistory';
 import FoodAllergyHistoryRepository from '../repositories/foodAllergyHistoryRepository';
+import AppError from '../../errors/AppError';
 
 type Params = {
   foodAllergyHistory: FoodAllergyHistory | UnpersistedFoodAllergyHistory;
@@ -17,8 +17,6 @@ export default class SaveFoodAllergyHistoryUseCase {
     readonly foodAllergyHistoryRepository: FoodAllergyHistoryRepository
   ) {}
 
-  execute = (
-    params: Params
-  ): TE.TaskEither<RepositoryError, FoodAllergyHistory> =>
+  execute = (params: Params): TE.TaskEither<AppError, FoodAllergyHistory> =>
     this.foodAllergyHistoryRepository.saveValue(params.foodAllergyHistory);
 }

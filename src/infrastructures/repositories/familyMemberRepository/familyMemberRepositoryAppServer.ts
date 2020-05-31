@@ -5,7 +5,6 @@ import FamilyMember, {
   UnpersistedFamilyMember,
 } from '../../../domain/models/familyMember';
 import FamilyMemberRepository from '../../../domain/repositories/familyMemberRepository';
-import BaseError from '../../../errors/baseError';
 import RestClient from '../../../drivers/restClient';
 import FamilyMembersResponse, {
   responseToFamilyMembers,
@@ -16,18 +15,19 @@ import * as replaceReq from '../../../api/handlers/familyMembers/requests/replac
 import FamilyMemberResponse, {
   familyMemberFromResponse,
 } from '../../../api/handlers/familyMembers/responses/familyMemberResponse';
+import AppError from '../../../errors/AppError';
 
 export default class FamilyMemberRepositoryAppServer
   implements FamilyMemberRepository {
   constructor(readonly restClient: RestClient) {}
 
-  all = (): TE.TaskEither<BaseError, FamilyMember[]> =>
+  all = (): TE.TaskEither<AppError, FamilyMember[]> =>
     pipe(
       this.restClient.all<FamilyMembersResponse>(),
       TE.map(responseToFamilyMembers)
     );
 
-  findById = (id: FamilyMemberID): TE.TaskEither<BaseError, FamilyMember> =>
+  findById = (id: FamilyMemberID): TE.TaskEither<AppError, FamilyMember> =>
     pipe(
       this.restClient.show<FamilyMemberResponse>(id),
       TE.map(familyMemberFromResponse)
@@ -35,14 +35,14 @@ export default class FamilyMemberRepositoryAppServer
 
   saveValue = (
     familyMember: FamilyMember | UnpersistedFamilyMember
-  ): TE.TaskEither<BaseError, FamilyMember> =>
+  ): TE.TaskEither<AppError, FamilyMember> =>
     isPersisted<FamilyMember>(familyMember)
       ? this.replaceValue(familyMember)
       : this.createValue(familyMember);
 
   private replaceValue = (
     familyMember: FamilyMember
-  ): TE.TaskEither<BaseError, FamilyMember> =>
+  ): TE.TaskEither<AppError, FamilyMember> =>
     pipe(
       replaceReq.requestFromFamilyMember(familyMember),
       (request) =>
@@ -55,7 +55,7 @@ export default class FamilyMemberRepositoryAppServer
 
   private createValue = (
     familyMember: UnpersistedFamilyMember
-  ): TE.TaskEither<BaseError, FamilyMember> =>
+  ): TE.TaskEither<AppError, FamilyMember> =>
     pipe(
       createReq.requestFromFamilyMember(familyMember),
       (request) =>

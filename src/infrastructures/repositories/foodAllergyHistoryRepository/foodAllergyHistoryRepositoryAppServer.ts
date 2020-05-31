@@ -7,7 +7,6 @@ import FoodAllergyHistory, {
   UnpersistedFoodAllergyHistory,
 } from '../../../domain/models/foodAllergyHistory';
 import { Foodstuff } from '../../../domain/models/foodstuff';
-import BaseError from '../../../errors/baseError';
 import RestClient from '../../../drivers/restClient';
 import FoodAllergyHistoriesResponse, {
   foodAllergyHistoriesFromResponse,
@@ -24,12 +23,13 @@ import {
   ReplaceFoodAllergyHistoryRequest,
 } from '../../../api/handlers/foodAllergyHistories/requests/replaceFoodAllergyHistoryRequest';
 import { isPersisted } from '../../../types/unpersisted';
+import AppError from '../../../errors/AppError';
 
 export default class FoodAllergyHistoryRepositoryAppServer
   implements FoodAllergyHistoryRepository {
   constructor(readonly restClient: RestClient) {}
 
-  all = (): TE.TaskEither<BaseError, FoodAllergyHistory[]> =>
+  all = (): TE.TaskEither<AppError, FoodAllergyHistory[]> =>
     pipe(
       this.restClient.all<FoodAllergyHistoriesResponse>(),
       TE.map(foodAllergyHistoriesFromResponse)
@@ -37,7 +37,7 @@ export default class FoodAllergyHistoryRepositoryAppServer
 
   findAllByFoodstuff = (
     foodstuff: Foodstuff
-  ): TE.TaskEither<BaseError, FoodAllergyHistory[]> =>
+  ): TE.TaskEither<AppError, FoodAllergyHistory[]> =>
     pipe(
       this.restClient.all<FoodAllergyHistoriesResponse>(),
       TE.map(foodAllergyHistoriesFromResponse),
@@ -48,7 +48,7 @@ export default class FoodAllergyHistoryRepositoryAppServer
 
   findAllByFamilyMember = (
     familyMember: FamilyMember
-  ): TE.TaskEither<BaseError, FoodAllergyHistory[]> =>
+  ): TE.TaskEither<AppError, FoodAllergyHistory[]> =>
     pipe(
       this.restClient.all<FoodAllergyHistoriesResponse>(),
       TE.map(foodAllergyHistoriesFromResponse),
@@ -61,19 +61,19 @@ export default class FoodAllergyHistoryRepositoryAppServer
 
   saveValue = (
     foodAllergyHistory: FoodAllergyHistory | UnpersistedFoodAllergyHistory
-  ): TE.TaskEither<BaseError, FoodAllergyHistory> =>
+  ): TE.TaskEither<AppError, FoodAllergyHistory> =>
     isPersisted<FoodAllergyHistory>(foodAllergyHistory)
       ? this.replaceValue(foodAllergyHistory)
       : this.createValue(foodAllergyHistory);
 
   saveValues = (
     foodAllergyHistories: (FoodAllergyHistory | UnpersistedFoodAllergyHistory)[]
-  ): TE.TaskEither<BaseError, FoodAllergyHistory[]> =>
+  ): TE.TaskEither<AppError, FoodAllergyHistory[]> =>
     A.array.sequence(TE.taskEither)(foodAllergyHistories.map(this.saveValue));
 
   private createValue = (
     foodAllergyHistory: UnpersistedFoodAllergyHistory
-  ): TE.TaskEither<BaseError, FoodAllergyHistory> =>
+  ): TE.TaskEither<AppError, FoodAllergyHistory> =>
     pipe(
       createRequestFromFoodAllergyHistory(foodAllergyHistory),
       (request) =>
@@ -86,7 +86,7 @@ export default class FoodAllergyHistoryRepositoryAppServer
 
   private replaceValue = (
     foodAllergyHistory: FoodAllergyHistory
-  ): TE.TaskEither<BaseError, FoodAllergyHistory> =>
+  ): TE.TaskEither<AppError, FoodAllergyHistory> =>
     pipe(
       replaceRequestFromFoodAllergyHistory(foodAllergyHistory),
       (request) =>

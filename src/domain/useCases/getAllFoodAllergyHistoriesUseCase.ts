@@ -1,7 +1,7 @@
 import * as TE from 'fp-ts/lib/TaskEither';
-import RepositoryError from '../../errors/repositoryError';
 import FoodAllergyHistoryRepository from '../repositories/foodAllergyHistoryRepository';
 import FoodAllergyHistory from '../models/foodAllergyHistory';
+import AppError from '../../errors/AppError';
 
 /**
  * 全ての食物アレルギー履歴を取得するためのユースケース
@@ -11,6 +11,6 @@ export default class GetAllFoodAllergyHistoriesUseCase {
     readonly foodAllergyHistoryRepository: FoodAllergyHistoryRepository
   ) {}
 
-  execute = (): TE.TaskEither<RepositoryError, FoodAllergyHistory[]> =>
+  execute = (): TE.TaskEither<AppError, FoodAllergyHistory[]> =>
     this.foodAllergyHistoryRepository.all();
 }

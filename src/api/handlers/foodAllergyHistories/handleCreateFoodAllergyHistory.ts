@@ -3,7 +3,6 @@ import { NowRequest } from '@now/node';
 import { pipe } from 'fp-ts/lib/pipeable';
 import * as TE from 'fp-ts/lib/TaskEither';
 import * as E from 'fp-ts/lib/Either';
-import BaseError from '../../../errors/baseError';
 import { ApiHandler } from '../handleRequest';
 import FamilyMember from '../../../domain/models/familyMember';
 import {
@@ -17,22 +16,22 @@ import {
 import GetAllFoodstuffsUseCase from '../../../domain/useCases/getAllFoodstuffsUseCase';
 import { Foodstuff } from '../../../domain/models/foodstuff';
 import GetAllFamilyMembersUseCase from '../../../domain/useCases/getAllFamilyMembersUseCase';
-import NotFoundError from '../../../errors/repositoryErrors/queryErrors/notFoundError';
 import SaveFoodAllergyHistoryUseCase from '../../../domain/useCases/saveFoodAllergyHistoryUseCase';
 import FoodAllergyHistoryResponse from './responses/foodAllergyHistoryResponse';
 import { responseValueFromFoodstuff } from '../foodstuffs/responses/foodstuffResponse';
 import { responseValueFromFamilyMember } from '../familyMembers/responses/familyMemberResponse';
+import AppError from '../../../errors/AppError';
 
-const getAllFoodstuffs = (): TE.TaskEither<BaseError, Foodstuff[]> =>
+const getAllFoodstuffs = (): TE.TaskEither<AppError, Foodstuff[]> =>
   container.resolve<GetAllFoodstuffsUseCase>(GetAllFoodstuffsUseCase).execute();
 
-const getAllFamilyMembers = (): TE.TaskEither<BaseError, FamilyMember[]> =>
+const getAllFamilyMembers = (): TE.TaskEither<AppError, FamilyMember[]> =>
   container
     .resolve<GetAllFamilyMembersUseCase>(GetAllFamilyMembersUseCase)
     .execute();
 
 const getAllFoodstuffsAndFamilyMembers = (): TE.TaskEither<
-  BaseError,
+  AppError,
   [Foodstuff[], FamilyMember[]]
 > =>
   pipe(
@@ -48,10 +47,10 @@ const getAllFoodstuffsAndFamilyMembers = (): TE.TaskEither<
 const findFoodstuff = (
   foodstuffs: Foodstuff[],
   foodstuffId: string
-): E.Either<NotFoundError, Foodstuff> => {
+): E.Either<AppError, Foodstuff> => {
   const foodstuff = foodstuffs.find((f) => f.id === foodstuffId);
   if (typeof foodstuff === 'undefined') {
-    return E.left(new NotFoundError());
+    return E.left(new AppError('repos/not_found_error'));
   }
   return E.right(foodstuff);
 };
@@ -59,10 +58,10 @@ const findFoodstuff = (
 const findFamilyMember = (
   familyMembers: FamilyMember[],
   familyMemberId: string
-): E.Either<NotFoundError, FamilyMember> => {
+): E.Either<AppError, FamilyMember> => {
   const familyMember = familyMembers.find((f) => f.id === familyMemberId);
   if (typeof familyMember === 'undefined') {
-    return E.left(new NotFoundError());
+    return E.left(new AppError('repos/not_found_error'));
   }
   return E.right(familyMember);
 };
@@ -71,7 +70,7 @@ const buildFoodAllergyHistory = (
   request: CreateFoodAllergyHistoryRequest,
   foodstuffs: Foodstuff[],
   familyMembers: FamilyMember[]
-): E.Either<NotFoundError, UnpersistedFoodAllergyHistory> =>
+): E.Either<AppError, UnpersistedFoodAllergyHistory> =>
   pipe(
     findFoodstuff(foodstuffs, request.foodstuffId),
     E.chain((foodstuff) =>
@@ -89,14 +88,14 @@ const buildFoodAllergyHistory = (
 
 const handleCreateFoodAllergyHistory: ApiHandler = (
   request: NowRequest
-): TE.TaskEither<BaseError, FoodAllergyHistoryResponse> =>
+): TE.TaskEither<AppError, FoodAllergyHistoryResponse> =>
   pipe(
     getCreateFoodAllergyHistoryRequest(request),
     TE.fromEither,
     TE.chain(
       (
         input: CreateFoodAllergyHistoryRequest
-      ): TE.TaskEither<BaseError, UnpersistedFoodAllergyHistory> =>
+      ): TE.TaskEither<AppError, UnpersistedFoodAllergyHistory> =>
         pipe(
           getAllFoodstuffsAndFamilyMembers(),
           TE.chainEitherK(([foodstuffs, familyMembers]) =>

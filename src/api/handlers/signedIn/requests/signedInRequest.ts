@@ -1,6 +1,6 @@
 import { NowRequest } from '@now/node';
 import * as E from 'fp-ts/lib/Either';
-import InvalidRequestError from '../../../../errors/requestErrors/clientErrors/invalidRequestError';
+import AppError from '../../../../errors/AppError';
 
 export type SignedInRequest = {
   idToken: string;
@@ -26,9 +26,9 @@ export const createSignedInRequestFromIdToken = (
 
 export const getSignedInRequest = (
   request: NowRequest
-): E.Either<InvalidRequestError, SignedInRequest> => {
+): E.Either<AppError, SignedInRequest> => {
   if (isSignedInRequest(request.body)) {
     return E.right(request.body);
   }
-  return E.left(new InvalidRequestError());
+  return E.left(new AppError('http_req/invalid_request_error'));
 };

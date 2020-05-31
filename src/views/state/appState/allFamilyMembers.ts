@@ -11,7 +11,7 @@ import FamilyMember, {
 } from '../../../domain/models/familyMember';
 import { SaveFamilyMemberForm } from '../../forms/saveFamilyMemberFormSchema';
 import SaveFamilyMemberUseCase from '../../../domain/useCases/saveFamilyMemberUseCase';
-import RepositoryError from '../../../errors/repositoryError';
+import AppError from '../../../errors/AppError';
 
 export type AllFamilyMembers = { [key: string]: FamilyMember };
 
@@ -62,7 +62,7 @@ export const allFamilyMembersReducer: Reducer<
 
 export const saveFamilyMember = (
   form: SaveFamilyMemberForm & { id?: FamilyMemberID }
-): TE.TaskEither<RepositoryError, SaveFamilyMemberAction> => {
+): TE.TaskEither<AppError, SaveFamilyMemberAction> => {
   const useCase = container.resolve(SaveFamilyMemberUseCase);
   const familyMember = makeFamilyMember(form);
   return pipe(

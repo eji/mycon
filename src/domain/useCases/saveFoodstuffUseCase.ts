@@ -1,8 +1,7 @@
 import * as TE from 'fp-ts/lib/TaskEither';
-import { pipe } from 'fp-ts/lib/pipeable';
-import RepositoryError from '../../errors/repositoryError';
 import { Foodstuff, UnpersistedFoodstuff } from '../models/foodstuff';
 import FoodstuffRepository from '../repositories/foodstuffRepository';
+import AppError from '../../errors/AppError';
 
 type Params = {
   foodstuff: Foodstuff | UnpersistedFoodstuff;
@@ -18,6 +17,6 @@ export default class SaveFoodstuffUseCase {
     this.foodstuffRepository = foodstuffRepository;
   }
 
-  execute = (params: Params): TE.TaskEither<RepositoryError, Foodstuff> =>
+  execute = (params: Params): TE.TaskEither<AppError, Foodstuff> =>
     this.foodstuffRepository.saveValue(params.foodstuff);
 }

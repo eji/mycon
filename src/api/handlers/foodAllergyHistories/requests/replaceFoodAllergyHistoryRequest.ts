@@ -1,7 +1,7 @@
 import * as E from 'fp-ts/lib/Either';
 import { NowRequest } from '@now/node';
-import InvalidRequestError from '../../../../errors/requestErrors/clientErrors/invalidRequestError';
 import FoodAllergyHistory from '../../../../domain/models/foodAllergyHistory';
+import AppError from '../../../../errors/AppError';
 
 export type ReplaceFoodAllergyHistoryRequestBody = {
   familyMemberId: string;
@@ -34,14 +34,14 @@ export const replaceRequestFromFoodAllergyHistory = (
 
 export const getReplaceFoodAllergyHistoryRequest = (
   request: NowRequest
-): E.Either<InvalidRequestError, ReplaceFoodAllergyHistoryRequest> => {
+): E.Either<AppError, ReplaceFoodAllergyHistoryRequest> => {
   const { id } = request.query;
   if (id == null || typeof id !== 'string') {
-    return E.left(new InvalidRequestError());
+    return E.left(new AppError('http_req/invalid_request_error'));
   }
 
   if (!isReplaceFoodAllergyHistoryRequestBody(request.body)) {
-    return E.left(new InvalidRequestError());
+    return E.left(new AppError('http_req/invalid_request_error'));
   }
 
   return E.right({

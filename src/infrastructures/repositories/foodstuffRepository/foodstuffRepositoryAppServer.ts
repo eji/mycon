@@ -1,14 +1,12 @@
 import * as TE from 'fp-ts/lib/TaskEither';
 import * as A from 'fp-ts/lib/Array';
 import { pipe } from 'fp-ts/lib/pipeable';
-import CommandError from '../../../errors/repositoryErrors/commandError';
 import FoodstuffRepository from '../../../domain/repositories/foodstuffRepository';
 import {
   Foodstuff,
   UnpersistedFoodstuff,
 } from '../../../domain/models/foodstuff';
 import RestClient from '../../../drivers/restClient';
-import BaseError from '../../../errors/baseError';
 import FoodstuffsResponse, {
   foodstuffsFromResponse,
 } from '../../../api/handlers/foodstuffs/responses/foodstuffsResponse';
@@ -18,12 +16,13 @@ import { isPersisted } from '../../../types/unpersisted';
 import FoodstuffResponse, {
   foodstuffFromResponse,
 } from '../../../api/handlers/foodstuffs/responses/foodstuffResponse';
+import AppError from '../../../errors/AppError';
 
 export default class FoodstuffRepositoryAppServer
   implements FoodstuffRepository {
   constructor(readonly restClient: RestClient) {}
 
-  all = (): TE.TaskEither<BaseError, Foodstuff[]> =>
+  all = (): TE.TaskEither<AppError, Foodstuff[]> =>
     pipe(
       this.restClient.all<FoodstuffsResponse>(),
       TE.map(foodstuffsFromResponse)
@@ -31,7 +30,7 @@ export default class FoodstuffRepositoryAppServer
 
   saveValue = (
     foodstuff: Foodstuff | UnpersistedFoodstuff
-  ): TE.TaskEither<CommandError, Foodstuff> => {
+  ): TE.TaskEither<AppError, Foodstuff> => {
     if (isPersisted<Foodstuff>(foodstuff)) {
       return this.replaceValue(foodstuff);
     }
@@ -40,12 +39,12 @@ export default class FoodstuffRepositoryAppServer
 
   saveValues = (
     foodstuffs: (Foodstuff | UnpersistedFoodstuff)[]
-  ): TE.TaskEither<BaseError, Foodstuff[]> =>
+  ): TE.TaskEither<AppError, Foodstuff[]> =>
     A.array.sequence(TE.taskEither)(foodstuffs.map(this.saveValue));
 
   private createValue = (
     foodstuff: UnpersistedFoodstuff
-  ): TE.TaskEither<BaseError, Foodstuff> =>
+  ): TE.TaskEither<AppError, Foodstuff> =>
     pipe(
       createReq.requestFromFoodstuff(foodstuff),
       (request) =>
@@ -58,7 +57,7 @@ export default class FoodstuffRepositoryAppServer
 
   private replaceValue = (
     foodstuff: Foodstuff
-  ): TE.TaskEither<CommandError, Foodstuff> =>
+  ): TE.TaskEither<AppError, Foodstuff> =>
     pipe(
       replaceReq.requestFromFoodstuff(foodstuff),
       (request) =>

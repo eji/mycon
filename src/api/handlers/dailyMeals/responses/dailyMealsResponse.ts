@@ -7,8 +7,7 @@ import {
   responseValueFromDailyMeal,
 } from './dailyMealResponse';
 import DailyMeal from '../../../../domain/models/dailyMeal';
-import InvalidResponseError from '../../../../errors/httpErrors/invalidResponseError';
-import BaseError from '../../../../errors/baseError';
+import AppError from '../../../../errors/AppError';
 
 type DailyMealsResponse = {
   dailyMeals: DailyMealResponseValue[];
@@ -32,7 +31,7 @@ export const isDailyMealsResponse = (
 
 export const dailyMealsFromResponse = (
   response: DailyMealsResponse
-): E.Either<BaseError, DailyMeal[]> =>
+): E.Either<AppError, DailyMeal[]> =>
   A.array.sequence(E.either)(
     response.dailyMeals.map(dailyMealFromResponseValue)
   );

@@ -10,8 +10,7 @@ import DailyMeal, {
   calendarDateFromDailyMealID,
   makeDailyMeal,
 } from '../../../../domain/models/dailyMeal';
-import InvalidResponseError from '../../../../errors/httpErrors/invalidResponseError';
-import BaseError from '../../../../errors/baseError';
+import AppError from '../../../../errors/AppError';
 
 export type DailyMealResponseValue = {
   id: string;
@@ -56,10 +55,12 @@ export const isDailyMealResponse = (value: any): value is DailyMealResponse => {
 
 export const dailyMealFromResponseValue = (
   value: DailyMealResponseValue
-): E.Either<BaseError, DailyMeal> => {
+): E.Either<AppError, DailyMeal> => {
   const { id, breakfast, lunch, dinner, snack } = value;
   return pipe(
-    E.fromNullable(new InvalidResponseError())(calendarDateFromDailyMealID(id)),
+    E.fromNullable(new AppError('http_req/invalid_response_error'))(
+      calendarDateFromDailyMealID(id)
+    ),
     E.map((calendarDate) =>
       makeDailyMeal({
         calendarDate,
@@ -74,7 +75,7 @@ export const dailyMealFromResponseValue = (
 
 export const dailyMealFromResponse = (
   response: DailyMealResponse
-): E.Either<BaseError, DailyMeal> =>
+): E.Either<AppError, DailyMeal> =>
   dailyMealFromResponseValue(response.dailyMeal);
 
 export const responseValueFromDailyMeal = (

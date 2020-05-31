@@ -14,12 +14,12 @@ import { useHistory, useParams } from 'react-router-dom';
 import { isUndefined } from 'util';
 import Layout from '../layouts/Layout';
 import { appStateContext } from '../components/AppStateProvider';
-import CommandError from '../../errors/repositoryErrors/commandError';
 import {
   SaveFamilyMemberForm,
   saveFamilyMemberFormSchema,
 } from '../forms/saveFamilyMemberFormSchema';
 import { saveFamilyMember } from '../state/appState/allFamilyMembers';
+import AppError from '../../errors/AppError';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -87,7 +87,7 @@ const EditFamilyMemberScreen: React.FC<EditFamilyMemberScreenProps> = () => {
       saveFamilyMember({ ...values, id }),
       map(dispatch),
       map(handleBack),
-      mapLeft((error: CommandError) => console.log(error))
+      mapLeft((error: AppError) => console.log(error))
     )();
   };
 

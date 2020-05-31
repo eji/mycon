@@ -5,10 +5,10 @@ import * as TE from 'fp-ts/lib/TaskEither';
 import { Action } from '../../../types/action';
 import { ActionHandler } from '../../../types/actionHandler';
 import createActionDistinguishFunction from '../../../utils/createActionDistinguishFunction';
-import RepositoryError from '../../../errors/repositoryError';
 import DailyMeal, { MealType } from '../../../domain/models/dailyMeal';
 import SaveDailyMealUseCase from '../../../domain/useCases/saveDailyMealUseCase';
 import Recipe from '../../../domain/models/recipe';
+import AppError from '../../../errors/AppError';
 
 export type AllDailyMeals = { [key: string]: DailyMeal };
 
@@ -61,7 +61,7 @@ export const saveDailyMeal = (params: {
   dailyMeal: DailyMeal;
   mealType: MealType;
   recipes: Recipe[];
-}): TE.TaskEither<RepositoryError, SaveDailyMealAction> => {
+}): TE.TaskEither<AppError, SaveDailyMealAction> => {
   const { dailyMeal, mealType, recipes } = params;
   const meal = dailyMeal[mealType];
   const newMeal = recipes.reduce((m, r) => m.addRecipe(r), meal);

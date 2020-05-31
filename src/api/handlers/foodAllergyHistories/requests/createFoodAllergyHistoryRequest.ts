@@ -1,7 +1,7 @@
 import * as E from 'fp-ts/lib/Either';
 import { NowRequest } from '@now/node';
-import InvalidRequestError from '../../../../errors/requestErrors/clientErrors/invalidRequestError';
 import { UnpersistedFoodAllergyHistory } from '../../../../domain/models/foodAllergyHistory';
+import AppError from '../../../../errors/AppError';
 
 export type CreateFoodAllergyHistoryRequest = {
   familyMemberId: string;
@@ -29,8 +29,8 @@ export const createRequestFromFoodAllergyHistory = (
 
 export const getCreateFoodAllergyHistoryRequest = (
   request: NowRequest
-): E.Either<InvalidRequestError, CreateFoodAllergyHistoryRequest> =>
+): E.Either<AppError, CreateFoodAllergyHistoryRequest> =>
   E.fromPredicate(
     isCreateFoodAllergyHistoryRequest,
-    () => new InvalidRequestError()
+    () => new AppError('http_req/invalid_request_error')
   )(request.body);

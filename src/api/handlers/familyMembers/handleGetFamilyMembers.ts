@@ -2,12 +2,12 @@ import { container } from 'tsyringe';
 import { pipe } from 'fp-ts/lib/pipeable';
 import * as TE from 'fp-ts/lib/TaskEither';
 import { ApiHandler } from '../handleRequest';
-import BaseError from '../../../errors/baseError';
 import FamilyMembersResponse from './responses/familyMembersResponse';
 import GetAllFamilyMembersUseCase from '../../../domain/useCases/getAllFamilyMembersUseCase';
+import AppError from '../../../errors/AppError';
 
 const handleGetFamilyMembers: ApiHandler = (): TE.TaskEither<
-  BaseError,
+  AppError,
   FamilyMembersResponse
 > =>
   pipe(

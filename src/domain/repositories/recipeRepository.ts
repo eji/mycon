@@ -1,12 +1,12 @@
 import { TaskEither } from 'fp-ts/lib/TaskEither';
 import Recipe, { RecipeID, UnpersistedRecipe } from '../models/recipe';
-import BaseError from '../../errors/baseError';
+import AppError from '../../errors/AppError';
 
 export default interface RecipeRepository {
-  findById(id: RecipeID): TaskEither<BaseError, Recipe>;
-  all(): TaskEither<BaseError, Recipe[]>;
-  saveValue(recipe: Recipe | UnpersistedRecipe): TaskEither<BaseError, Recipe>;
+  findById(id: RecipeID): TaskEither<AppError, Recipe>;
+  all(): TaskEither<AppError, Recipe[]>;
+  saveValue(recipe: Recipe | UnpersistedRecipe): TaskEither<AppError, Recipe>;
   saveValues(
     recipes: (Recipe | UnpersistedRecipe)[]
-  ): TaskEither<BaseError, Recipe[]>;
+  ): TaskEither<AppError, Recipe[]>;
 }

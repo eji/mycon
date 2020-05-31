@@ -1,9 +1,9 @@
 import * as TE from 'fp-ts/lib/TaskEither';
-import BaseError from '../../errors/baseError';
 import User, { UnpersistedUser } from '../models/user';
+import AppError from '../../errors/AppError';
 
 export default interface UserRepository {
-  getCurrentUser: () => TE.TaskEither<BaseError, User>;
-  findByEmail: (email: string) => TE.TaskEither<BaseError, User>;
-  create: (user: UnpersistedUser) => TE.TaskEither<BaseError, User>;
+  getCurrentUser: () => TE.TaskEither<AppError, User>;
+  findByEmail: (email: string) => TE.TaskEither<AppError, User>;
+  create: (user: UnpersistedUser) => TE.TaskEither<AppError, User>;
 }

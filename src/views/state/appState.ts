@@ -36,7 +36,6 @@ import {
   allFoodAllergyHistoriesReducer,
   AllFoodAllergyHistoriesAction,
 } from './appState/allFoodAllergyHistories';
-import RepositoryError from '../../errors/repositoryError';
 import initSeeds from '../../data/initSeeds';
 import {
   foodstuffRepository,
@@ -52,6 +51,7 @@ import {
   isAllDailyMealsAction,
 } from './appState/allDailyMeals';
 import User from '../../domain/models/user';
+import AppError from '../../errors/AppError';
 
 export type InitializedAppState =
   | 'not yet'
@@ -238,7 +238,7 @@ export const selectBottomNavi = async (
 
 // TODO: 直すこと
 export const initializingAppState = (): TE.TaskEither<
-  RepositoryError,
+  AppError,
   InitializeAppStateAction
 > => {
   const recipeRepos = container.resolve<RecipeRepository>(recipeRepository);

@@ -5,7 +5,7 @@ import FoodstuffCategory, {
   isFoodstuffCategory,
 } from '../../../../domain/models/foodstuffCategory';
 import { Foodstuff } from '../../../../domain/models/foodstuff';
-import InvalidRequestError from '../../../../errors/requestErrors/clientErrors/invalidRequestError';
+import AppError from '../../../../errors/AppError';
 
 export type ReplaceFoodstuffRequestBody = {
   name: string;
@@ -47,14 +47,14 @@ export const requestFromFoodstuff = (
 
 export const getReplaceFoodstuffRequest = (
   request: NowRequest
-): E.Either<InvalidRequestError, ReplaceFoodstuffRequest> => {
+): E.Either<AppError, ReplaceFoodstuffRequest> => {
   const { id } = request.query;
   if (id == null || typeof id !== 'string') {
-    return E.left(new InvalidRequestError());
+    return E.left(new AppError('http_req/invalid_request_error'));
   }
 
   if (!isReplaceFoodstuffRequestBody(request.body)) {
-    return E.left(new InvalidRequestError());
+    return E.left(new AppError('http_req/invalid_request_error'));
   }
 
   return E.right({

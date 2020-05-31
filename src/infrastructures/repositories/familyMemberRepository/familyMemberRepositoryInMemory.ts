@@ -1,15 +1,14 @@
 import * as TE from 'fp-ts/lib/TaskEither';
 import { pipe } from 'fp-ts/lib/pipeable';
 import InMemoryStore from '../../../drivers/inMemoryStore';
-import NotFoundError from '../../../errors/repositoryErrors/queryErrors/notFoundError';
 import FamilyMember, {
   FamilyMemberID,
   UnpersistedFamilyMember,
   makeFamilyMember,
 } from '../../../domain/models/familyMember';
 import FamilyMemberRepository from '../../../domain/repositories/familyMemberRepository';
-import BaseError from '../../../errors/baseError';
 import { genId } from '../../../domain/models/id';
+import AppError from '../../../errors/AppError';
 
 export default class FamilyMemberRepositoryInMemory
   implements FamilyMemberRepository {
@@ -19,18 +18,18 @@ export default class FamilyMemberRepositoryInMemory
     this.store = store || new InMemoryStore<FamilyMemberID, FamilyMember>();
   }
 
-  all = (): TE.TaskEither<BaseError, FamilyMember[]> =>
+  all = (): TE.TaskEither<AppError, FamilyMember[]> =>
     TE.right(this.store.values());
 
-  findById = (id: FamilyMemberID): TE.TaskEither<BaseError, FamilyMember> =>
+  findById = (id: FamilyMemberID): TE.TaskEither<AppError, FamilyMember> =>
     pipe(
       this.store.get(id),
-      TE.fromOption(() => new NotFoundError())
+      TE.fromOption(() => new AppError('repos/not_found_error'))
     );
 
   saveValue = (
     familyMember: FamilyMember | UnpersistedFamilyMember
-  ): TE.TaskEither<BaseError, FamilyMember> => {
+  ): TE.TaskEither<AppError, FamilyMember> => {
     const newFamilyMember = makeFamilyMember({
       id: familyMember.id || genId(),
       name: familyMember.name,

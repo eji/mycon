@@ -10,8 +10,8 @@ import FoodAllergyHistory, {
   makeFoodAllergyHistory,
 } from '../../../domain/models/foodAllergyHistory';
 import { Foodstuff } from '../../../domain/models/foodstuff';
-import BaseError from '../../../errors/baseError';
 import { genId } from '../../../domain/models/id';
+import AppError from '../../../errors/AppError';
 
 export default class FoodAllergyHistoryRepositoryInMemory
   implements FoodAllergyHistoryRepository {
@@ -22,12 +22,12 @@ export default class FoodAllergyHistoryRepositoryInMemory
       store || new InMemoryStore<FoodAllergyHistoryID, FoodAllergyHistory>();
   }
 
-  all = (): TE.TaskEither<BaseError, FoodAllergyHistory[]> =>
+  all = (): TE.TaskEither<AppError, FoodAllergyHistory[]> =>
     TE.right(this.store.values());
 
   findAllByFoodstuff = (
     foodstuff: Foodstuff
-  ): TE.TaskEither<BaseError, FoodAllergyHistory[]> => {
+  ): TE.TaskEither<AppError, FoodAllergyHistory[]> => {
     return pipe(
       this.store.values(),
       A.filter((history) => history.foodstuff.equals(foodstuff)),
@@ -37,7 +37,7 @@ export default class FoodAllergyHistoryRepositoryInMemory
 
   findAllByFamilyMember = (
     familyMember: FamilyMember
-  ): TE.TaskEither<BaseError, FoodAllergyHistory[]> => {
+  ): TE.TaskEither<AppError, FoodAllergyHistory[]> => {
     return pipe(
       this.store.values(),
       A.filter((history) => history.familyMember.equals(familyMember)),
@@ -47,7 +47,7 @@ export default class FoodAllergyHistoryRepositoryInMemory
 
   saveValue = (
     foodAllergyHistory: FoodAllergyHistory | UnpersistedFoodAllergyHistory
-  ): TE.TaskEither<BaseError, FoodAllergyHistory> => {
+  ): TE.TaskEither<AppError, FoodAllergyHistory> => {
     const newFoodAllergyHistory = makeFoodAllergyHistory({
       id: foodAllergyHistory.id || genId(),
       familyMember: foodAllergyHistory.familyMember,
@@ -59,6 +59,6 @@ export default class FoodAllergyHistoryRepositoryInMemory
 
   saveValues = (
     foodAllergyHistories: (FoodAllergyHistory | UnpersistedFoodAllergyHistory)[]
-  ): TE.TaskEither<BaseError, FoodAllergyHistory[]> =>
+  ): TE.TaskEither<AppError, FoodAllergyHistory[]> =>
     A.array.sequence(TE.taskEither)(foodAllergyHistories.map(this.saveValue));
 }

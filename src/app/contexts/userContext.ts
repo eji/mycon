@@ -2,8 +2,7 @@ import * as O from 'fp-ts/lib/Option';
 import * as TE from 'fp-ts/lib/TaskEither';
 import { pipe } from 'fp-ts/lib/pipeable';
 import User from '../../domain/models/user';
-import BaseError from '../../errors/baseError';
-import NotFoundError from '../../errors/repositoryErrors/queryErrors/notFoundError';
+import AppError from '../../errors/AppError';
 
 interface UserContextData {
   currentUser: O.Option<User>;
@@ -32,15 +31,18 @@ const setCurrentFirebaseUser = (user: firebase.User): firebase.User => {
   return user;
 };
 
-const getIdToken = (): TE.TaskEither<BaseError, string> =>
+const getIdToken = (): TE.TaskEither<AppError, string> =>
   pipe(
     userContextData.currentFirebaseUser,
     // TODO: 直すこと
-    TE.fromOption(() => new NotFoundError()),
+    TE.fromOption(() => new AppError('user_context/firebase_user_not_exists')),
     TE.chain((user) =>
       TE.tryCatch(
         () => user.getIdToken(),
-        () => new NotFoundError()
+        (e) => {
+          console.error(e);
+          return new AppError('firebase/failed_to_get_id_token');
+        }
       )
     )
   );

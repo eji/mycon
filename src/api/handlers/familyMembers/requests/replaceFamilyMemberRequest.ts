@@ -1,7 +1,7 @@
 import * as E from 'fp-ts/lib/Either';
 import { NowRequest } from '@now/node';
 import FamilyMember from '../../../../domain/models/familyMember';
-import InvalidRequestError from '../../../../errors/requestErrors/clientErrors/invalidRequestError';
+import AppError from '../../../../errors/AppError';
 
 export type ReplaceFamilyMemberRequestBody = {
   name: string;
@@ -32,14 +32,14 @@ export const requestFromFamilyMember = (
 
 export const getReplaceFamilyMemberRequest = (
   request: NowRequest
-): E.Either<InvalidRequestError, ReplaceFamilyMemberRequest> => {
+): E.Either<AppError, ReplaceFamilyMemberRequest> => {
   const { id } = request.query;
   if (id == null || typeof id !== 'string') {
-    return E.left(new InvalidRequestError());
+    return E.left(new AppError('http_req/invalid_request_error'));
   }
 
   if (!isReplaceFamilyMemberRequestBody(request.body)) {
-    return E.left(new InvalidRequestError());
+    return E.left(new AppError('http_req/invalid_request_error'));
   }
 
   return E.right({

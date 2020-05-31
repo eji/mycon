@@ -1,14 +1,13 @@
 import { TaskEither } from 'fp-ts/lib/TaskEither';
-import QueryError from '../../errors/repositoryErrors/queryError';
-import CommandError from '../../errors/repositoryErrors/commandError';
 import { Foodstuff, UnpersistedFoodstuff } from '../models/foodstuff';
+import AppError from '../../errors/AppError';
 
 export default interface FoodstuffRepository {
-  all(): TaskEither<QueryError, Foodstuff[]>;
+  all(): TaskEither<AppError, Foodstuff[]>;
   saveValue(
     foodstuff: Foodstuff | UnpersistedFoodstuff
-  ): TaskEither<CommandError, Foodstuff>;
+  ): TaskEither<AppError, Foodstuff>;
   saveValues(
     foodstuffs: (Foodstuff | UnpersistedFoodstuff)[]
-  ): TaskEither<CommandError, Foodstuff[]>;
+  ): TaskEither<AppError, Foodstuff[]>;
 }

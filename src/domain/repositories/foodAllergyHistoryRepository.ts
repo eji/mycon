@@ -4,24 +4,24 @@ import FoodAllergyHistory, {
 } from '../models/foodAllergyHistory';
 import { Foodstuff } from '../models/foodstuff';
 import FamilyMember from '../models/familyMember';
-import BaseError from '../../errors/baseError';
+import AppError from '../../errors/AppError';
 
 export default interface FoodAllergyHistoryRepository {
-  all: () => TE.TaskEither<BaseError, FoodAllergyHistory[]>;
+  all: () => TE.TaskEither<AppError, FoodAllergyHistory[]>;
 
   findAllByFoodstuff: (
     foodstuff: Foodstuff
-  ) => TE.TaskEither<BaseError, FoodAllergyHistory[]>;
+  ) => TE.TaskEither<AppError, FoodAllergyHistory[]>;
 
   findAllByFamilyMember: (
     familyMember: FamilyMember
-  ) => TE.TaskEither<BaseError, FoodAllergyHistory[]>;
+  ) => TE.TaskEither<AppError, FoodAllergyHistory[]>;
 
   saveValue: (
     foodAllergyHistory: FoodAllergyHistory | UnpersistedFoodAllergyHistory
-  ) => TE.TaskEither<BaseError, FoodAllergyHistory>;
+  ) => TE.TaskEither<AppError, FoodAllergyHistory>;
 
   saveValues: (
     foodAllergyHistories: (FoodAllergyHistory | UnpersistedFoodAllergyHistory)[]
-  ) => TE.TaskEither<BaseError, FoodAllergyHistory[]>;
+  ) => TE.TaskEither<AppError, FoodAllergyHistory[]>;
 }

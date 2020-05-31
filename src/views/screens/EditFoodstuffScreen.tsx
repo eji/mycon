@@ -25,7 +25,6 @@ import {
   addFoodstuffFormSchema,
 } from '../forms/addFoodstuffFormSchema';
 import { addFoodstuff } from '../state/appState/allFoodstuffs';
-import CommandError from '../../errors/repositoryErrors/commandError';
 import CheckboxButton from '../components/common/CheckboxButton';
 import Nutrient, {
   WATER_SOLUBLE_VITAMINS,
@@ -37,6 +36,7 @@ import Nutrient, {
 } from '../../domain/models/nutrient';
 import { foodstuffCategories } from '../../domain/models/foodstuffCategory';
 import ImageUploader from '../components/common/ImageUploader';
+import AppError from '../../errors/AppError';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -108,7 +108,7 @@ const AddFoodstuffScreen: React.FC<AddFoodstuffScreenProps> = () => {
       addFoodstuff(values),
       map(dispatch),
       map(handleBack),
-      mapLeft((error: CommandError) => console.log(error))
+      mapLeft((error: AppError) => console.log(error))
     )();
   };
 

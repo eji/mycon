@@ -3,12 +3,12 @@ import FamilyMember, {
   FamilyMemberID,
   UnpersistedFamilyMember,
 } from '../models/familyMember';
-import BaseError from '../../errors/baseError';
+import AppError from '../../errors/AppError';
 
 export default interface FamilyMemberRepository {
-  findById(id: FamilyMemberID): TaskEither<BaseError, FamilyMember>;
-  all(): TaskEither<BaseError, FamilyMember[]>;
+  findById(id: FamilyMemberID): TaskEither<AppError, FamilyMember>;
+  all(): TaskEither<AppError, FamilyMember[]>;
   saveValue(
     familyMember: FamilyMember | UnpersistedFamilyMember
-  ): TaskEither<BaseError, FamilyMember>;
+  ): TaskEither<AppError, FamilyMember>;
 }

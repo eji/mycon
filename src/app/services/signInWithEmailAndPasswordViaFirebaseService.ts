@@ -1,8 +1,6 @@
 import * as TE from 'fp-ts/lib/TaskEither';
 import * as E from 'fp-ts/lib/Either';
 import { pipe } from 'fp-ts/lib/pipeable';
-import BaseError from '../../errors/baseError';
-import NotFoundError from '../../errors/repositoryErrors/queryErrors/notFoundError';
 import RestClient from '../../drivers/restClient';
 import { UserContext } from '../contexts/userContext';
 import SignedInResponse, {
@@ -10,6 +8,7 @@ import SignedInResponse, {
 } from '../../api/handlers/signedIn/responses/signedInResponse';
 import { SignedInRequest } from '../../api/handlers/signedIn/requests/signedInRequest';
 import User from '../../domain/models/user';
+import AppError from '../../errors/AppError';
 
 type Params = {
   email: string;
@@ -23,7 +22,7 @@ export default class SignInWithEmailAndPasswordViaFirebaseService {
     readonly userContext: UserContext
   ) {}
 
-  execute = (params: Params): TE.TaskEither<BaseError, User> => {
+  execute = (params: Params): TE.TaskEither<AppError, User> => {
     const { email, password } = params;
     return pipe(
       this.signIn(email, password),
@@ -45,38 +44,38 @@ export default class SignInWithEmailAndPasswordViaFirebaseService {
   private signIn = (
     email: string,
     password: string
-  ): TE.TaskEither<BaseError, firebase.auth.UserCredential> => {
+  ): TE.TaskEither<AppError, firebase.auth.UserCredential> => {
     return TE.tryCatch(
       (): Promise<firebase.auth.UserCredential> =>
         this.firebaseAuth.signInWithEmailAndPassword(email, password),
       // TODO: 認証エラーに直すこと
       (e) => {
         console.error(e);
-        return new NotFoundError();
+        return new AppError('auth/failed_sign_in');
       }
     );
   };
 
   private getFirebaseUserFromUserCredential = (
     credential: firebase.auth.UserCredential
-  ): E.Either<BaseError, firebase.User> => {
+  ): E.Either<AppError, firebase.User> => {
     if (credential.user === null) {
-      // TODO: 直すこと
-      return E.left(new NotFoundError());
+      return E.left(
+        new AppError('firebase/user_not_exists_in_user_credential')
+      );
     }
     return E.right(credential.user);
   };
 
   private getIdTokenFromFirebaseUser = (
     user: firebase.User
-  ): TE.TaskEither<BaseError, string> => {
+  ): TE.TaskEither<AppError, string> => {
     return pipe(
       TE.tryCatch(
         () => user.getIdToken(),
-        // TODO: 認証エラーに直すこと
         (e) => {
           console.log(e);
-          return new NotFoundError();
+          return new AppError('firebase/failed_to_get_id_token');
         }
       )
     );
@@ -84,7 +83,7 @@ export default class SignInWithEmailAndPasswordViaFirebaseService {
 
   private sendSignedInRequest = (
     idToken: string
-  ): TE.TaskEither<BaseError, User> => {
+  ): TE.TaskEither<AppError, User> => {
     return pipe(
       this.restClient.create<SignedInRequest, SignedInResponse>({
         idToken,

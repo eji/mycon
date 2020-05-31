@@ -2,13 +2,8 @@ import * as TE from 'fp-ts/lib/TaskEither';
 import * as F from 'fp-ts/lib/function';
 import { pipe } from 'fp-ts/lib/pipeable';
 import * as restm from 'typed-rest-client/RestClient';
-import HttpError from '../errors/httpError';
-import NotFoundError from '../errors/repositoryErrors/queryErrors/notFoundError';
-import InvalidResponseError from '../errors/httpErrors/invalidResponseError';
-import BaseError from '../errors/baseError';
-import RecievedErrorResponseError from '../errors/receivedErrorResponseError';
 import { isErrorResponse } from '../api/responses/errorResponse';
-import inspect from '../utils/taskEitherHelpers';
+import AppError from '../errors/AppError';
 
 type RestmClientError = Error & { statusCode: number };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -25,53 +20,63 @@ const isRestmClientError = (reason: any): reason is RestmClientError => {
   return false;
 };
 
-const makeHttpError = (reason: unknown): HttpError => {
+const makeHttpError = (reason: unknown): AppError => {
   if (isRestmClientError(reason)) {
-    return new HttpError(reason.statusCode, { message: reason.message });
+    // return new HttpError(reason.statusCode, { message: reason.message });
+    console.error({ statusCode: reason.statusCode, message: reason.message });
+    return new AppError('http_req/error_received');
   }
-  return new InvalidResponseError();
+  return new AppError('http_req/invalid_response_error');
 };
 
 export default class RestClient {
   constructor(readonly client: restm.RestClient, readonly basePath: string) {}
 
-  all = <T>(): TE.TaskEither<BaseError, T> =>
+  all = <T>(): TE.TaskEither<AppError, T> =>
     this.sendRequest(() => this.client.get<T>(`${this.basePath}`));
 
-  show = <T>(id: string): TE.TaskEither<BaseError, T> =>
+  show = <T>(id: string): TE.TaskEither<AppError, T> =>
     this.sendRequest(() => this.client.get<T>(`${this.basePath}/${id}`));
 
-  create = <T, U>(resource: T): TE.TaskEither<BaseError, U> =>
+  create = <T, U>(resource: T): TE.TaskEither<AppError, U> =>
     this.sendRequest(() => this.client.create<U>(`${this.basePath}`, resource));
 
   replace = <T extends { id: string }, U>(
     resource: T
-  ): TE.TaskEither<BaseError, U> =>
+  ): TE.TaskEither<AppError, U> =>
     this.sendRequest(() =>
       this.client.replace<U>(`${this.basePath}/${resource.id}`, resource)
     );
 
   delete = <T extends { id: string }, U>(
     resource: T
-  ): TE.TaskEither<BaseError, U> =>
+  ): TE.TaskEither<AppError, U> =>
     this.sendRequest(() =>
       this.client.del<U>(`${this.basePath}/${resource.id}`)
     );
 
   private sendRequest = <T>(
     fetchFunc: F.Lazy<Promise<restm.IRestResponse<T>>>
-  ): TE.TaskEither<BaseError, T> => {
+  ): TE.TaskEither<AppError, T> => {
     return pipe(
       TE.tryCatch(fetchFunc, makeHttpError),
       TE.chain(
-        (res): TE.TaskEither<BaseError, T> =>
-          res.result == null || res.statusCode === 404
-            ? TE.left(new NotFoundError())
-            : TE.right(res.result)
+        (res): TE.TaskEither<AppError, T> => {
+          if (res.statusCode === 404) {
+            return TE.left(new AppError('http_req/404_error'));
+          }
+
+          if (res.result == null) {
+            return TE.left(
+              new AppError('http_req/empty_response_body_received')
+            );
+          }
+          return TE.right(res.result);
+        }
       ),
       TE.chain((res) => {
         if (isErrorResponse(res)) {
-          return TE.left(new RecievedErrorResponseError(res));
+          return TE.left(new AppError(res.error.errorCode));
         }
         return TE.right(res);
       })

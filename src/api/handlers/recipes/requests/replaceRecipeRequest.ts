@@ -1,11 +1,11 @@
 import * as E from 'fp-ts/lib/Either';
 import { NowRequest } from '@now/node';
-import InvalidRequestError from '../../../../errors/requestErrors/clientErrors/invalidRequestError';
 import Recipe from '../../../../domain/models/recipe';
 import {
   RecipeIngredientRequestValue,
   requestFromRecipeIngredient,
 } from '../../../commons/recipeIngredientRequestValue';
+import AppError from '../../../../errors/AppError';
 
 export type ReplaceRecipeRequestBody = {
   name: string;
@@ -34,14 +34,14 @@ export const requestFromRecipe = (recipe: Recipe): ReplaceRecipeRequest => ({
 
 export const getReplaceRecipeRequest = (
   request: NowRequest
-): E.Either<InvalidRequestError, ReplaceRecipeRequest> => {
+): E.Either<AppError, ReplaceRecipeRequest> => {
   const { id } = request.query;
   if (id == null || typeof id !== 'string') {
-    return E.left(new InvalidRequestError());
+    return E.left(new AppError('http_req/invalid_request_error'));
   }
 
   if (!isReplaceRecipeRequestBody(request.body)) {
-    return E.left(new InvalidRequestError());
+    return E.left(new AppError('http_req/invalid_request_error'));
   }
 
   return E.right({

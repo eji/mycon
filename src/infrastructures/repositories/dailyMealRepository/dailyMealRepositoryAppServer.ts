@@ -5,7 +5,6 @@ import DailyMeal, {
   dailyMealIDFromCalendarDate,
 } from '../../../domain/models/dailyMeal';
 import CalendarDate from '../../../domain/models/calender/calendarDate';
-import BaseError from '../../../errors/baseError';
 import RestClient from '../../../drivers/restClient';
 import DailyMealsResponse, {
   dailyMealsFromResponse,
@@ -17,12 +16,13 @@ import {
   requestFromDailyMeal,
   ReplaceDailyMealRequest,
 } from '../../../api/handlers/dailyMeals/requests/replaceDailyMealRequest';
+import AppError from '../../../errors/AppError';
 
 export default class DailyMealRepositoryAppServer
   implements DailyMealRepository {
   constructor(readonly restClient: RestClient) {}
 
-  all = (): TE.TaskEither<BaseError, DailyMeal[]> =>
+  all = (): TE.TaskEither<AppError, DailyMeal[]> =>
     pipe(
       this.restClient.all<DailyMealsResponse>(),
       TE.chainEitherK(dailyMealsFromResponse)
@@ -30,14 +30,14 @@ export default class DailyMealRepositoryAppServer
 
   findByCalendarDate = (
     calendarDate: CalendarDate
-  ): TE.TaskEither<BaseError, DailyMeal> =>
+  ): TE.TaskEither<AppError, DailyMeal> =>
     pipe(
       dailyMealIDFromCalendarDate(calendarDate),
       (id) => this.restClient.show<DailyMealResponse>(id),
       TE.chainEitherK(dailyMealFromResponse)
     );
 
-  saveValue = (dailyMeal: DailyMeal): TE.TaskEither<BaseError, DailyMeal> =>
+  saveValue = (dailyMeal: DailyMeal): TE.TaskEither<AppError, DailyMeal> =>
     pipe(
       requestFromDailyMeal(dailyMeal),
       (req) =>

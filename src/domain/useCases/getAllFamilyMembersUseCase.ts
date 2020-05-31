@@ -1,7 +1,7 @@
 import * as TE from 'fp-ts/lib/TaskEither';
-import RepositoryError from '../../errors/repositoryError';
 import FamilyMemberRepository from '../repositories/familyMemberRepository';
 import FamilyMember from '../models/familyMember';
+import AppError from '../../errors/AppError';
 
 /**
  * 全ての家族メンバーを取得するためのユースケース
@@ -9,6 +9,6 @@ import FamilyMember from '../models/familyMember';
 export default class GetAllFamilyMembersUseCase {
   constructor(readonly familyMemberRepository: FamilyMemberRepository) {}
 
-  execute = (): TE.TaskEither<RepositoryError, FamilyMember[]> =>
+  execute = (): TE.TaskEither<AppError, FamilyMember[]> =>
     this.familyMemberRepository.all();
 }

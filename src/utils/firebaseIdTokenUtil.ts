@@ -251,10 +251,10 @@ const verifyIdToken = (
         TE.map(() => payload)
       );
     }),
-    TE.filterOrElse(
-      verifyIdTokenPayload,
-      () => new AppError('firebase/failed_to_verify_id_token_payload')
-    )
+    TE.filterOrElse(verifyIdTokenPayload, () => {
+      console.info(idToken);
+      return new AppError('firebase/failed_to_verify_id_token_payload');
+    })
   );
 
 const verifyIdTokenAndGetEmail = (

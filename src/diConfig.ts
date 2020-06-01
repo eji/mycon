@@ -147,21 +147,33 @@ const diConfig = (): void => {
   container.registerInstance(
     appServerFoodstuffRepository,
     new FoodstuffRepositoryAppServer(
-      new RestClient(container.resolve(restmRestClient), '/api/foodstuffs')
+      new RestClient(
+        container.resolve(restmRestClient),
+        '/api/foodstuffs',
+        userContext
+      )
     )
   );
 
   container.registerInstance(
     appServerRecipeRepository,
     new RecipeRepositoryAppServer(
-      new RestClient(container.resolve(restmRestClient), '/api/recipes')
+      new RestClient(
+        container.resolve(restmRestClient),
+        '/api/recipes',
+        userContext
+      )
     )
   );
 
   container.registerInstance(
     appServerFamilyMemberRepository,
     new FamilyMemberRepositoryAppServer(
-      new RestClient(container.resolve(restmRestClient), '/api/family_members')
+      new RestClient(
+        container.resolve(restmRestClient),
+        '/api/family_members',
+        userContext
+      )
     )
   );
 
@@ -170,7 +182,8 @@ const diConfig = (): void => {
     new FoodAllergyHistoryRepositoryAppServer(
       new RestClient(
         container.resolve(restmRestClient),
-        '/food_allergy_histories'
+        '/food_allergy_histories',
+        userContext
       )
     )
   );
@@ -178,14 +191,22 @@ const diConfig = (): void => {
   container.registerInstance(
     appServerDailyMealRepository,
     new DailyMealRepositoryAppServer(
-      new RestClient(container.resolve(restmRestClient), '/api/daily_meals')
+      new RestClient(
+        container.resolve(restmRestClient),
+        '/api/daily_meals',
+        userContext
+      )
     )
   );
 
   container.registerInstance(
     appServerUserRepository,
     new UserRepositoryAppServer(
-      new RestClient(container.resolve(restmRestClient), '/api/users')
+      new RestClient(
+        container.resolve(restmRestClient),
+        '/api/users',
+        userContext
+      )
     )
   );
 
@@ -322,7 +343,11 @@ const diConfig = (): void => {
     SignInWithEmailAndPasswordViaFirebaseService,
     new SignInWithEmailAndPasswordViaFirebaseService(
       firebase.auth(),
-      new RestClient(container.resolve(restmRestClient), '/api/signed_in'),
+      new RestClient(
+        container.resolve(restmRestClient),
+        '/api/signed_in',
+        userContext
+      ),
       userContext
     )
   );

@@ -3,13 +3,14 @@ import handleGetFoodstuffs from '../src/api/handlers/foodstuffs/handleGetFoodstu
 import handleRequest from '../src/api/handlers/handleRequest';
 import handleCreateFoodstuff from '../src/api/handlers/foodstuffs/handleCreateFoodstuff';
 import initApi from '../src/api/initApi';
+import requireSignIn from '../src/api/beforeActions/requireSingIn';
 
 initApi();
 
 export default handleRequest({
   /** 食材一覧の取得 */
-  get: handleGetFoodstuffs,
+  get: { handler: handleGetFoodstuffs, beforeActions: [requireSignIn] },
 
   /** 食材の追加 */
-  post: handleCreateFoodstuff,
+  post: { handler: handleCreateFoodstuff, beforeActions: [requireSignIn] },
 });

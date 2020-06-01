@@ -39,7 +39,12 @@ const httpRequestErrorCodes = [
 
 export type HttpRequestErrorCode = typeof httpRequestErrorCodes[number];
 
-const authErrorCodes = ['auth/require_sign_in', 'auth/failed_sign_in'] as const;
+const authErrorCodes = [
+  'auth/require_sign_in',
+  'auth/failed_sign_in',
+  'auth/no_authorization_header',
+  'auth/invalid_authorization_header',
+] as const;
 
 export type AuthErrorCode = typeof authErrorCodes[number];
 

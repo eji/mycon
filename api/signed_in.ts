@@ -7,5 +7,5 @@ initApi();
 
 export default handleRequest({
   /** サインイン後の処理 */
-  post: handleCreateSignedIn,
+  post: { handler: handleCreateSignedIn },
 });

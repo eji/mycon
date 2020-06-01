@@ -4,6 +4,7 @@ import { pipe } from 'fp-ts/lib/pipeable';
 import * as restm from 'typed-rest-client/RestClient';
 import { isErrorResponse } from '../api/responses/errorResponse';
 import AppError from '../errors/AppError';
+import { UserContext } from '../app/contexts/userContext';
 
 type RestmClientError = Error & { statusCode: number };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -30,29 +31,96 @@ const makeHttpError = (reason: unknown): AppError => {
 };
 
 export default class RestClient {
-  constructor(readonly client: restm.RestClient, readonly basePath: string) {}
+  constructor(
+    readonly client: restm.RestClient,
+    readonly basePath: string,
+    readonly userContext: UserContext
+  ) {}
 
   all = <T>(): TE.TaskEither<AppError, T> =>
-    this.sendRequest(() => this.client.get<T>(`${this.basePath}`));
+    pipe(
+      this.getRequestOptions(),
+      TE.chain((options) =>
+        this.sendRequest(() => this.client.get<T>(`${this.basePath}`, options))
+      )
+    );
 
   show = <T>(id: string): TE.TaskEither<AppError, T> =>
-    this.sendRequest(() => this.client.get<T>(`${this.basePath}/${id}`));
+    pipe(
+      this.getRequestOptions(),
+      TE.chain((options) =>
+        this.sendRequest(() =>
+          this.client.get<T>(`${this.basePath}/${id}`, options)
+        )
+      )
+    );
 
   create = <T, U>(resource: T): TE.TaskEither<AppError, U> =>
-    this.sendRequest(() => this.client.create<U>(`${this.basePath}`, resource));
+    pipe(
+      this.getRequestOptions(),
+      TE.chain((options) =>
+        this.sendRequest(() =>
+          this.client.create<U>(`${this.basePath}`, resource, options)
+        )
+      )
+    );
 
   replace = <T extends { id: string }, U>(
     resource: T
   ): TE.TaskEither<AppError, U> =>
-    this.sendRequest(() =>
-      this.client.replace<U>(`${this.basePath}/${resource.id}`, resource)
+    pipe(
+      this.getRequestOptions(),
+      TE.chain((options) =>
+        this.sendRequest(() =>
+          this.client.replace<U>(
+            `${this.basePath}/${resource.id}`,
+            resource,
+            options
+          )
+        )
+      )
     );
 
   delete = <T extends { id: string }, U>(
     resource: T
   ): TE.TaskEither<AppError, U> =>
-    this.sendRequest(() =>
-      this.client.del<U>(`${this.basePath}/${resource.id}`)
+    pipe(
+      this.getRequestOptions(),
+      TE.chain((options) =>
+        this.sendRequest(() =>
+          this.client.del<U>(`${this.basePath}/${resource.id}`, options)
+        )
+      )
+    );
+
+  private getAuthorizationHeaderValue = (): TE.TaskEither<AppError, string> =>
+    pipe(
+      this.userContext.getIdToken(),
+      TE.orElse((e) => {
+        if (
+          e.errorCode === 'user_context/firebase_user_not_exists' ||
+          e.errorCode === 'firebase/failed_to_get_id_token'
+        ) {
+          return TE.right('');
+        }
+        return TE.left(e);
+      }),
+      TE.map((idToken) => `Bearer ${idToken}`)
+    );
+
+  private getRequestOptions = (): TE.TaskEither<
+    AppError,
+    restm.IRequestOptions
+  > =>
+    pipe(
+      this.getAuthorizationHeaderValue(),
+      TE.map(
+        (authzHeaderValue): restm.IRequestOptions => ({
+          additionalHeaders: {
+            Authorization: authzHeaderValue,
+          },
+        })
+      )
     );
 
   private sendRequest = <T>(

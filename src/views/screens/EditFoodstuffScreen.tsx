@@ -114,7 +114,7 @@ const AddFoodstuffScreen: React.FC<AddFoodstuffScreenProps> = () => {
 
   const NutrientItem = (props: {
     nutrient: Nutrient;
-    values: Nutrient[];
+    values: Readonly<Nutrient[]>;
     setFieldValue: (
       field: string,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -143,8 +143,8 @@ const AddFoodstuffScreen: React.FC<AddFoodstuffScreenProps> = () => {
 
   const nutrientList = (params: {
     section: string;
-    nutrients: Nutrient[];
-    values: Nutrient[];
+    nutrients: Readonly<Nutrient[]>;
+    values: Readonly<Nutrient[]>;
     setFieldValue: (
       field: string,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

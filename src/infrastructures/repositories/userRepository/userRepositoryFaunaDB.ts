@@ -5,7 +5,9 @@ import UserRepository from '../../../domain/repositories/userRepository';
 import AppError from '../../../errors/AppError';
 import User, { UnpersistedUser } from '../../../domain/models/user';
 import UserResponse, {
-  buildUserFromUserReponse,
+  isUserFoundResponse,
+  buildUserFromUserFoundReponse,
+  UserFoundResponse,
 } from './userRepositoryFaunaDB/userResponse';
 import FaunaDBGraphQLClient from '../../../drivers/faunaDBGraphQLClient';
 import { GraphQLIDTable } from '../../../utils/graphQLIDTable';
@@ -50,26 +52,31 @@ export default class UserRepositoryFaunaDB implements UserRepository {
           email,
         },
       }),
-      TE.map(
-        // eslint-disable-next-line no-underscore-dangle
-        inspect((result) => this.graphqlIDTable.set(result.userID, result._id))
+      TE.filterOrElse(
+        isUserFoundResponse,
+        () => new AppError('repos/not_found_error')
       ),
-      TE.map(buildUserFromUserReponse)
+      TE.map(inspect(this.registerGraphQLIDAndDomainModelID)),
+      TE.map(buildUserFromUserFoundReponse)
     );
 
   create = (user: UnpersistedUser): TE.TaskEither<AppError, User> =>
     pipe(
-      this.client.mutate<UserResponse>({
+      this.client.mutate<UserFoundResponse>({
         mutation: createUserMutation,
         variables: {
           userID: genId(),
           email: user.email,
         },
       }),
-      TE.map(
-        // eslint-disable-next-line no-underscore-dangle
-        inspect((result) => this.graphqlIDTable.set(result.userID, result._id))
-      ),
-      TE.map(buildUserFromUserReponse)
+      TE.map(inspect(this.registerGraphQLIDAndDomainModelID)),
+      TE.map(buildUserFromUserFoundReponse)
     );
+
+  private registerGraphQLIDAndDomainModelID = (
+    response: UserFoundResponse
+  ): void => {
+    // eslint-disable-next-line no-underscore-dangle
+    this.graphqlIDTable.set(response.data.userID, response.data._id);
+  };
 }

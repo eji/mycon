@@ -54,6 +54,7 @@ export default class UserRepositoryFaunaDB implements UserRepository {
           email,
         },
       }),
+      TE.map(inspect(console.log)),
       TE.filterOrElse(
         isFoundUserByEmailResponse,
         () => new AppError('repos/not_found_error')

@@ -101,12 +101,55 @@ const executeBeforeActions = (
   );
 };
 
+const allowCORS = (response: NowResponse): void => {
+  if (process.env.ALLOW_ORIGIN == null) {
+    return;
+  }
+
+  response.setHeader('Access-Control-Allow-Credentials', 'false');
+  response.setHeader('Access-Control-Allow-Origin', process.env.ALLOW_ORIGIN);
+  response.setHeader(
+    'Access-Control-Allow-Methods',
+    ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'].join(', ')
+  );
+  response.setHeader(
+    'Access-Control-Allow-Headers',
+    [
+      'Accept',
+      'Accept-Encoding',
+      'Accept-Language',
+      'Cache-Control',
+      'Connection',
+      'Host',
+      'Pragma',
+      'Content-Length',
+      'Content-Type',
+      'Authorization',
+    ].join(', ')
+  );
+};
+
+// const handleOptionsRequest = (
+//   handlers: Handlers,
+//   request: NowRequest,
+//   response: NowResponse
+// ): Promise<void> => {
+//   response.status(204);
+// };
+
 const handleRequest = (
   handlers: Handlers
 ): ((request: NowRequest, response: NowResponse) => Promise<void>) => {
   return async (request: NowRequest, response: NowResponse): Promise<void> => {
     const handleError = makeErrorHandler(response);
+
     try {
+      allowCORS(response);
+      if (request.method === 'OPTIONS') {
+        response.status(204).end();
+        return;
+      }
+
       await pipe(
         executeBeforeActions(handlers, request),
         TE.chain((req) =>

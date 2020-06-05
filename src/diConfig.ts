@@ -152,7 +152,6 @@ const diConfig = (): void => {
 
   /* GraphQL client */
   if (!isBrowser()) {
-    console.log(process.env.FAUNA_DB_GRAPHQL_ENDPOINT);
     container.registerInstance(
       faunaDBGraphQLClientToken,
       new FaunaDBGraphQLClient(

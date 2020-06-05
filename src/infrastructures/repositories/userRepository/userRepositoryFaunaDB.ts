@@ -14,7 +14,7 @@ import { genId } from '../../../domain/models/id';
 
 const findByEmailQuery = gql`
   query findUserByEmail($email: String!) {
-    findByEmail(email: $email) {
+    findUserByEmail(email: $email) {
       _id
       name
       email

@@ -52,11 +52,11 @@ export default class UserRepositoryFaunaDB implements UserRepository {
           email,
         },
       }),
+      TE.map(inspect(console.log)),
       TE.filterOrElse(
         isUserFoundResponse,
         () => new AppError('repos/not_found_error')
       ),
-      TE.map(inspect(console.log)),
       TE.map(inspect(this.registerGraphQLIDAndDomainModelID)),
       TE.map(buildUserFromUserFoundReponse)
     );

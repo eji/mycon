@@ -77,7 +77,10 @@ export default class UserRepositoryFaunaDB implements UserRepository {
   private registerGraphQLIDAndDomainModelID = (
     response: UserFoundResponse
   ): void => {
-    // eslint-disable-next-line no-underscore-dangle
-    this.graphqlIDTable.set(response.data.userID, response.data._id);
+    this.graphqlIDTable.set(
+      response.data.findUserByEmail.userID,
+      // eslint-disable-next-line no-underscore-dangle
+      response.data.findUserByEmail._id
+    );
   };
 }

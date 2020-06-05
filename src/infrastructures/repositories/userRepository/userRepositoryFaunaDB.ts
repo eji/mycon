@@ -64,8 +64,10 @@ export default class UserRepositoryFaunaDB implements UserRepository {
       this.client.mutate<UserFoundResponse>({
         mutation: createUserMutation,
         variables: {
-          userID: genId(),
-          email: user.email,
+          input: {
+            userID: genId(),
+            email: user.email,
+          },
         },
       }),
       TE.map(inspect(this.registerGraphQLIDAndDomainModelID)),

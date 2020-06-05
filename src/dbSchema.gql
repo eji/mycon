@@ -1,0 +1,68 @@
+type User @collection(name: "users") {
+    userID: String!
+    name: String!
+    email: String! @unique
+    familyMembers: [FamilyMember!]! @relation
+    foodstuffs: [Foodstuff!]! @relation
+    recipes: [Recipe!]! @relation
+    dailyMeals: [DailyMeal!]! @relation
+    foodAllergyHistories: [FoodAllergyHistory!]! @relation
+}
+
+type Foodstuff @collection(name: "foodstuffs") {
+    foodstuffID: String!
+    user: User!
+    name: String!
+    nutrients: [String!]!
+    category: String!
+}
+
+type RecipeIngredient @collection(name: "recipeIngredients") {
+    recipe: Recipe!
+    foodstuff: Foodstuff!
+    quantity: String!
+}
+
+type Recipe @collection(name: "recipes") {
+    recipeID: String!
+    user: User! 
+    name: String!
+    ingredients: [RecipeIngredient!]! @relation
+    meals: [Meal!] @relation
+}
+
+type Meal @collection(name: "meals") {
+    breakfast: DailyMeal @relation(name: "breakfast")
+    lunch: DailyMeal @relation(name: "lunch")
+    dinner: DailyMeal @relation(name: "dinner")
+    snack: DailyMeal @relation(name: "snack")
+    name: String!
+    recipes: [Recipe!] @relation
+}
+
+type DailyMeal @collection(name: "dailyMeals") {
+    dailyMealID: String!
+    user: User! @relation
+    calendarDate: String!
+    breakfast: Meal! @relation(name: "breakfast")
+    lunch: Meal! @relation(name: "lunch")
+    dinner: Meal! @relation(name: "dinner")
+    snack: Meal! @relation(name: "snack")
+}
+
+type FamilyMember @collection(name: "familyMembers") {
+    familyMemberID: String!
+    user: User!
+    name: String!
+}
+
+type FoodAllergyHistory @collection(name: "foodAllergyHistories") {
+    foodAllergyHistoryID: String!
+    user: User!
+    familyMember: FamilyMember!
+    foodstuff: Foodstuff!
+}
+
+type Query {
+    findUserByEmail(email: String!): User
+}

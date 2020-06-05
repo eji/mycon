@@ -24,8 +24,9 @@ export default class SignedInService {
       TE.chain(this.findOrCreateUser)
     );
 
-  private findOrCreateUser = (email: string): TE.TaskEither<AppError, User> =>
-    pipe(
+  private findOrCreateUser = (email: string): TE.TaskEither<AppError, User> => {
+    console.log(this.userRepository);
+    return pipe(
       this.userRepository.findByEmail(email),
       TE.orElse((e) => {
         if (e.errorCode === 'repos/not_found_error') {
@@ -35,4 +36,5 @@ export default class SignedInService {
         return TE.left(e);
       })
     );
+  };
 }

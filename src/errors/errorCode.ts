@@ -80,6 +80,15 @@ const userContextErrorCodes = [
 
 export type UserContextErrorCode = typeof userContextErrorCodes[number];
 
+const graphQLErrorCodes = [
+  'graphql/network_error',
+  'graphql/graphql_error',
+  'graphql/id_not_found_error',
+  'graphql/no_response',
+] as const;
+
+export type GraphQLErrorCode = typeof graphQLErrorCodes[number];
+
 const errorCodes = [
   ...unknownErrors,
   ...unhandledErrors,
@@ -88,6 +97,7 @@ const errorCodes = [
   ...authErrorCodes,
   ...firebaseErrorCodes,
   ...userContextErrorCodes,
+  ...graphQLErrorCodes,
 ] as const;
 
 type ErrorCode = typeof errorCodes[number];

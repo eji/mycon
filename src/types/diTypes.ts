@@ -39,10 +39,15 @@ export const inMemoryUserRepository = 'inMemoryUserRepository';
 
 export const appServerUserRepository = 'appServerUserRepository';
 
+export const faunaDBUserRepository = 'faunaDBUserRepository';
+
 /* rest client */
 
 export const restClient = 'restClient';
 export const restmRestClient = 'restmRestClient';
+
+/* GraphQL client */
+export const faunaDBGraphQLClientToken = 'faunaDBGraphQLClientToken';
 
 /** contexts */
 export const appUserContextToken = 'appUserContextToken';

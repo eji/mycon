@@ -1,6 +1,9 @@
 import { container, DependencyContainer } from 'tsyringe';
 import * as restm from 'typed-rest-client/RestClient';
 import firebase from 'firebase';
+import { ApolloClient } from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { createHttpLink } from 'apollo-link-http';
 import FoodstuffRepository from './domain/repositories/foodstuffRepository';
 import {
   foodstuffRepository,
@@ -23,6 +26,8 @@ import {
   userRepositoryToken,
   inMemoryUserRepository,
   appServerUserRepository,
+  faunaDBGraphQLClientToken,
+  faunaDBUserRepository,
 } from './types/diTypes';
 import FoodstuffRepositoryInMemory from './infrastructures/repositories/foodstuffRepository/foodstuffRepositoryInMemory';
 import SaveFoodstuffUseCase from './domain/useCases/saveFoodstuffUseCase';
@@ -58,6 +63,9 @@ import firebaseIdTokenUtil from './utils/firebaseIdTokenUtil';
 import UserRepositoryInMemory from './infrastructures/repositories/userRepository/userRepositoryInMemory';
 import UserRepositoryAppServer from './infrastructures/repositories/userRepository/userRepositoryAppServer';
 import SignInWithEmailAndPasswordViaFirebaseService from './app/services/signInWithEmailAndPasswordViaFirebaseService';
+import FaunaDBGraphQLClient from './drivers/faunaDBGraphQLClient';
+import UserRepositoryFaunaDB from './infrastructures/repositories/userRepository/userRepositoryFaunaDB';
+import graphQLIDTable from './utils/graphQLIDTable';
 
 const diConfig = (): void => {
   /** contexts */
@@ -99,7 +107,7 @@ const diConfig = (): void => {
   );
 
   container.register<UserRepository>(userRepositoryToken, {
-    useToken: isBrowser() ? appServerUserRepository : inMemoryUserRepository,
+    useToken: isBrowser() ? appServerUserRepository : faunaDBUserRepository,
   });
 
   /* in-memory repository */
@@ -141,6 +149,36 @@ const diConfig = (): void => {
     // TODO: 直すこと
     new restm.RestClient('MyConClient', apiUrl)
   );
+
+  /* GraphQL client */
+  if (!isBrowser()) {
+    console.log(process.env.FAUNA_DB_GRAPHQL_ENDPOINT);
+    container.registerInstance(
+      faunaDBGraphQLClientToken,
+      new FaunaDBGraphQLClient(
+        new ApolloClient({
+          cache: new InMemoryCache(),
+          link: createHttpLink({
+            uri: process.env.FAUNA_DB_GRAPHQL_ENDPOINT,
+            headers: {
+              Authorization: `Bearer ${process.env.FAUNA_DB_KEY}`,
+            },
+          }),
+        })
+      )
+    );
+  }
+
+  /* FaunaDB repository */
+  if (!isBrowser()) {
+    container.registerInstance(
+      faunaDBUserRepository,
+      new UserRepositoryFaunaDB(
+        container.resolve(faunaDBGraphQLClientToken),
+        graphQLIDTable
+      )
+    );
+  }
 
   /* appServer repository */
 

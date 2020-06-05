@@ -20,6 +20,7 @@ const findByEmailQuery = gql`
   query findUserByEmail($email: String!) {
     findUserByEmail(email: $email) {
       _id
+      userID
       email
     }
   }
@@ -29,6 +30,7 @@ const createUserMutation = gql`
   mutation CrateUser($input: UserInput!) {
     createUser(data: $input) {
       _id
+      userID
       email
     }
   }
@@ -52,7 +54,6 @@ export default class UserRepositoryFaunaDB implements UserRepository {
           email,
         },
       }),
-      TE.map(inspect(console.log)),
       TE.filterOrElse(
         isFoundUserByEmailResponse,
         () => new AppError('repos/not_found_error')

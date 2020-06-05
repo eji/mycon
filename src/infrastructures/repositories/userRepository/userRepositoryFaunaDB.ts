@@ -25,7 +25,7 @@ const findByEmailQuery = gql`
 `;
 
 const createUserMutation = gql`
-  query CrateUser($input: UserInput!) {
+  mutation CrateUser($input: UserInput!) {
     createUser(data: $input) {
       _id
       name

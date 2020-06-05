@@ -1,6 +1,5 @@
 type User @collection(name: "users") {
     userID: String!
-    name: String!
     email: String! @unique
     familyMembers: [FamilyMember!]! @relation
     foodstuffs: [Foodstuff!]! @relation

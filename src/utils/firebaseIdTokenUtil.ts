@@ -94,7 +94,6 @@ const fetchPublicKeys = (): TE.TaskEither<AppError, PublicKeyInfos> =>
         return new AppError('firebase/failed_to_fetch_public_keys');
       }
     ),
-    TE.map(inspect((res) => console.log(res))),
     TE.chainEitherK(getHeadersAndResponseResult),
     TE.chainEitherK(([headers, result]) =>
       pipe(
@@ -252,7 +251,6 @@ const verifyIdToken = (
       );
     }),
     TE.filterOrElse(verifyIdTokenPayload, () => {
-      console.info(idToken);
       return new AppError('firebase/failed_to_verify_id_token_payload');
     })
   );

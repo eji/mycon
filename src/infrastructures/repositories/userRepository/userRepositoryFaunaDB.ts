@@ -18,7 +18,6 @@ const findByEmailQuery = gql`
   query findUserByEmail($email: String!) {
     findUserByEmail(email: $email) {
       _id
-      name
       email
     }
   }
@@ -28,7 +27,6 @@ const createUserMutation = gql`
   mutation CrateUser($input: UserInput!) {
     createUser(data: $input) {
       _id
-      name
       email
     }
   }

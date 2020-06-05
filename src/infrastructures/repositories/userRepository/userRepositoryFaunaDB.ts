@@ -4,15 +4,17 @@ import { pipe } from 'fp-ts/lib/pipeable';
 import UserRepository from '../../../domain/repositories/userRepository';
 import AppError from '../../../errors/AppError';
 import User, { UnpersistedUser } from '../../../domain/models/user';
-import UserResponse, {
-  isUserFoundResponse,
-  buildUserFromUserFoundReponse,
-  UserFoundResponse,
-} from './userRepositoryFaunaDB/userResponse';
+import FindUserByEmailResponse, {
+  isFoundUserByEmailResponse,
+  buildUserFromUserFoundUserByEmailReponse,
+} from './userRepositoryFaunaDB/findUserByEmailResponse';
 import FaunaDBGraphQLClient from '../../../drivers/faunaDBGraphQLClient';
 import { GraphQLIDTable } from '../../../utils/graphQLIDTable';
 import inspect from '../../../utils/taskEitherHelpers';
 import { genId } from '../../../domain/models/id';
+import CreateUserResponse, {
+  buildUserFromCreateUserResponse,
+} from './userRepositoryFaunaDB/createUserResponse';
 
 const findByEmailQuery = gql`
   query findUserByEmail($email: String!) {
@@ -44,7 +46,7 @@ export default class UserRepositoryFaunaDB implements UserRepository {
 
   findByEmail = (email: string): TE.TaskEither<AppError, User> =>
     pipe(
-      this.client.query<UserResponse>({
+      this.client.query<FindUserByEmailResponse>({
         query: findByEmailQuery,
         variables: {
           email,
@@ -52,16 +54,24 @@ export default class UserRepositoryFaunaDB implements UserRepository {
       }),
       TE.map(inspect(console.log)),
       TE.filterOrElse(
-        isUserFoundResponse,
+        isFoundUserByEmailResponse,
         () => new AppError('repos/not_found_error')
       ),
-      TE.map(inspect(this.registerGraphQLIDAndDomainModelID)),
-      TE.map(buildUserFromUserFoundReponse)
+      TE.map(
+        inspect((res) =>
+          this.graphqlIDTable.set(
+            res.findUserByEmail.userID,
+            // eslint-disable-next-line no-underscore-dangle
+            res.findUserByEmail._id
+          )
+        )
+      ),
+      TE.map(buildUserFromUserFoundUserByEmailReponse)
     );
 
   create = (user: UnpersistedUser): TE.TaskEither<AppError, User> =>
     pipe(
-      this.client.mutate<UserFoundResponse>({
+      this.client.mutate<CreateUserResponse>({
         mutation: createUserMutation,
         variables: {
           input: {
@@ -70,17 +80,15 @@ export default class UserRepositoryFaunaDB implements UserRepository {
           },
         },
       }),
-      TE.map(inspect(this.registerGraphQLIDAndDomainModelID)),
-      TE.map(buildUserFromUserFoundReponse)
+      TE.map(
+        inspect((res) =>
+          this.graphqlIDTable.set(
+            res.createUser.userID,
+            // eslint-disable-next-line no-underscore-dangle
+            res.createUser._id
+          )
+        )
+      ),
+      TE.map(buildUserFromCreateUserResponse)
     );
-
-  private registerGraphQLIDAndDomainModelID = (
-    response: UserFoundResponse
-  ): void => {
-    this.graphqlIDTable.set(
-      response.findUserByEmail.userID,
-      // eslint-disable-next-line no-underscore-dangle
-      response.findUserByEmail._id
-    );
-  };
 }

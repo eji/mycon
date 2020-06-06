@@ -1,11 +1,7 @@
 import * as TE from 'fp-ts/lib/TaskEither';
-import * as A from 'fp-ts/lib/Array';
 import { pipe } from 'fp-ts/lib/pipeable';
 import RecipeRepository from '../../../domain/repositories/recipeRepository';
-import Recipe, {
-  RecipeID,
-  UnpersistedRecipe,
-} from '../../../domain/models/recipe';
+import Recipe, { UnpersistedRecipe } from '../../../domain/models/recipe';
 import RestClient from '../../../drivers/restClient';
 import RecipesResponse, {
   recipesFromResponse,
@@ -24,20 +20,12 @@ export default class RecipeRepositoryAppServer implements RecipeRepository {
   all = (): TE.TaskEither<AppError, Recipe[]> =>
     pipe(this.restClient.all<RecipesResponse>(), TE.map(recipesFromResponse));
 
-  findById = (id: RecipeID): TE.TaskEither<AppError, Recipe> =>
-    pipe(this.restClient.show<RecipeResponse>(id), TE.map(recipeFromResponse));
-
   saveValue = (
     recipe: Recipe | UnpersistedRecipe
   ): TE.TaskEither<AppError, Recipe> =>
     isPersisted<Recipe>(recipe)
       ? this.replaceValue(recipe)
       : this.createValue(recipe);
-
-  saveValues = (
-    recipes: (Recipe | UnpersistedRecipe)[]
-  ): TE.TaskEither<AppError, Recipe[]> =>
-    A.array.sequence(TE.taskEither)(recipes.map(this.saveValue));
 
   private createValue = (
     recipe: UnpersistedRecipe

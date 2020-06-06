@@ -29,6 +29,7 @@ import {
   faunaDBGraphQLClientToken,
   faunaDBUserRepository,
   faunaDBFoodstuffRepository,
+  faunaDBRecipeRepository,
 } from './types/diTypes';
 import FoodstuffRepositoryInMemory from './infrastructures/repositories/foodstuffRepository/foodstuffRepositoryInMemory';
 import SaveFoodstuffUseCase from './domain/useCases/saveFoodstuffUseCase';
@@ -68,6 +69,7 @@ import FaunaDBGraphQLClient from './drivers/faunaDBGraphQLClient';
 import UserRepositoryFaunaDB from './infrastructures/repositories/userRepository/userRepositoryFaunaDB';
 import graphQLIDTable from './utils/graphQLIDTable';
 import FoodstuffRepositoryFaunaDB from './infrastructures/repositories/foodstuffRepository/foodstuffRepositoryFaunaDB';
+import RecipeRepositoryFaunaDB from './infrastructures/repositories/recipeRepository/recipeRepositoryFaunaDB';
 
 const diConfig = (): void => {
   /** contexts */
@@ -82,9 +84,7 @@ const diConfig = (): void => {
   });
 
   container.register<RecipeRepository>(recipeRepository, {
-    useToken: isBrowser()
-      ? appServerRecipeRepository
-      : inMemoryRecipeRepository,
+    useToken: isBrowser() ? appServerRecipeRepository : faunaDBRecipeRepository,
   });
 
   container.register<FamilyMemberRepository>(familyMemberRepository, {
@@ -183,6 +183,15 @@ const diConfig = (): void => {
     container.registerInstance(
       faunaDBFoodstuffRepository,
       new FoodstuffRepositoryFaunaDB(
+        container.resolve(faunaDBGraphQLClientToken),
+        graphQLIDTable,
+        userContext
+      )
+    );
+
+    container.registerInstance(
+      faunaDBRecipeRepository,
+      new RecipeRepositoryFaunaDB(
         container.resolve(faunaDBGraphQLClientToken),
         graphQLIDTable,
         userContext

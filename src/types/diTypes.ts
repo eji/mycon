@@ -14,6 +14,8 @@ export const inMemoryRecipeRepository = 'inMemoryRecipeRepository';
 
 export const appServerRecipeRepository = 'appServerRecipeRepository';
 
+export const faunaDBRecipeRepository = 'faunaDBRecipeRepository';
+
 export const familyMemberRepository = 'familyMemberRepository';
 
 export const inMemoryFamilyMemberRepository = 'inMemoryFamilyMemberRepository';

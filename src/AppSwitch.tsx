@@ -46,57 +46,57 @@ const AppSwitch: React.FC = () => {
           <NewSignInScreen />
         </Route>
         <Route exact path={scheduleScreenPath()}>
-          <AccessFilter requireSignIn>
+          <AccessFilter requireSignIn requireInitApp>
             <ScheduleScreen />
           </AccessFilter>
         </Route>
         <Route exact path={showDailyMealScreenPath()}>
-          <AccessFilter requireSignIn>
+          <AccessFilter requireSignIn requireInitApp>
             <DailyMealScreen />
           </AccessFilter>
         </Route>
         <Route exact path={editDailyMealScreenPath()}>
-          <AccessFilter requireSignIn>
+          <AccessFilter requireSignIn requireInitApp>
             <DailyMealScreen />
           </AccessFilter>
         </Route>
         <Route exact path={recipesScreenPath()}>
-          <AccessFilter requireSignIn>
+          <AccessFilter requireSignIn requireInitApp>
             <RecipesScreen />
           </AccessFilter>
         </Route>
         <Route exact path={addRecipeScreenPath()}>
-          <AccessFilter requireSignIn>
+          <AccessFilter requireSignIn requireInitApp>
             <EditRecipeScreen />
           </AccessFilter>
         </Route>
         <Route exact path={showRecipeScreenPath()}>
-          <AccessFilter requireSignIn>
+          <AccessFilter requireSignIn requireInitApp>
             <ShowRecipeScreen />
           </AccessFilter>
         </Route>
         <Route exact path={foodstuffsScreenPath()}>
-          <AccessFilter requireSignIn>
+          <AccessFilter requireSignIn requireInitApp>
             <FoodstuffsScreen />
           </AccessFilter>
         </Route>
         <Route exact path={addFoodstuffScreenPath()}>
-          <AccessFilter requireSignIn>
+          <AccessFilter requireSignIn requireInitApp>
             <EditFoodstuffScreen />
           </AccessFilter>
         </Route>
         <Route exact path={showFoodstuffScreenPath()}>
-          <AccessFilter requireSignIn>
+          <AccessFilter requireSignIn requireInitApp>
             <ShowFoodstuffScreen />
           </AccessFilter>
         </Route>
         <Route exact path={familyMembersScreenPath()}>
-          <AccessFilter requireSignIn>
+          <AccessFilter requireSignIn requireInitApp>
             <FamilyMembersScreen />
           </AccessFilter>
         </Route>
         <Route path={addFamilyMemberScreenPath()}>
-          <AccessFilter requireSignIn>
+          <AccessFilter requireSignIn requireInitApp>
             <EditFamilyMemberScreen />
           </AccessFilter>
         </Route>
@@ -105,7 +105,7 @@ const AppSwitch: React.FC = () => {
       {background && (
         <Switch location={location}>
           <Route path={addRecipeToDailyMenuDialogPath()}>
-            <AccessFilter requireSignIn>
+            <AccessFilter requireSignIn requireInitApp>
               <SelectRecipesDialog />
             </AccessFilter>
           </Route>

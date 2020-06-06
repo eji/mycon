@@ -31,6 +31,7 @@ import {
 } from '../forms/inputRecipeFormSchema';
 import { addRecipe } from '../state/appState/allRecipes';
 import ImageUploader from '../components/common/ImageUploader';
+import graphQLIDTable from '../../utils/graphQLIDTable';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -93,7 +94,11 @@ const EditRecipeScreen: React.FC<EditRecipeScreenProps> = () => {
             addRecipe({ form: values, allFoodstuffs }),
             TE.map(dispatch),
             TE.map(() => history.goBack()),
-            TE.mapLeft((error) => console.log(error))
+            TE.mapLeft((error) => {
+              console.log(error.errorCode);
+              console.log(error.stack);
+              console.log(error);
+            })
           )();
         }}
       >

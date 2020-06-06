@@ -2,7 +2,7 @@ import User, { makeUser } from '../../../../domain/models/user';
 
 export interface FoundUserByEmailResponse {
   readonly findUserByEmail: {
-    readonly _id: number;
+    readonly _id: string;
     readonly userID: string;
     readonly email: string;
   };

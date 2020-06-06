@@ -6,7 +6,6 @@ import { RestClient, IRestResponse } from 'typed-rest-client';
 import { pipe } from 'fp-ts/lib/pipeable';
 import base64url from 'base64-url';
 import { firebaseProjectId, firebaseIdTokenIssuer } from '../firebaseConfig';
-import inspect from './taskEitherHelpers';
 import AppError from '../errors/AppError';
 
 /** 公開鍵情報 */

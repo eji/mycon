@@ -5,7 +5,7 @@ import { isFoodstuffCategory } from '../../../../domain/models/foodstuffCategory
 import Nutrient, { isNutrient } from '../../../../domain/models/nutrient';
 
 export default interface FoodstuffResponse {
-  readonly _id: number;
+  readonly _id: string;
   readonly foodstuffID: string;
   readonly name: string;
   readonly category: string;

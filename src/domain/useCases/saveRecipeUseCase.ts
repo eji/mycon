@@ -13,6 +13,7 @@ type Params = {
 export default class SaveRecipeUseCase {
   constructor(readonly recipeRepository: RecipeRepository) {}
 
-  execute = (params: Params): TE.TaskEither<AppError, Recipe> =>
-    this.recipeRepository.saveValue(params.recipe);
+  execute = (params: Params): TE.TaskEither<AppError, Recipe> => {
+    return this.recipeRepository.saveValue(params.recipe);
+  };
 }

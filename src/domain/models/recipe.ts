@@ -1,6 +1,6 @@
 import { Record } from 'immutable';
 import { Eq } from 'fp-ts/lib/Eq';
-import ID, { genId } from './id';
+import ID from './id';
 import RecipeIngredient from './recipeIngredient';
 import Unpersisted from '../../types/unpersisted';
 
@@ -33,8 +33,8 @@ export default interface Recipe extends Readonly<RecipeProps>, Eq<Recipe> {
 
 export type UnpersistedRecipe = Unpersisted<Recipe>;
 
-class RecipeClass extends Record<RecipeProps>({
-  id: genId(),
+class RecipeClass extends Record<Omit<RecipeProps, 'id'> & { id?: RecipeID }>({
+  id: undefined,
   name: '',
   ingredients: [],
 }) {}

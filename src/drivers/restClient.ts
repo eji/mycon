@@ -55,8 +55,9 @@ export default class RestClient {
       )
     );
 
-  create = <T, U>(resource: T): TE.TaskEither<AppError, U> =>
-    pipe(
+  create = <T, U>(resource: T): TE.TaskEither<AppError, U> => {
+    console.log(this.basePath);
+    return pipe(
       this.getRequestOptions(),
       TE.chain((options) =>
         this.sendRequest(() =>
@@ -64,6 +65,7 @@ export default class RestClient {
         )
       )
     );
+  };
 
   replace = <T extends { id: string }, U>(
     resource: T

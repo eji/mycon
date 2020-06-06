@@ -1,5 +1,4 @@
 import * as TE from 'fp-ts/lib/TaskEither';
-import * as A from 'fp-ts/lib/Array';
 import RecipeRepository from '../../../domain/repositories/recipeRepository';
 import Recipe, {
   RecipeID,
@@ -21,11 +20,6 @@ export default class RecipeRepositoryInMemory implements RecipeRepository {
     return TE.right(this.store.values());
   };
 
-  findById = (id: RecipeID): TE.TaskEither<AppError, Recipe> => {
-    const recipe = this.store.get(id);
-    return TE.fromOption(() => new AppError('repos/not_found_error'))(recipe);
-  };
-
   saveValue = (
     recipe: Recipe | UnpersistedRecipe
   ): TE.TaskEither<AppError, Recipe> => {
@@ -37,9 +31,4 @@ export default class RecipeRepositoryInMemory implements RecipeRepository {
     this.store.set(newRecipe.id, newRecipe);
     return TE.right(newRecipe);
   };
-
-  saveValues = (
-    recipes: (Recipe | UnpersistedRecipe)[]
-  ): TE.TaskEither<AppError, Recipe[]> =>
-    A.array.sequence(TE.taskEither)(recipes.map(this.saveValue));
 }

@@ -31,8 +31,8 @@ const AccessFilter: React.FC<Props> = (props: Props) => {
   const { requireSignIn, requireInitApp, children } = props;
 
   const filter = F.flow(
-    filterSignIn(requireSignIn),
-    filterInitApp(requireInitApp)
+    filterInitApp(requireInitApp),
+    filterSignIn(requireSignIn)
   );
 
   return <>{filter(children)}</>;

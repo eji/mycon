@@ -77,6 +77,13 @@ export default class FoodstuffRepositoryFaunaDB implements FoodstuffRepository {
         isFoundFoodstuffsResponse,
         () => new AppError('graphql/user_not_found')
       ),
+      TE.map((res) => {
+        res.findUserByID.foodstuffs.data.forEach((f) => {
+          // eslint-disable-next-line no-underscore-dangle
+          this.graphqlIDTable.set(f.foodstuffID, f._id);
+        });
+        return res;
+      }),
       TE.chainEitherK(buildFoodstuffsFromFoundFoodstuffsResponse)
     );
 
@@ -84,7 +91,7 @@ export default class FoodstuffRepositoryFaunaDB implements FoodstuffRepository {
     foodstuff: Foodstuff | UnpersistedFoodstuff
   ): TE.TaskEither<AppError, Foodstuff> => {
     if (isPersisted<Foodstuff>(foodstuff)) {
-      return this.updateValue(foodstuff);
+      return this.replaceValue(foodstuff);
     }
     return this.createValue(foodstuff);
   };
@@ -123,10 +130,18 @@ export default class FoodstuffRepositoryFaunaDB implements FoodstuffRepository {
           },
         })
       ),
+      TE.map((res) => {
+        this.graphqlIDTable.set(
+          res.createFoodstuff.foodstuffID,
+          // eslint-disable-next-line no-underscore-dangle
+          res.createFoodstuff._id
+        );
+        return res;
+      }),
       TE.chainEitherK(buildFoodstuffFromCreateFoodstuffResponse)
     );
 
-  private updateValue = (
+  private replaceValue = (
     foodstuff: Foodstuff
   ): TE.TaskEither<AppError, Foodstuff> =>
     pipe(
@@ -152,6 +167,14 @@ export default class FoodstuffRepositoryFaunaDB implements FoodstuffRepository {
           },
         })
       ),
+      TE.map((res) => {
+        this.graphqlIDTable.set(
+          res.updateFoodstuff.foodstuffID,
+          // eslint-disable-next-line no-underscore-dangle
+          res.updateFoodstuff._id
+        );
+        return res;
+      }),
       TE.chainEitherK(buildFoodstuffFromUpdateFoodstuffResponse)
     );
 }

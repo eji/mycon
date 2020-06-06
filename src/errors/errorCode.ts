@@ -76,6 +76,7 @@ export type FirebaseErrorCode = typeof firebaseErrorCodes[number];
 
 const userContextErrorCodes = [
   'user_context/firebase_user_not_exists',
+  'user_context/current_user_not_exists',
 ] as const;
 
 export type UserContextErrorCode = typeof userContextErrorCodes[number];
@@ -85,6 +86,8 @@ const graphQLErrorCodes = [
   'graphql/graphql_error',
   'graphql/id_not_found_error',
   'graphql/no_response',
+  'graphql/invalid_response',
+  'graphql/user_not_found',
 ] as const;
 
 export type GraphQLErrorCode = typeof graphQLErrorCodes[number];

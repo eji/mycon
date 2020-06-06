@@ -6,6 +6,8 @@ export const inMemoryFoodstuffRepository = 'inMemoryFoodstuffRepository';
 
 export const appServerFoodstuffRepository = 'appServerFoodstuffRepository';
 
+export const faunaDBFoodstuffRepository = 'faunaDBFoodstuffRepository';
+
 export const recipeRepository = 'recipeRepository';
 
 export const inMemoryRecipeRepository = 'inMemoryRecipeRepository';

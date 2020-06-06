@@ -28,6 +28,7 @@ import {
   appServerUserRepository,
   faunaDBGraphQLClientToken,
   faunaDBUserRepository,
+  faunaDBFoodstuffRepository,
 } from './types/diTypes';
 import FoodstuffRepositoryInMemory from './infrastructures/repositories/foodstuffRepository/foodstuffRepositoryInMemory';
 import SaveFoodstuffUseCase from './domain/useCases/saveFoodstuffUseCase';
@@ -66,6 +67,7 @@ import SignInWithEmailAndPasswordViaFirebaseService from './app/services/signInW
 import FaunaDBGraphQLClient from './drivers/faunaDBGraphQLClient';
 import UserRepositoryFaunaDB from './infrastructures/repositories/userRepository/userRepositoryFaunaDB';
 import graphQLIDTable from './utils/graphQLIDTable';
+import FoodstuffRepositoryFaunaDB from './infrastructures/repositories/foodstuffRepository/foodstuffRepositoryFaunaDB';
 
 const diConfig = (): void => {
   /** contexts */
@@ -76,7 +78,7 @@ const diConfig = (): void => {
   container.register<FoodstuffRepository>(foodstuffRepository, {
     useToken: isBrowser()
       ? appServerFoodstuffRepository
-      : inMemoryFoodstuffRepository,
+      : faunaDBFoodstuffRepository,
   });
 
   container.register<RecipeRepository>(recipeRepository, {
@@ -175,6 +177,15 @@ const diConfig = (): void => {
       new UserRepositoryFaunaDB(
         container.resolve(faunaDBGraphQLClientToken),
         graphQLIDTable
+      )
+    );
+
+    container.registerInstance(
+      faunaDBFoodstuffRepository,
+      new FoodstuffRepositoryFaunaDB(
+        container.resolve(faunaDBGraphQLClientToken),
+        graphQLIDTable,
+        userContext
       )
     );
   }

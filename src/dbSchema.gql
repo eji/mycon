@@ -12,7 +12,7 @@ type Foodstuff @collection(name: "foodstuffs") {
     foodstuffID: String!
     user: User!
     name: String!
-    nutrients: [String!]!
+    nutrients: [String!]
     category: String!
 }
 

@@ -11,7 +11,7 @@ import {
   UnpersistedFoodstuff,
 } from '../../../domain/models/foodstuff';
 import FaunaDBGraphQLClient from '../../../drivers/faunaDBGraphQLClient';
-import { GraphQLIDTable } from '../../../utils/graphQLIDTable';
+import { GraphQLIDTable, GraphQLID } from '../../../utils/graphQLIDTable';
 import { UserContext } from '../../../app/contexts/userContext';
 import FindAllFoodstuffsResponse, {
   isFoundFoodstuffsResponse,
@@ -27,16 +27,15 @@ import UpdateFoodstuffResponse, {
 } from './foodstuffRepositoryFaunaDB/updateFoodstuffResponse';
 
 const findAllFoodstuffsQuery = gql`
-  query FindAllFoodstuffs($id: number!) {
+  query FindAllFoodstuffs($id: ID!) {
     findUserByID(id: $id) {
-        foodstuffs {
-            data {
-                _id
-                foodstuffID
-                name
-                category
-                nutrients
-            }
+      foodstuffs {
+        data {
+          _id
+          foodstuffID
+          name
+          category
+          nutrients
         }
       }
     }
@@ -95,7 +94,7 @@ export default class FoodstuffRepositoryFaunaDB implements FoodstuffRepository {
   ): TE.TaskEither<AppError, Foodstuff[]> =>
     A.array.sequence(TE.taskEither)(foodstuffs.map(this.saveValue));
 
-  private getGraphQLUserID = (): E.Either<AppError, number> =>
+  private getGraphQLUserID = (): E.Either<AppError, GraphQLID> =>
     pipe(
       this.userContext.getCurrentUser(),
       E.fromOption(() => new AppError('user_context/current_user_not_exists')),

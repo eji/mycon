@@ -31,7 +31,6 @@ import {
 } from '../forms/inputRecipeFormSchema';
 import { addRecipe } from '../state/appState/allRecipes';
 import ImageUploader from '../components/common/ImageUploader';
-import graphQLIDTable from '../../utils/graphQLIDTable';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

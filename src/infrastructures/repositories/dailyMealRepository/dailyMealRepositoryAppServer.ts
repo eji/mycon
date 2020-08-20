@@ -1,10 +1,7 @@
 import * as TE from 'fp-ts/lib/TaskEither';
 import { pipe } from 'fp-ts/lib/pipeable';
 import DailyMealRepository from '../../../domain/repositories/dailyMealRepository';
-import DailyMeal, {
-  dailyMealIDFromCalendarDate,
-} from '../../../domain/models/dailyMeal';
-import CalendarDate from '../../../domain/models/calender/calendarDate';
+import DailyMeal from '../../../domain/models/dailyMeal';
 import RestClient from '../../../drivers/restClient';
 import DailyMealsResponse, {
   dailyMealsFromResponse,
@@ -26,15 +23,6 @@ export default class DailyMealRepositoryAppServer
     pipe(
       this.restClient.all<DailyMealsResponse>(),
       TE.chainEitherK(dailyMealsFromResponse)
-    );
-
-  findByCalendarDate = (
-    calendarDate: CalendarDate
-  ): TE.TaskEither<AppError, DailyMeal> =>
-    pipe(
-      dailyMealIDFromCalendarDate(calendarDate),
-      (id) => this.restClient.show<DailyMealResponse>(id),
-      TE.chainEitherK(dailyMealFromResponse)
     );
 
   saveValue = (dailyMeal: DailyMeal): TE.TaskEither<AppError, DailyMeal> =>

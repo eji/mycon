@@ -31,18 +31,18 @@ type Recipe @collection(name: "recipes") {
 }
 
 type Meal @collection(name: "meals") {
+    mealID: String!
+    name: String!
+    recipes: [Recipe!] @relation
     breakfast: DailyMeal @relation(name: "breakfast")
     lunch: DailyMeal @relation(name: "lunch")
     dinner: DailyMeal @relation(name: "dinner")
     snack: DailyMeal @relation(name: "snack")
-    name: String!
-    recipes: [Recipe!] @relation
 }
 
 type DailyMeal @collection(name: "dailyMeals") {
     dailyMealID: String!
     user: User! @relation
-    calendarDate: String!
     breakfast: Meal! @relation(name: "breakfast")
     lunch: Meal! @relation(name: "lunch")
     dinner: Meal! @relation(name: "dinner")

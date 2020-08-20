@@ -16,15 +16,6 @@ export default class DailyMealRepositoryInMemory
   all = (): TE.TaskEither<AppError, DailyMeal[]> =>
     TE.right(this.store.values());
 
-  findByCalendarDate = (
-    calendarDate: CalendarDate
-  ): TE.TaskEither<AppError, DailyMeal> => {
-    const recipesOfTheDay = this.store.get(calendarDate);
-    return TE.fromOption(() => new AppError('repos/not_found_error'))(
-      recipesOfTheDay
-    );
-  };
-
   saveValue = (dailyMeal: DailyMeal): TE.TaskEither<AppError, DailyMeal> => {
     this.store.set(dailyMeal.calendarDate, dailyMeal);
     return TE.right(dailyMeal);
